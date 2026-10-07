@@ -1016,6 +1016,18 @@ kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-botto
 #library>h2:first-child{font-size:28px;font-weight:700;letter-spacing:-.01em}
 .rsrow{display:grid;grid-template-columns:20px 1fr auto;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer}
 .hidden-file{display:none}
+/* ===== โจทย์ ===== */
+.excard{display:block}.exi{border-top:1px solid var(--line)}.exh{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:10px 4px;cursor:pointer;font-size:14px;color:var(--ink)}.exh:hover{background:var(--hover);border-radius:10px}
+.exl{font-size:12px;white-space:nowrap;color:#B45309}.exm{display:flex;gap:6px;align-items:center}.exd{font-size:11px;background:var(--surface2);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.exs{font-size:12px;font-weight:700;border-radius:999px;padding:1px 8px}.exs.ok{background:color-mix(in srgb,var(--found) 15%,var(--surface));color:var(--found)}.exs.no{background:color-mix(in srgb,#EA580C 14%,var(--surface));color:#C2410C}
+.exb{padding:4px 4px 14px;display:flex;flex-direction:column;gap:10px}.exqt{font-size:15.5px;line-height:1.7;margin:0}
+.extb{background:var(--surface2);border-radius:12px;padding:8px 10px}.exscroll{overflow-x:auto}.exdt{border-collapse:collapse;font-size:12.5px;width:100%}.exdt th,.exdt td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.exdt th{color:var(--muted);font-weight:600}
+.exch{display:flex;flex-direction:column;gap:6px}.exc{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;cursor:pointer;font-size:14.5px;color:var(--ink)}.exc.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.excode{width:100%;min-height:120px;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#0f172a;color:#e2e8f0;border-radius:12px;padding:10px 12px;border:0}
+.exhint{background:color-mix(in srgb,#F59E0B 12%,var(--surface));border-radius:10px;padding:8px 12px;margin:0;font-size:14px}
+.exres{display:flex;flex-direction:column;gap:6px;background:var(--surface2);border-radius:12px;padding:10px 12px}.exref{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:8px 10px;font-size:12px;overflow-x:auto;margin:0}
+.exnote{font-size:13.5px;background:var(--surface);border-radius:10px;padding:6px 10px;margin:0}.exdis{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.exgen{display:flex;flex-direction:column;gap:8px;margin:8px 0}
 </style>
 </head>
 <body>
@@ -1057,7 +1069,8 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
   const SB_URL="https://tppcsgnpbjyzmhhhafpi.supabase.co",SB_KEY="sb_publishable_uKC2qbLFs2Qpgwu7l0ngnw_mYBNqXGX";
   const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   window.SB=sb;let resolveUser,USER=null;const userReady=new Promise(r=>resolveUser=r);
-  const setUser=u=>{if(USER)return;USER=u;hideLogin();resolveUser(u)};
+  const cleanUrl=()=>{try{if(/access_token|refresh_token|error_description/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}};
+  const setUser=u=>{cleanUrl();if(USER)return;USER=u;hideLogin();resolveUser(u)};
   /* --- หน้าล็อกอิน --- */
   function hideLogin(){const o=document.getElementById("sbLogin");if(o)o.remove()}
   function showLogin(msg){if(USER||document.getElementById("sbLogin"))return;const o=document.createElement("div");o.id="sbLogin";
@@ -2637,7 +2650,9 @@ function chapterPage(sec){
   const C=UI.course,ns=nodesOfSec(sec,C.secPh&&NODES.some(n=>n.sec===sec&&n.ph===C.secPh)?C.secPh:null),w=el("div",{class:"chap"});
   const plId=ns.length?ns[0].plan:(C.chapPlan||null),pl=plId?PBY(plId):null,ph=ns.length?ns[0].ph:(pl?"PL_"+pl.id:"P1");const c=chapOf(ph,sec);
   w.appendChild(crumbs([{t:pl?pl.name:"แผน DA",on:()=>{C.mode="home";C.plan=pl?pl.id:"da";renderAll()}},{t:pl?"บท":PH[ph][0].split(" · ")[0]},{t:pl?sec.split(" › ").pop():sec}]));
-  w.appendChild(el("div",{class:"row sp tight"},[el("h2",{class:"ch1",text:pl?sec.split(" › ").pop():sec}),el("button",{class:"ghost cebtn",onclick:()=>{UI.ce=UI.ce&&UI.ce.key===(ph+"|"+sec)?null:null;UI.ceOpen=UI.ceOpen===(ph+"|"+sec)?null:(ph+"|"+sec);renderAll()},text:"✎ แก้หรือเพิ่มเนื้อหาบท"})]));
+  w.appendChild(el("div",{class:"row sp tight"},[el("h2",{class:"ch1",text:pl?sec.split(" › ").pop():sec}),el("span",{class:"row tight"},[el("button",{class:"ghost cebtn",onclick:()=>{UI.exGen=UI.exGen&&UI.exGen.sec===sec&&!UI.exGen.topic?null:{scope:"sec",sec,ph};renderAll()},text:"🧩 สร้างโจทย์"}),el("button",{class:"ghost cebtn",onclick:()=>{UI.ce=null;UI.ceOpen=UI.ceOpen===(ph+"|"+sec)?null:(ph+"|"+sec);renderAll()},text:"✎ แก้หรือเพิ่มเนื้อหาบท"})])]));
+  if(UI.exGen&&UI.exGen.sec===sec&&!UI.exGen.topic)w.appendChild(exGenPanel());
+  {const xs=ns.flatMap(n=>exOf(n.id));if(xs.length){const dn=new Set(A.exAtt.filter(a=>a.done).map(a=>a.exId));w.appendChild(el("p",{class:"muted sm",text:"🧩 โจทย์ในบทนี้ "+xs.length+" ข้อ · ทำแล้ว "+xs.filter(x=>dn.has(x.id)).length}))}}
   if(UI.ceOpen===(ph+"|"+sec))w.appendChild(contentEditor("chap",CHAP[ph+"|"+sec]||!CHAP[sec]?ph+"|"+sec:sec,null,()=>{if(!UI.ce)UI.ceOpen=null;renderAll()}));
   if(c&&c.plain){if(c.tag)w.appendChild(el("p",{class:"ctagl",text:c.tag}));if(c.why&&c.why.trim()!==(c.tag||"").trim())w.appendChild(el("section",{class:"ovb"},[el("h4",{text:"ภาพรวมของบท"}),el("p",{text:c.why})]));if(c.gain&&c.gain.length)w.appendChild(el("section",{class:"ovb"},[el("h4",{text:"เรียนแล้วได้อะไร"}),el("ul",{class:"gain"},c.gain.map(x=>el("li",{text:x})))]))}
   else if(c){if(c.tag)w.appendChild(el("p",{class:"ctagl",text:c.tag}));
@@ -4455,7 +4470,7 @@ function studyReportCard(){const c=card("",[el("div",{class:"cap",text:"ภา�
     c.appendChild(el("div",{class:"rrow2"},[el("span",{class:"sm",text:x.sec}),bar,el("span",{class:"sm "+(r&&r>1.25?"warnc":"muted"),text:x.est?`${r1(x.mins/60)} / ${r1(x.est)} ชม.`+(r?" ×"+r1(r):"")+` · จบ ${x.done}/${x.total}`:`ใช้ไป ${r1(x.mins/60)} ชม. · ยังไม่จบหัวข้อไหน (0/${x.total})`})]))});
   if(tot[1]>=2){const r=tot[0]/tot[1];c.appendChild(el("p",{class:"sm "+(r>1.2?"warnc":"okc"),text:r>1.2?`โดยรวมใช้เวลามากกว่าที่ประมาณ ×${r1(r)} ถ้าเป็นแบบนี้ต่อ ช่วงถัดไปจะช้ากว่าแผน ลองดูทาง "เร่ง" หรือ "เลื่อน" ที่หน้าวันนี้ หรือทำหัวข้อเสริมแบบอ่านผ่าน`:r<.8?`โดยรวมเร็วกว่าที่ประมาณ (×${r1(r)}) เช็กว่าทบทวนแล้วยังจำได้ ถ้าจำได้ดี แปลว่าเรียนได้เร็วจริง`:`โดยรวมใกล้เคียงที่ประมาณ (×${r1(r)})`}))}
   c.appendChild(el("p",{class:"muted sm",text:"แถบเทา = เวลาที่ประมาณไว้สำหรับหัวข้อที่จบแล้ว · แถบสี = เวลาที่ใช้จริง"}));
-  c.appendChild(el("div",{class:"row tight"},[el("button",{onclick:async()=>{toast("กำลังรวมข้อมูล…","",[]);toast(await exportAllData(),"",[])},text:"ส่งออกข้อมูลทั้งหมดสำหรับวิเคราะห์ (.zip)"}),el("span",{class:"muted sm",text:"20 ตาราง CSV + คำอธิบายทุกคอลัมน์"})]));return c}
+  c.appendChild(el("div",{class:"row tight"},[el("button",{onclick:async()=>{toast("กำลังรวมข้อมูล…","",[]);toast(await exportAllData(),"",[])},text:"ส่งออกข้อมูลทั้งหมดสำหรับวิเคราะห์ (.zip)"}),el("span",{class:"muted sm",text:"22 ตาราง CSV + คำอธิบายทุกคอลัมน์"})]));return c}
 /* ---------- ส่งออกข้อมูลดิบทั้งหมด ---------- */
 const DICT={
  "sessions.csv":["รอบเรียนและรอบอ่าน 1 แถวต่อรอบ","id·รหัสรอบ|date·วันที่|start,end·เวลาเริ่ม-จบ (ISO)|block·morning/afternoon/evening|type·learn/practice/read/...|node·รหัสหัวข้อ (join topics.id)|item_id·รหัสเรื่องที่อ่าน (join reading_items.id)|title·ชื่อที่พิมพ์เอง|mode·count/watch|planned_min·นาทีที่ตั้งใจ|focus_min·นาทีโฟกัสจริง|pauses,breaks·จำนวนครั้ง|distractions·ครั้งที่วอกแวก|ended_early·จบก่อนเวลา|focus·คะแนนโฟกัส 1–5|confidence·คะแนนมั่นใจ 1–5|energy,clarity·สภาพก่อนเริ่ม 1–5|sleep·น้อย/พอ/ดี|phone·ห่าง/ข้าง|page_from,page_to·หน้าที่อ่าน|reasons·เหตุผลถ้าได้น้อย (คั่นด้วย |)|did,understood,mistake,next·โน้ตหลังรอบ"],
@@ -4477,6 +4492,8 @@ const DICT={
  "session_events.csv":["ทุกเหตุการณ์ระหว่างรอบ 1 แถวต่อเหตุการณ์","session_id·join sessions.id|time|sec_from_start·วินาทีนับจากเริ่มรอบ|type·start/pause/resume/break/work/extend/distract/confused/away/resource/claude/sub/focus_on/focus_off/finish|detail·ข้อมูลเพิ่มเป็น JSON (เช่น away มี sec, sub มี node และ index)"],
  "session_rounds.csv":["รอบย่อย (pomodoro) 1 แถวต่อรอบย่อย","session_id|round·รอบย่อยที่|start,end|focus_min·นาทีโฟกัสในรอบย่อย|pauses|distractions|away_sec·วินาทีที่ใช้แอปอื่น|confused·ครั้งที่จดว่างง|first_distract_min·วอกแวกครั้งแรกนาทีที่|pulse·หน้ายิ้มช่วงพัก 1–5"],
  "session_context.csv":["บริบทและตัวชี้วัดต่อรอบ","session_id|device·desktop/mobile|location·home/cafe/work/other|data_level·light/normal/full|focus_mode·ใช้โหมดโฟกัส|sound·เสียงพื้นหลัง|goal·เป้าของรอบ|goal_met·yes/part/no|away_sec,away_count|first_distract_min|longest_streak_min·ช่วงโฟกัสยาวสุดที่ไม่ขาด|planned_block,planned_time·จากแผนในปฏิทิน|start_late_min·เริ่มช้ากว่าเวลาในแผนกี่นาที (มีเมื่อแผนระบุเวลา)"],
+ "exercises.csv":["โจทย์ทั้งหมด","id|topic·join topics.id|level·1 เข้าใจ 2 ลงมือ 3 ตัดสินใจ|domain·สายงาน|tool|type·mcq/data/written|question|fixed·เคยแก้เฉลย|notes·จำนวนคำอธิบายเพิ่มเติม"],
+ "exercise_attempts.csv":["การทำโจทย์ 1 แถวต่อครั้ง","id|exercise_id·join exercises.id|topic|level|domain|tool|type|time|confidence·มั่นใจก่อนส่ง 1–5|hint·ใช้คำใบ้|tries·ส่งกี่ครั้งกว่าจะจบ|revealed·ดูเฉลยก่อน|correct|score·คะแนน 0–1 สำหรับเขียนอธิบาย"],
  "subtopic_log.csv":["ทุกครั้งที่ติ๊กหรือเอาติ๊กออกหัวข้อย่อย","node·join topics.id|index·ลำดับหัวข้อย่อย|checked·1 ติ๊ก 0 เอาออก|time|session_id·รอบที่กำลังจับเวลาอยู่ (ถ้ามี)"]};
 async function exportAllData(){
   const iso=t=>t?new Date(t).toISOString():"";const est=Object.fromEntries(topicHours(MAIN_ORDER.concat(R_ORDER)).map(([n,h])=>[n.id,h]));
@@ -4500,6 +4517,8 @@ async function exportAllData(){
   f["session_events.csv"]=csvOf(A.sessions.flatMap(s=>(s.ev||[]).map(e=>({session_id:s.id,time:iso(e.t),sec_from_start:Math.round((e.t-s.start)/1000),type:e.ty,detail:e.d?JSON.stringify(e.d):""}))),["session_id","time","sec_from_start","type","detail"]);
   f["session_rounds.csv"]=csvOf(A.sessions.flatMap(s=>(s.rounds||[]).map(r=>({session_id:s.id,round:r.round,start:iso(r.start),end:iso(r.end),focus_min:r.focusMin,pauses:r.pauses,distractions:r.distractions,away_sec:r.awaySec,confused:r.confused,first_distract_min:r.firstDistractMin??"",pulse:r.pulse??""}))),["session_id","round","start","end","focus_min","pauses","distractions","away_sec","confused","first_distract_min","pulse"]);
   f["session_context.csv"]=csvOf(A.sessions.filter(s=>s.ctx||s.goal||s.plan).map(s=>({session_id:s.id,device:s.ctx&&s.ctx.device||"",location:s.ctx&&s.ctx.loc||"",data_level:s.ctx&&s.ctx.dl||"",focus_mode:s.ctx&&s.ctx.focusMode?1:0,sound:s.ctx&&s.ctx.sound||"",goal:s.goal||"",goal_met:s.goalMet||"",away_sec:s.awaySec||0,away_count:s.awayN||0,first_distract_min:s.firstDistractMin??"",longest_streak_min:s.longestStreakMin??"",planned_block:s.plan&&s.plan.block||"",planned_time:s.plan&&s.plan.time||"",start_late_min:s.plan&&s.plan.lateMin!=null?s.plan.lateMin:""})),["session_id","device","location","data_level","focus_mode","sound","goal","goal_met","away_sec","away_count","first_distract_min","longest_streak_min","planned_block","planned_time","start_late_min"]);
+  f["exercises.csv"]=csvOf(Object.values(A.ex).flat().map(e=>({id:e.id,topic:e.topic,level:e.level,domain:e.domain||"",tool:e.tool||"",type:e.type,question:e.q,fixed:e.fix?1:0,notes:(e.notes||[]).length})),["id","topic","level","domain","tool","type","question","fixed","notes"]);
+  f["exercise_attempts.csv"]=csvOf(A.exAtt.map(a=>({id:a.id,exercise_id:a.exId,topic:a.topic,level:a.level,domain:a.domain,tool:a.tool,type:a.type,time:iso(a.at),confidence:a.conf??"",hint:a.hint?1:0,tries:a.tries,revealed:a.revealed?1:0,correct:a.correct?1:0,score:a.score??""})),["id","exercise_id","topic","level","domain","tool","type","time","confidence","hint","tries","revealed","correct","score"]);
   f["subtopic_log.csv"]=csvOf((A.subLog||[]).map(e=>({node:e.node,index:e.k,checked:e.on?1:0,time:iso(e.t),session_id:e.sid||""})),["node","index","checked","time","session_id"]);
   const readme=["# ข้อมูลการเรียนของฉัน (ส่งออก "+today()+")","","ไฟล์ CSV เข้ารหัส UTF-8 แถวแรกเป็นชื่อคอลัมน์ ค่าหลายค่าในช่องเดียวคั่นด้วย |","","## ความสัมพันธ์ระหว่างตาราง","- sessions.node → topics.id · sessions.item_id → reading_items.id","- distractions.session_id → sessions.id · reviews.node → topics.id · review_history.review_id → reviews.id","- reading_marks.item_id → reading_items.id · note_links.note_id → notes.id · job_status_log.job_id → jobs.id","","## คำอธิบายคอลัมน์",...Object.entries(DICT).flatMap(([fn,[d,cols]])=>["","### "+fn+" · "+d,...cols.split("|").map(c=>"- "+c.replace("·"," — "))]),"","## ไอเดียคำถามสำหรับวิเคราะห์","- ช่วงเวลาไหนโฟกัสดีที่สุด และพลังงาน/การนอนส่งผลแค่ไหน (sessions)","- วอกแวกนาทีที่เท่าไรบ่อยสุด รอบควรยาวเท่าไร (distractions)","- จำได้กี่ % เมื่อเว้นทบทวน n วัน (review_history.days_since_prev)","- บทไหนใช้เวลาเกินประมาณ และเพราะอะไร (topics.est_hours เทียบ sessions)","- การทดลองวันศุกร์อันไหนได้ผลจริง (experiments เทียบ sessions ก่อน/หลัง)"].join("\n");
   const files=[["README.md",readme],...Object.entries(f).map(([n,c])=>["data/"+n,c.charCodeAt(0)===0xFEFF?c:"\ufeff"+c])];
@@ -4597,6 +4616,14 @@ renderStats=function(){
   box.appendChild(sec("จุดที่ยังไม่เข้าใจ","",cfk));
   /* ส่วนที่พับไว้ */
   const fold=(t,build)=>{const d=el("details",{class:"sfold"});d.appendChild(el("summary",{text:t}));d.addEventListener("toggle",()=>{if(d.open&&!d.dataset.b){d.dataset.b=1;build(d)}});return d};
+  box.appendChild(fold("🧩 ผลโจทย์",d=>{const at=A.exAtt.filter(a=>a.done&&(a.at>=new Date(r.from+"T00:00:00").getTime()));if(!at.length){d.appendChild(el("p",{class:"muted sm",text:"ยังไม่มีการทำโจทย์ในช่วงนี้"}));return}
+    const acc=a=>a.length?Math.round(a.filter(x=>x.score!=null?x.score>=0.75:x.correct).length/a.length*100):null;const grid=el("div",{class:"stiles"});
+    [1,2,3].forEach(lv=>{const a=at.filter(x=>x.level===lv);grid.appendChild(el("div",{class:"stile"},[el("div",{class:"stl",text:EX_LV[lv]}),el("div",{class:"stv"},[el("b",{text:acc(a)!=null?acc(a)+"%":"–"})]),el("div",{class:"sm muted",text:a.length+" ครั้ง"})]))});
+    const over=at.filter(x=>(x.conf||0)>=4&&!(x.score!=null?x.score>=0.75:x.correct));grid.appendChild(el("div",{class:"stile"},[el("div",{class:"stl",text:"มั่นใจแต่พลาด"}),el("div",{class:"stv"},[el("b",{text:String(over.length)})]),el("div",{class:"sm muted",text:"จุดอันตรายที่สุด"})]));d.appendChild(grid);
+    const stuck=[1,2,3].map(lv=>acc(at.filter(x=>x.level===lv)));if(stuck[0]!=null&&stuck[1]!=null&&stuck[0]-stuck[1]>=25)d.appendChild(el("p",{class:"sm",text:"เข้าใจแนวคิดแล้ว แต่ยังติดตอนลงมือกับข้อมูล"}));if(stuck[1]!=null&&stuck[2]!=null&&stuck[1]-stuck[2]>=25)d.appendChild(el("p",{class:"sm",text:"ทำได้ แต่ยังติดตอนตีความเป็นภาษาธุรกิจ"}));
+    const doms={};at.forEach(x=>{if(x.domain)(doms[x.domain]=doms[x.domain]||[]).push(x)});if(Object.keys(doms).length>1){d.appendChild(el("div",{class:"slbl",text:"ตามสายงาน"}));Object.entries(doms).sort((a,b)=>acc(b[1])-acc(a[1])).forEach(([k,a])=>d.appendChild(el("div",{class:"rrow2"},[el("span",{class:"sm",text:k}),el("span",{class:"dbar"},[(()=>{const i=el("i");i.style.width=acc(a)+"%";return i})()]),el("span",{class:"sm muted",text:acc(a)+"% · "+a.length})])))}
+    const tops=[...new Set(at.map(x=>x.topic))].map(t=>[t,mastery(t)]).filter(x=>x[1]!=null).sort((a,b)=>a[1]-b[1]).slice(0,5);if(tops.length){d.appendChild(el("div",{class:"slbl",text:"หัวข้อที่ผลโจทย์ต่ำสุด"}));tops.forEach(([t,m])=>d.appendChild(el("div",{class:"rrow"},[el("button",{class:"linkish",onclick:()=>openPeek("t:"+t),text:t+" "+(BY[t]?BY[t].t:"")}),el("span",{class:"muted sm",text:"เข้าใจราว "+m+"%"}),el("span")])))}
+    if(over.length){d.appendChild(el("div",{class:"slbl",text:"มั่นใจแต่พลาด"}));over.slice(0,5).forEach(x=>{const e=exById(x.exId);if(e)d.appendChild(el("div",{class:"rrow"},[el("button",{class:"linkish",onclick:()=>openPeek("t:"+x.topic),text:x.topic+" · "+e.q.slice(0,60)}),el("span",{class:"muted sm",text:"มั่นใจ "+x.conf+"/5"}),el("span")]))})}}));
   box.appendChild(fold("จังหวะการเรียน (ข้อมูลละเอียดจากนาฬิกา)",d=>{const ss=D.ss.filter(x=>x.ev&&x.ev.length);if(!ss.length){d.appendChild(el("p",{class:"muted sm",text:"ข้อมูลละเอียดเริ่มเก็บตั้งแต่รอบถัดไป เรียนสักสองสามรอบแล้วส่วนนี้จะมีตัวเลข"}));return}
     const med=a=>{const v=a.filter(x=>x!=null).sort((x,y)=>x-y);return v.length?v[Math.floor(v.length/2)]:null};const hm=ms=>{const d0=new Date(ms);return pad2(d0.getHours())+":"+pad2(d0.getMinutes())};
     const fd=med(ss.map(x=>x.firstDistractMin)),ls=med(ss.map(x=>x.longestStreakMin)),gm=ss.filter(x=>x.goalMet),gy=gm.filter(x=>x.goalMet==="yes").length,aw=ss.length?avg(ss.map(x=>(x.awaySec||0)/60)):0,late=ss.filter(x=>x.plan&&x.plan.lateMin!=null).map(x=>x.plan.lateMin);
@@ -4777,6 +4804,7 @@ const RESET_GROUPS=[
  ["read","คลังการอ่าน หมุด และชุดหนังสือ",()=>(A.items||[]).length+(A.marks||[]).length,["b_","m_","z_"]],
  ["notes","โน้ต (เก็บโน้ตถอดบทเรียน repo ตัวอย่างไว้)",()=>(A.knotes||[]).filter(n=>!isSeedNote(n)).length,["k_"]],
  ["jobs","สถานะการสมัครงาน (ประกาศยังอยู่)",()=>(A.jobs||[]).filter(j=>j.status!=="interest"||j.pinned).length,[]],
+ ["exatt","ผลการทำโจทย์ (ตัวโจทย์ยังอยู่)",()=>(A.exAtt||[]).length,["xa_"]],
  ["goals","ประวัติของเป้าหมาย (ตัวเป้ายังอยู่)",()=>(A.goals||[]).reduce((a,g)=>a+(g.log||[]).length,0),[]]];
 const isSeedNote=n=>n.type==="repo"&&(n.title||"").startsWith("repo: sales-forecast");
 function applyLocalReset(groups){const G=new Set(groups);
@@ -4788,6 +4816,7 @@ function applyLocalReset(groups){const G=new Set(groups);
   if(G.has("notes"))A.knotes=(A.knotes||[]).filter(isSeedNote);
   if(G.has("jobs"))(A.jobs||[]).forEach(j=>{j.status="interest";j.pinned=false;j.archived=null;j.log=[{s:"interest",d:today()}]});
   if(G.has("goals"))(A.goals||[]).forEach(g=>{g.log=[]});
+  if(G.has("exatt"))A.exAtt=[];
   if(G.has("plan")){A.planned={};A.ev=[];A.baseline=null;A.cal.sel=null;ensureBaseline();
     EXT.filter(x=>x.start).forEach(x=>{const pl=A.plans.find(p=>p.extKey===x.key);if(pl)(A.planned[x.start]=A.planned[x.start]||[]).push({id:uidGen(),type:"note",text:"เริ่ม "+x.name+" ขั้นแรก",block:"evening",manual:true,extStart:x.key})})}
   persistA()}
@@ -4812,7 +4841,7 @@ async function importBackup(text,onMsg){let j;try{j=JSON.parse(text)}catch(e){re
   persistA();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}persistT();
   const jobs=[];const run=(arr,fn)=>(arr||[]).forEach(x=>jobs.push(()=>fn(x)));
   run(A.sessions,x=>putRec("session",x));run(Object.values(A.days||{}),x=>putRec("day",x));run(A.reviews,x=>putRec("review",x));
-  run(A.learn,putLearn);run(A.items,putItem);run(A.marks,putMark);run(A.series,putSeries);run(A.knotes,putNote);run(A.plans,putPlan);
+  run(Object.keys(A.ex||{}),putEx);run(A.exAtt,putAtt);run(A.learn,putLearn);run(A.items,putItem);run(A.marks,putMark);run(A.series,putSeries);run(A.knotes,putNote);run(A.plans,putPlan);
   let done=0;for(const f of jobs){try{await f()}catch(e){}done++;if(onMsg&&done%20===0)onMsg("กำลังอัปโหลด "+done+"/"+jobs.length)}
   try{saveCal()}catch(e){}try{saveJobs()}catch(e){}try{saveExp()}catch(e){}try{saveBrain()}catch(e){}
   try{await db.doc(dbBase+"/progress").set({status:S.status,notes:S.notes,sub:S.sub||{},custom:S.custom||{},skipWhy:S.skipWhy||{},threads:S.threads||{},threadDefault:S.threadDefault||null,doneAt:S.doneAt||{},selfRate:S.selfRate||{},contentOv:S.contentOv||{chap:{},det:{}}})}catch(e){}
@@ -4826,6 +4855,133 @@ function accountCard(){if(!window.SB)return null;const c=card("",[el("div",{clas
   fi.addEventListener("change",async()=>{const f=fi.files&&fi.files[0];if(!f)return;msg.textContent="กำลังอ่านไฟล์…";const t=await f.text();msg.textContent=await importBackup(t,m=>msg.textContent=m);renderAll()});
   c.appendChild(el("div",{class:"row"},[el("button",{onclick:()=>fi.click(),text:"📥 นำเข้าไฟล์สำรอง"}),el("button",{class:"ghost",onclick:()=>window.SB_signOut(),text:"ออกจากระบบ"})]));c.appendChild(fi);c.appendChild(msg);
   c.appendChild(el("p",{class:"muted sm",text:"นำเข้าไฟล์ backup-da-map-….json จากเว็บเดิม ข้อมูลในบัญชีนี้จะถูกแทนด้วยข้อมูลในไฟล์"}));return c}
+
+/* ===== ระบบโจทย์: เลือกตอบ · ข้อมูล (เว็บคิดเฉลยเองด้วย SQL) · เขียนอธิบาย ===== */
+A.ex=A.ex||{};A.exAtt=A.exAtt||[];
+const SQLJS_VER="1.14.2",SQLJS_BASE="https://cdn.jsdelivr.net/npm/sql.js@"+SQLJS_VER+"/dist/";
+const EX_LV={1:"⭐ เข้าใจ",2:"⭐⭐ ลงมือ",3:"⭐⭐⭐ ตัดสินใจ"};
+const exOf=topic=>A.ex[topic]||[];const exById=id=>{for(const t in A.ex){const x=A.ex[t].find(e=>e.id===id);if(x)return x}return null};
+async function putEx(topic){A.ex[topic]=A.ex[topic]||[];persistA();if(dbBase)try{await db.doc(dbBase+"/x_"+topic).set({topic,items:A.ex[topic],updatedAt:Date.now()})}catch(e){}}
+async function putAtt(a){a.updatedAt=Date.now();persistA();if(dbBase)try{await db.doc(dbBase+"/xa_"+a.id).set(a)}catch(e){}}
+async function syncEx(base){try{const all=await db.collection(base).get();
+  all.docs.filter(d=>d.id.startsWith("x_")).forEach(d=>{const v=d.data();const loc=A.ex[v.topic];if(!loc||!loc._u||(v.updatedAt||0)>=loc._u){A.ex[v.topic]=v.items||[];A.ex[v.topic]._u=v.updatedAt||0}});
+  const rem=all.docs.filter(d=>d.id.startsWith("xa_")).map(d=>d.data());const ids=new Set(rem.map(a=>a.id));const up=A.exAtt.filter(a=>!ids.has(a.id));
+  const m=new Map(A.exAtt.map(a=>[a.id,a]));rem.forEach(r=>{const l=m.get(r.id);if(!l||(r.updatedAt||0)>(l.updatedAt||0))m.set(r.id,r)});A.exAtt=[...m.values()];
+  for(const a of up)await db.doc(base+"/xa_"+a.id).set(a);Object.keys(A.ex).forEach(t=>{if(!all.docs.some(d=>d.id==="x_"+t))putEx(t)});persistA()}catch(e){}}
+/* --- ตัวรัน SQL ในเบราว์เซอร์ --- */
+let SQLP=null;function loadSQL(){if(SQLP)return SQLP;SQLP=new Promise((res,rej)=>{if(window.initSqlJs)return window.initSqlJs({locateFile:f=>SQLJS_BASE+f}).then(res,rej);const s=document.createElement("script");s.src=SQLJS_BASE+"sql-wasm.js";s.onload=()=>window.initSqlJs({locateFile:f=>SQLJS_BASE+f}).then(res,rej);s.onerror=()=>{SQLP=null;rej(new Error("โหลดตัวรัน SQL ไม่ได้ (ต้องเปิดจากเว็บใหม่และมีอินเทอร์เน็ต)"))};document.head.appendChild(s)});return SQLP}
+function exTables(ex){return ex.tables||(ex.table?[ex.table]:[])}
+async function runSQL(ex,code,variant){const SQL=await loadSQL();const d=new SQL.Database();try{exTables(ex).forEach(t=>{const rows=variant?perturb(t,variant):t.rows;const num=t.columns.map((c,i)=>rows.every(r=>r[i]==null||typeof r[i]==="number"));
+    d.run(`CREATE TABLE "${t.name}" (${t.columns.map((c,i)=>`"${c}" ${num[i]?"REAL":"TEXT"}`).join(",")})`);const st=d.prepare(`INSERT INTO "${t.name}" VALUES (${t.columns.map(()=>"?").join(",")})`);rows.forEach(r=>st.run(r.map(v=>v===undefined?null:v)));st.free()});
+  const res=d.exec(code);const last=res[res.length-1];return last?{columns:last.columns,values:last.values}:{columns:[],values:[]}}finally{d.close()}}
+function perturb(t,seed){let s=seed;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};return t.rows.map(r=>r.map(v=>typeof v==="number"&&!Number.isInteger(v)?Math.round(v*(0.9+rnd()*0.2)*100)/100:typeof v==="number"&&Math.abs(v)>50?Math.round(v*(0.9+rnd()*0.2)):v))}
+const nEq=(a,b,tol)=>{const x=Number(a),y=Number(b);if(isNaN(x)||isNaN(y))return String(a).trim()===String(b).trim();return Math.abs(x-y)<=Math.max(tol||0.01,Math.abs(y)*0.001)};
+function cmpResult(got,exp,tol){if(exp.values.length===1&&exp.values[0].length===1){const g=got.values.length?got.values[0][0]:null;return nEq(g,exp.values[0][0],tol)?{ok:true}:{ok:false,msg:"ได้ "+fmtV(g)+" · ยังไม่ตรง"}}
+  if(got.values.length!==exp.values.length)return{ok:false,msg:`ผลของนายมี ${got.values.length} แถว เฉลยมี ${exp.values.length} แถว`};
+  if((got.values[0]||[]).length!==(exp.values[0]||[]).length)return{ok:false,msg:`ผลของนายมี ${(got.values[0]||[]).length} คอลัมน์ เฉลยมี ${(exp.values[0]||[]).length} คอลัมน์`};
+  const key=r=>r.map(v=>typeof v==="number"?Math.round(v*100)/100:String(v)).join("|");const gs=got.values.map(key).sort(),es=exp.values.map(key).sort();
+  for(let i=0;i<es.length;i++)if(gs[i]!==es[i]){const gr=got.values.map(key);const miss=exp.values.find(r=>!gr.includes(key(r)));return{ok:false,msg:"ค่าไม่ตรง"+(miss?" เช่น แถวที่ควรมี: "+miss.map(fmtV).join(" · "):"")}}return{ok:true}}
+const fmtV=v=>v==null?"(ว่าง)":typeof v==="number"?(Number.isInteger(v)?v.toLocaleString("en-US"):v.toLocaleString("en-US",{maximumFractionDigits:4})):String(v);
+async function expectedOf(ex){if(ex.fix&&ex.fix.expected!=null)return{columns:["answer"],values:[[ex.fix.expected]]};if(ex._exp)return ex._exp;ex._exp=await runSQL(ex,ex.ref.code);return ex._exp}
+function tableCSV(t){return[t.columns.join(","),...t.rows.map(r=>r.map(v=>v==null?"":/[",\n]/.test(String(v))?'"'+String(v).replace(/"/g,'""')+'"':v).join(","))].join("\n")}
+/* --- ระดับความเข้าใจต่อหัวข้อ --- */
+function mastery(topic){const at=A.exAtt.filter(a=>a.topic===topic&&a.done);if(!at.length)return null;const last=new Map();at.sort((a,b)=>a.at-b.at).forEach(a=>last.set(a.exId,a));
+  let w=0,s=0;last.forEach(a=>{const wt=a.level||1;w+=wt;s+=wt*(a.score!=null?a.score:a.correct?1:0)});return w?Math.round(s/w*100):null}
+/* --- การ์ดโจทย์ในหน้าหัวข้อ --- */
+UI.exs=UI.exs||{};
+function exCard(n){const xs=exOf(n.id);const c=card("excard",[el("div",{class:"row sp tight"},[el("div",{class:"cap",text:"🧩 โจทย์ ("+xs.length+")"+(mastery(n.id)!=null?" · เข้าใจราว "+mastery(n.id)+"%":"")}),el("button",{class:"ghost",onclick:()=>{UI.exGen={scope:"topic",topic:n.id,sec:n.sec,ph:n.ph};renderAll()},text:"+ สร้างโจทย์"})])]);
+  if(UI.exGen&&UI.exGen.topic===n.id)c.appendChild(exGenPanel());
+  if(!xs.length&&!(UI.exGen&&UI.exGen.topic===n.id)){c.appendChild(el("p",{class:"muted sm",text:"ยังไม่มีโจทย์ สร้างทีละบทหรือทั้งช่วงได้จากหน้าบท"}));return c}
+  xs.forEach((ex,i)=>c.appendChild(exItem(ex,i)));return c}
+function exItem(ex,i){const st=UI.exs[ex.id]=UI.exs[ex.id]||{open:false};const atts=A.exAtt.filter(a=>a.exId===ex.id&&a.done);const lastA=atts[atts.length-1];
+  const head=el("button",{class:"exh",onclick:()=>{st.open=!st.open;renderAll()}},[el("span",{class:"exl",text:EX_LV[ex.level]||""}),el("span",{class:"exq",text:ex.q.slice(0,90)+(ex.q.length>90?"…":"")}),el("span",{class:"exm"},[ex.domain?el("span",{class:"exd",text:ex.domain}):null,lastA?el("span",{class:"exs "+(lastA.correct||lastA.score>=0.75?"ok":"no"),text:lastA.score!=null?Math.round(lastA.score*100)+"%":lastA.correct?"✓":"✗"}):null])]);
+  const w=el("div",{class:"exi"+(st.open?" open":"")},[head]);if(!st.open)return w;
+  const b=el("div",{class:"exb"});w.appendChild(b);b.appendChild(el("p",{class:"exqt",text:ex.q}));
+  if(ex.tool)b.appendChild(el("p",{class:"muted sm",text:"เครื่องมือ: "+ex.tool}));
+  exTables(ex).forEach(t=>{const tb=el("div",{class:"extb"},[el("div",{class:"row sp tight"},[el("b",{class:"sm",text:"ตาราง "+t.name+" · "+t.rows.length+" แถว"}),el("button",{class:"ghost",onclick:async()=>{const dl=await window.claude.use("downloads");if(dl)dl.save({filename:t.name+".csv",data:new Blob(["\ufeff"+tableCSV(t)],{type:"text/csv"})})},text:"⬇ CSV"})])]);
+    const tbl=el("table",{class:"exdt"},[el("tr",{},t.columns.map(c=>el("th",{text:c}))),...t.rows.slice(0,5).map(r=>el("tr",{},r.map(v=>el("td",{text:fmtV(v)}))))]);tb.appendChild(el("div",{class:"exscroll"},[tbl]));if(t.rows.length>5)tb.appendChild(el("p",{class:"muted sm",text:"แสดง 5 แถวแรก ดาวน์โหลด CSV เพื่อดูทั้งหมด"}));b.appendChild(tb)});
+  if(st.done){b.appendChild(exResult(ex,st));return w}
+  if(ex.type==="mcq"){const ch=el("div",{class:"exch"});ex.choices.forEach((t,k)=>ch.appendChild(el("button",{class:"exc"+(st.pick===k?" on":""),onclick:()=>{st.pick=k;renderAll()}},[String.fromCharCode(65+k)+". "+t])));b.appendChild(ch)}
+  if(ex.type==="data"){const md=st.mode||"number";b.appendChild(pills([["number","ตอบเป็นตัวเลข / ข้อความ"],["sql","ส่งโค้ด SQL ให้เว็บรัน"]],md,v=>{st.mode=v;renderAll()}));
+    if(md==="number"){const ip=el("input",{class:"search",placeholder:"คำตอบ",value:st.ans||""});ip.addEventListener("input",()=>st.ans=ip.value);b.appendChild(ip)}
+    else{const ta=el("textarea",{class:"excode",spellcheck:"false",placeholder:"SELECT ... FROM "+(exTables(ex)[0]||{name:"table"}).name});ta.value=st.code||"";ta.addEventListener("input",()=>st.code=ta.value);b.appendChild(ta);
+      b.appendChild(el("button",{class:"ghost",onclick:async()=>{try{st.preview=await runSQL(ex,st.code||"");st.err=null}catch(e){st.err=e.message;st.preview=null}renderAll()},text:"▶ ลองรัน (ไม่นับคะแนน)"}));
+      if(st.err)b.appendChild(el("p",{class:"warnc sm",text:st.err}));if(st.preview)b.appendChild(resTable(st.preview))}}
+  if(ex.type==="written"){const ta=el("textarea",{class:"chta",placeholder:"เขียนคำตอบ"});ta.value=st.ans||"";ta.addEventListener("input",()=>st.ans=ta.value);b.appendChild(ta)}
+  b.appendChild(el("div",{class:"qrow"},[el("span",{class:"ql",text:"มั่นใจแค่ไหน"}),pills([[1,"1"],[2,"2"],[3,"3"],[4,"4"],[5,"5"]],st.conf,v=>{st.conf=v;renderAll()})]));
+  if(st.hint&&ex.hint)b.appendChild(el("p",{class:"exhint",text:"💡 "+ex.hint}));if(st.msg)b.appendChild(el("p",{class:"warnc sm",text:st.msg}));
+  b.appendChild(el("div",{class:"row tight"},[el("button",{class:"primary-btn",onclick:()=>exSubmit(ex,st),text:ex.type==="written"?"ส่งให้ Claude ตรวจ":"ส่งคำตอบ"}),ex.hint&&!st.hint?el("button",{class:"ghost",onclick:()=>{st.hint=true;renderAll()},text:"ขอคำใบ้"}):null,el("button",{class:"ghost",onclick:()=>{st.reveal=true;exFinish(ex,st,{correct:false,revealed:true});},text:"ดูเฉลย (นับว่าผิด)"})]));
+  return w}
+function resTable(r){const t=el("table",{class:"exdt"},[el("tr",{},r.columns.map(c=>el("th",{text:c}))),...r.values.slice(0,20).map(v=>el("tr",{},v.map(x=>el("td",{text:fmtV(x)}))))]);return el("div",{class:"exscroll"},[t])}
+async function exSubmit(ex,st){st.tries=(st.tries||0)+1;st.msg=null;
+  if(ex.type==="mcq"){if(st.pick==null){st.msg="เลือกคำตอบก่อน";renderAll();return}const ok=st.pick===(ex.fix&&ex.fix.answer!=null?ex.fix.answer:ex.answer);exFinish(ex,st,{correct:ok,given:String.fromCharCode(65+st.pick)});return}
+  if(ex.type==="data"){try{const exp=await expectedOf(ex);
+    if((st.mode||"number")==="number"){if(!(st.ans||"").trim()){st.msg="ใส่คำตอบก่อน";renderAll();return}const got={columns:["a"],values:[[isNaN(Number(String(st.ans).replace(/,/g,"")))?st.ans:Number(String(st.ans).replace(/,/g,""))]]};const r=cmpResult(got,exp,ex.tolerance);
+      if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:String(st.ans)});return}
+    const got=await runSQL(ex,st.code||"");let r=cmpResult(got,exp,ex.tolerance);
+    if(r.ok&&exTables(ex).length){const seed=7+ex.id.length;const ge=await runSQL(ex,st.code||"",seed),ee=await runSQL(ex,ex.ref.code,seed);if(!cmpResult(ge,ee,ex.tolerance).ok)r={ok:false,msg:"ถูกกับข้อมูลชุดนี้ แต่ผิดกับข้อมูลชุดที่ซ่อนไว้ (ตัวเลขต่างไปเล็กน้อย) โค้ดอาจพิมพ์ค่าตายตัวไว้"}}
+    if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:st.code})}catch(e){st.msg="รันไม่ได้: "+e.message;renderAll()}return}
+  if(ex.type==="written"){if(!(st.ans||"").trim()){st.msg="เขียนคำตอบก่อน";renderAll();return}st.grading=true;st.done=true;renderAll()}}
+function exFinish(ex,st,r){const a={id:uidGen(),exId:ex.id,topic:ex.topic,level:ex.level,domain:ex.domain||"",tool:ex.tool||"",type:ex.type,at:Date.now(),conf:st.conf||null,hint:!!st.hint,tries:st.tries||0,revealed:!!r.revealed,correct:!!r.correct,score:r.score!=null?r.score:null,given:(r.given||"").slice(0,2000),done:true};
+  A.exAtt.push(a);putAtt(a);st.done=true;st.att=a.id;
+  if(!a.correct&&a.score==null){const rv={id:uidGen(),node:ex.topic,prompt:"โจทย์: "+ex.q.slice(0,100),exId:ex.id,due:addDays(today(),1),step:0,history:[],created:today()};A.reviews.push(rv);putRec("review",rv)}
+  if(!a.correct&&(st.conf||0)>=4)toast("มั่นใจแต่ยังพลาด","ข้อนี้น่าทวนเป็นพิเศษ",[]);renderAll()}
+function exResult(ex,st){const a=A.exAtt.find(x=>x.id===st.att)||{};const w=el("div",{class:"exres"});
+  if(ex.type==="written"&&a.score==null){w.appendChild(el("p",{class:"sm",text:"คัดลอกข้อความไปให้ Claude ตรวจ แล้ววางผลกลับ"}));w.appendChild(promptBox("ให้ Claude ตรวจคำตอบ","",gradePrompt(ex,st.ans)));
+    const ta=el("textarea",{class:"chta",placeholder:"วางผลจาก Claude (มีบรรทัด คะแนน X/Y)"});w.appendChild(ta);w.appendChild(el("button",{class:"primary-btn",onclick:()=>{const m=ta.value.match(/คะแนน\s*[:：]?\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);if(!m){toast("ไม่เจอบรรทัด คะแนน X/Y","",[]);return}const sc=Number(m[1])/Number(m[2]);const miss=(ta.value.match(/ขาด\s*[:：]\s*(.+)/)||[])[1]||"";
+      const at={id:uidGen(),exId:ex.id,topic:ex.topic,level:ex.level,domain:ex.domain||"",tool:ex.tool||"",type:"written",at:Date.now(),conf:st.conf||null,hint:!!st.hint,tries:1,revealed:false,correct:sc>=0.75,score:sc,given:(st.ans||"").slice(0,2000),feedback:miss.slice(0,300),done:true};A.exAtt.push(at);putAtt(at);st.att=at.id;if(sc<0.75&&miss)addConfusion({node:ex.topic,text:"ตอบไม่ครบ: "+miss.slice(0,120),src:"exercise"});renderAll()},text:"บันทึกผลตรวจ"}));return w}
+  w.appendChild(el("p",{class:a.correct||a.score>=0.75?"okc":"warnc",text:a.revealed?"ดูเฉลย (นับว่าผิด)":a.score!=null?"คะแนน "+Math.round(a.score*100)+"%":a.correct?"✓ ถูก"+(a.tries>1?" (ครั้งที่ "+a.tries+")":""):"✗ ยังไม่ถูก"}));
+  if(ex.type==="mcq"){const ans=ex.fix&&ex.fix.answer!=null?ex.fix.answer:ex.answer;w.appendChild(el("p",{class:"sm",text:"เฉลย: "+String.fromCharCode(65+ans)+". "+ex.choices[ans]}))}
+  if(ex.type==="data"){const box=el("div");expectedOf(ex).then(e=>{box.appendChild(el("p",{class:"sm",text:"เฉลย (เว็บคำนวณจากข้อมูลจริง):"}));box.appendChild(resTable(e));if(ex.ref)box.appendChild(el("pre",{class:"exref",text:ex.ref.code}))}).catch(e=>box.appendChild(el("p",{class:"warnc sm",text:e.message})));w.appendChild(box)}
+  if(ex.type==="written"&&ex.model)w.appendChild(el("p",{class:"sm",text:"แนวคำตอบ: "+ex.model}));
+  if(a.feedback)w.appendChild(el("p",{class:"sm",text:"ขาด: "+a.feedback}));
+  if(ex.explain)w.appendChild(el("p",{class:"sm",text:"คำอธิบาย: "+ex.explain}));(ex.notes||[]).forEach(t=>w.appendChild(el("p",{class:"exnote",text:"📝 คำอธิบายเพิ่มเติม: "+t})));
+  const st2=UI.exs[ex.id];w.appendChild(el("div",{class:"row tight"},[el("button",{class:"ghost",onclick:()=>{UI.exs[ex.id]={open:true};renderAll()},text:"ทำอีกครั้ง"}),el("button",{class:"ghost",onclick:()=>{st2.dispute=!st2.dispute;renderAll()},text:"ไม่เข้าใจเฉลย / คิดว่าเฉลยผิด"})]));
+  if(st2.dispute)w.appendChild(disputeBox(ex,a));return w}
+function gradePrompt(ex,ans){return["[บทบาท] คุณคือผู้ตรวจงานด้านการวิเคราะห์ข้อมูล ตรวจตามเกณฑ์อย่างเคร่งครัดแต่ยุติธรรม","[หัวข้อ] "+(BY[ex.topic]?ex.topic+" "+BY[ex.topic].t:ex.topic),"[โจทย์] "+ex.q,"[เกณฑ์ให้คะแนน]\n"+(ex.rubric||[]).map((r,i)=>(i+1)+". "+r).join("\n"),"[คำตอบของผู้เรียน]\n"+ans,"[ตอบกลับ] อธิบายสั้น ๆ ทีละเกณฑ์ว่าได้กี่คะแนนเพราะอะไร แล้วปิดด้วย 2 บรรทัดนี้เท่านั้น:\nคะแนน X/"+(ex.maxScore||(ex.rubric||[]).length||4)+"\nขาด: ประเด็นที่ยังขาด (ถ้าไม่มีให้เขียนว่า ไม่มี)"].join("\n\n")}
+function disputeBox(ex,a){const w=el("div",{class:"exdis"});const data=exTables(ex).map(t=>"ตาราง "+t.name+" ("+t.columns.join(", ")+")\n"+tableCSV({columns:t.columns,rows:t.rows.slice(0,40)})).join("\n\n");
+  const p=["[สถานการณ์] ฉันทำโจทย์แล้วไม่เข้าใจเฉลย หรือคิดว่าเฉลยอาจผิด ช่วยอธิบายและตัดสินอย่างตรงไปตรงมา","[โจทย์] "+ex.q,ex.type==="mcq"?"[ตัวเลือก]\n"+ex.choices.map((c,i)=>String.fromCharCode(65+i)+". "+c).join("\n")+"\n[เฉลย] "+String.fromCharCode(65+ex.answer):"",ex.ref?"[โค้ดเฉลย SQL]\n"+ex.ref.code:"",data?"[ข้อมูล]\n"+data:"","[คำตอบของฉัน] "+(a.given||"(ไม่ได้ตอบ)"),ex.explain?"[คำอธิบายเดิม] "+ex.explain:"","[ข้อตกลง] คุยกับฉันได้หลายรอบ เมื่อฉันพิมพ์ว่า สรุป ให้ตอบด้วย 3 บรรทัดนี้เท่านั้น:\nผลตัดสิน: เฉลยถูก หรือ เฉลยผิด\nสรุป: ...\nเฉลยใหม่: ... (เฉพาะกรณีเฉลยผิด ถ้าเป็นเลือกตอบให้ตอบเป็นตัวอักษร ถ้าเป็นตัวเลขให้ตอบตัวเลขอย่างเดียว)"].filter(Boolean).join("\n\n");
+  w.appendChild(promptBox("คุยกับ Claude เรื่องเฉลยข้อนี้","",p));const ta=el("textarea",{class:"chta",placeholder:"วางผลสรุปจาก Claude"});w.appendChild(ta);
+  w.appendChild(el("button",{class:"primary-btn",onclick:()=>{const t=ta.value;const wrong=/ผลตัดสิน\s*[:：]\s*เฉลยผิด/.test(t),right=/ผลตัดสิน\s*[:：]\s*เฉลยถูก/.test(t);if(!wrong&&!right){toast("ไม่เจอบรรทัด ผลตัดสิน","",[]);return}
+    const sum=((t.match(/สรุป\s*[:：]\s*(.+)/)||[])[1]||"").trim();ex.notes=ex.notes||[];if(sum)ex.notes.push(sum);
+    if(wrong){const nv=((t.match(/เฉลยใหม่\s*[:：]\s*(.+)/)||[])[1]||"").trim();ex.fix=ex.fix||{};ex.fixes=(ex.fixes||[]).concat([{at:Date.now(),from:ex.type==="mcq"?ex.answer:"ref",to:nv,why:sum}]);
+      if(ex.type==="mcq"){const k=nv.toUpperCase().charCodeAt(0)-65;if(k>=0&&k<ex.choices.length)ex.fix.answer=k}else if(ex.type==="data"){const v=Number(nv.replace(/,/g,""));if(!isNaN(v)){ex.fix.expected=v;delete ex._exp}}
+      A.exAtt.filter(x=>x.exId===ex.id).forEach(x=>{if(ex.type==="mcq"&&ex.fix.answer!=null)x.correct=x.given===String.fromCharCode(65+ex.fix.answer);if(ex.type==="data"&&ex.fix.expected!=null&&!isNaN(Number(x.given)))x.correct=nEq(x.given,ex.fix.expected);putAtt(x)});
+      A.reviews=A.reviews.filter(r=>!(r.exId===ex.id&&A.exAtt.some(x=>x.exId===ex.id&&x.correct)));toast("แก้เฉลยแล้ว","ตรวจคำตอบเก่าใหม่ทั้งหมด",[])}
+    else{addConfusion({node:ex.topic,text:"เข้าใจเฉลยคลาด: "+(sum||ex.q).slice(0,120),src:"exercise"});toast("เฉลยถูก บันทึกคำอธิบายไว้แล้ว","ข้อนี้ยังนับว่าผิด และเข้ารายการทวน",[])}
+    putEx(ex.topic);UI.exs[ex.id].dispute=false;renderAll()},text:"วางผลแล้วบันทึก"}));return w}
+/* --- ตัวสร้างโจทย์ (หัวข้อ · บท · ทั้งช่วง) --- */
+function exImportance(n){const dep=NODES.filter(x=>x.pre.includes(n.id)).length,jobs=(A.jobs||[]).filter(j=>(j.must||[]).includes(n.id)||(j.nice||[]).includes(n.id)).length;const wk=(typeof topicDifficulty==="function"?topicDifficulty():[]).find(x=>x.n.id===n.id);const cf=A.confusions.filter(c=>c.node===n.id&&!c.resolved).length;const ms=mastery(n.id);
+  return`ระดับ ${n.tier==="c"?"แกน":n.tier==="s"?"เสริม":"ทางเลือก"} · มี ${dep} หัวข้อที่ต้องรู้เรื่องนี้ก่อน · ประกาศงานขอ ${jobs} ที่`+(wk?" · ผลการเรียน: "+wk.why.join(", "):"")+(cf?" · จดว่างง "+cf+" จุด":"")+(ms!=null?" · ผลโจทย์เดิม "+ms+"%":"")}
+function exPrompt(nodes,label){const tools="pandas, SQL, Excel, สถิติ, Python ล้วน";const doms="ค้าปลีก/อีคอมเมิร์ซ, โลจิสติกส์, การเงิน/ฟินเทค, ประกันภัย, การตลาด, ร้านอาหาร/F&B, HR/ปฏิบัติการ, สายข้อมูลล้วน";
+  const bySec={};nodes.forEach(n=>{(bySec[n.sec]=bySec[n.sec]||[]).push(n)});
+  return["[ใครเรียน] "+aboutMe(),"[งานที่ขอ] สร้างโจทย์ฝึกให้ "+label+" ตอบทีละบท ถ้ามีหลายบท ให้ตอบบทแรกก่อน แล้วท้ายข้อความเขียนว่า \"พิมพ์ ต่อ เพื่อบทถัดไป\"",
+   "[หัวข้อทั้งหมด]\n"+Object.entries(bySec).map(([s,ns])=>"## "+s+"\n"+ns.map(n=>`- ${n.id} ${n.t}: ${n.w}\n  หัวข้อย่อย: ${((DET[n.id]||{}).sub||[]).join(" · ")}\n  ความสำคัญ: ${exImportance(n)}\n  โจทย์ที่มีแล้ว: ${exOf(n.id).map(e=>e.q.slice(0,50)).join(" | ")||"ยังไม่มี"}`).join("\n")).join("\n\n"),
+   "[กติกา]\n- จำนวนข้อต่อหัวข้อไม่ตายตัว ตัดสินจากความสำคัญด้านบน หัวข้อแกนที่เป็นฐานของหลายเรื่องหรือประกาศงานขอเยอะ ให้ ⭐⭐⭐ ได้หลายข้อ หัวข้อเสริมให้น้อยลง หัวข้อที่ผู้เรียนอ่อนให้เพิ่ม\n- ระดับ: 1 = เข้าใจแนวคิด (ใช้ type mcq), 2 = ลงมือกับข้อมูล (ใช้ type data), 3 = ตีความและตัดสินใจทางธุรกิจ (ใช้ type written หรือ data ที่ต้องตีความ)\n- หมุนสายงานให้หลากหลาย: "+doms+"\n- หมุนเครื่องมือ: "+tools+" และมีโจทย์ผสมหลายเครื่องมือในระดับ 3\n- type data: ให้ข้อมูลตัวอย่างเป็นตาราง 15–60 แถว ค่าตัวเลขสมจริง มีความสกปรกเล็กน้อยถ้าหัวข้อเกี่ยวกับการล้างข้อมูล และต้องมี ref.code เป็น SQL แบบ SQLite ที่คำนวณคำตอบได้จากตารางนั้น (เว็บจะรัน ref เพื่อหาเฉลยเอง ไม่ต้องเขียนตัวเลขเฉลย) ถึงโจทย์จะให้ทำใน pandas หรือ Excel ก็ต้องมี ref เป็น SQL\n- type mcq: 4 ตัวเลือก มีคำตอบถูกข้อเดียว ตรวจซ้ำทุกข้อก่อนตอบ ตัวลวงต้องเป็นความเข้าใจผิดที่พบบ่อยจริง\n- type written: ให้ rubric 3–5 ประเด็น และ model (แนวคำตอบ)\n- ทุกข้อมี hint (ใบ้ทิศทาง ไม่เฉลย) และ explain\n- ภาษาไทย ศัพท์เทคนิคใช้อังกฤษได้",
+   "[รูปแบบตอบกลับ] JSON ใน code block เดียวต่อบท ไม่มีคำอธิบายอื่น:\n```json\n{\"chapter\":\"ชื่อบท\",\"exercises\":[\n {\"topic\":\"รหัสหัวข้อ\",\"level\":1,\"domain\":\"ประกันภัย\",\"tool\":\"สถิติ\",\"type\":\"mcq\",\"q\":\"...\",\"choices\":[\"...\",\"...\",\"...\",\"...\"],\"answer\":0,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":2,\"domain\":\"...\",\"tool\":\"SQL\",\"type\":\"data\",\"q\":\"...\",\"tables\":[{\"name\":\"claims\",\"columns\":[\"claim_id\",\"amount\"],\"rows\":[[\"C1\",1200.5]]}],\"ref\":{\"lang\":\"sql\",\"code\":\"SELECT ...\"},\"tolerance\":0.01,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":3,\"domain\":\"...\",\"tool\":\"ผสม\",\"type\":\"written\",\"q\":\"...\",\"rubric\":[\"...\"],\"maxScore\":4,\"model\":\"...\",\"hint\":\"...\",\"explain\":\"...\"}\n]}\n```"].join("\n\n")}
+function parseExJSON(text){const blocks=[...String(text).matchAll(/```(?:json)?\s*([\s\S]*?)```/g)].map(m=>m[1]);const cands=blocks.length?blocks:[String(text).slice(String(text).indexOf("{"),String(text).lastIndexOf("}")+1)];const out=[];const errs=[];
+  cands.forEach(c=>{try{const j=JSON.parse(c.replace(/,\s*([}\]])/g,"$1"));(j.exercises?[j]:Array.isArray(j)?j:[]).forEach(ch=>out.push(ch))}catch(e){errs.push(e.message)}});return{chapters:out,errs}}
+function validateEx(e){const p=[];if(!BY[e.topic])p.push("ไม่รู้จักหัวข้อ "+e.topic);if(![1,2,3].includes(e.level))p.push("ระดับต้องเป็น 1–3");if(!e.q)p.push("ไม่มีคำถาม");
+  if(e.type==="mcq"){if(!Array.isArray(e.choices)||e.choices.length<2)p.push("ตัวเลือกไม่ครบ");if(!(e.answer>=0&&e.answer<(e.choices||[]).length))p.push("ไม่มีเฉลยที่ถูกต้อง")}
+  else if(e.type==="data"){if(!exTables(e).length)p.push("ไม่มีตารางข้อมูล");if(!e.ref||!e.ref.code)p.push("ไม่มีโค้ดเฉลย SQL");exTables(e).forEach(t=>{if(!t.name||!Array.isArray(t.columns)||!Array.isArray(t.rows))p.push("ตารางไม่ครบส่วน");else if(t.rows.some(r=>r.length!==t.columns.length))p.push("บางแถวในตาราง "+t.name+" จำนวนคอลัมน์ไม่ตรง")})}
+  else if(e.type==="written"){if(!(e.rubric||[]).length)p.push("ไม่มีเกณฑ์ให้คะแนน")}else p.push("ไม่รู้จักชนิดโจทย์ "+e.type);return p}
+function exGenPanel(){const G=UI.exGen;G.stage=G.stage||[];const nodes=G.scope==="topic"?[BY[G.topic]]:G.scope==="sec"?nodesOfSec(G.sec,G.ph):NODES.filter(n=>n.ph===G.ph&&!n.plan&&n.tier!=="o");
+  const label=G.scope==="topic"?"หัวข้อ "+G.topic+" "+BY[G.topic].t:G.scope==="sec"?"บท "+G.sec:(PH[G.ph]||[G.ph])[0]+" ("+nodes.length+" หัวข้อ)";
+  const w=card("soft exgen",[el("div",{class:"row sp tight"},[el("b",{text:"🧩 สร้างโจทย์: "+label}),el("button",{class:"ghost",onclick:()=>{UI.exGen=null;renderAll()},text:"ปิด"})])]);
+  {const opts=[];if(G.topic)opts.push(["topic","หัวข้อนี้"]);if(G.sec)opts.push(["sec","ทั้งบท"]);if(G.ph)opts.push(["ph","ทั้งช่วง"]);if(opts.length>1)w.appendChild(pills(opts,G.scope,v=>{G.scope=v;renderAll()}))}
+  w.appendChild(el("p",{class:"sm muted",text:"1 คัดลอกข้อความ → 2 วางในแชทใหม่กับ Claude → 3 คัดลอกผล → 4 กดวางจากคลิปบอร์ด (ทำซ้ำทุกครั้งที่ได้บทใหม่) → 5 นำเข้า"}));
+  w.appendChild(promptBox("ข้อความสำหรับ Claude","",exPrompt(nodes,label)));
+  const ta=el("textarea",{class:"chta",placeholder:"หรือวางผลจาก Claude ตรงนี้"});const add=t=>{const r=parseExJSON(t);if(!r.chapters.length){G.msg="อ่าน JSON ไม่ได้"+(r.errs[0]?": "+r.errs[0]:"");renderAll();return}r.chapters.forEach(ch=>G.stage.push(ch));G.msg="เพิ่มแล้ว "+r.chapters.length+" บท";ta.value="";renderAll()};
+  w.appendChild(el("div",{class:"row tight"},[el("button",{onclick:async()=>{try{add(await navigator.clipboard.readText())}catch(e){G.msg="อ่านคลิปบอร์ดไม่ได้ วางในช่องแทน";renderAll()}},text:"📋 วางจากคลิปบอร์ด"}),el("button",{class:"ghost",onclick:()=>add(ta.value),text:"เพิ่มจากช่อง"})]));w.appendChild(ta);
+  if(G.msg)w.appendChild(el("p",{class:"sm",text:G.msg}));
+  if(G.stage.length){const all=G.stage.flatMap(ch=>ch.exercises||[]);const bad=all.map(e=>[e,validateEx(e)]).filter(x=>x[1].length);
+    w.appendChild(el("p",{class:"sm",text:`รอนำเข้า ${G.stage.length} บท · ${all.length} ข้อ · ⭐ ${all.filter(e=>e.level===1).length} · ⭐⭐ ${all.filter(e=>e.level===2).length} · ⭐⭐⭐ ${all.filter(e=>e.level===3).length}`+(bad.length?` · มีปัญหา ${bad.length} ข้อ (จะไม่นำเข้า)`:"")}));
+    bad.slice(0,5).forEach(([e,p])=>w.appendChild(el("p",{class:"warnc sm",text:"• "+(e.topic||"?")+": "+e.q.slice(0,40)+" → "+p.join(", ")})));
+    if(bad.length)w.appendChild(el("button",{class:"ghost",onclick:()=>{navigator.clipboard&&navigator.clipboard.writeText("ข้อเหล่านี้มีปัญหา ช่วยแก้แล้วส่ง JSON ใหม่เฉพาะข้อที่แก้ รูปแบบเดิม:\n"+bad.map(([e,p])=>"- "+e.topic+" \""+e.q.slice(0,60)+"\": "+p.join(", ")).join("\n"));toast("คัดลอกข้อความขอแก้แล้ว","วางในแชทเดิมกับ Claude",[])},text:"ขอ Claude แก้ข้อที่มีปัญหา"}));
+    w.appendChild(el("div",{class:"row tight"},[el("button",{class:"primary-btn",onclick:async()=>{let n=0;const tps=new Set();for(const e of all){if(validateEx(e).length)continue;e.id=uidGen();e.created=Date.now();if(e.type==="data"){try{await runSQL(e,e.ref.code)}catch(er){continue}}(A.ex[e.topic]=A.ex[e.topic]||[]).push(e);tps.add(e.topic);n++}
+      for(const t of tps)await putEx(t);G.stage=[];G.msg="นำเข้าแล้ว "+n+" ข้อ ใน "+tps.size+" หัวข้อ";toast("นำเข้าโจทย์ "+n+" ข้อ","",[]);renderAll()},text:"นำเข้าทั้งหมด"}),el("button",{class:"ghost",onclick:()=>{G.stage=[];G.msg="";renderAll()},text:"ล้างที่รอนำเข้า"})]))}
+  return w}
+{const _lp=lessonPage;lessonPage=function(n){const w=_lp(n);try{const c=exCard(n);const subs=[...w.querySelectorAll(".card")].find(x=>x.querySelector(".cap")&&/หัวข้อย่อย/.test(x.querySelector(".cap").textContent));if(subs)subs.after(c);else w.appendChild(c)}catch(e){}return w}}
 
 applyPlans();seedExt();migrateNotes();
 if(!A.repoSeeded){A.repoSeeded=true;const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},"repo: sales-forecast-mlops-at-scale");n.body=n.body.replace("## ทำอะไร (สรุป 2 บรรทัด)\n","## ทำอะไร (สรุป 2 บรรทัด)\nระบบพยากรณ์ยอดขายรายร้านที่ทำงานเองครบวงจร: ข้อมูลไหลเข้า ฝึกโมเดลรายสัปดาห์ เก็บผล และหน้าเว็บให้ผู้ใช้ดูและสั่งฝึกใหม่ ใช้ข้อมูล Rossmann 1,115 ร้าน\n").replace("## README ดีตรงไหน\n- ","## README ดีตรงไหน\n- เปิดด้วยประโยคเดียวว่าระบบทำอะไร แล้วตามด้วยแผนภาพและวิดีโอสาธิต\n- มีส่วน \"ทำงานยังไง\" เป็นขั้น 1–11 ก่อนวิธีติดตั้ง\n- บอกข้อจำกัดตรง ๆ เช่น เครื่องสเปกต่ำจะค้างตอนเปิดครั้งแรก").replace("## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- ","## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- หนึ่งโมเดลต่อร้าน เพราะแต่ละร้านมีรูปแบบยอดขายของตัวเอง\n- แยกเหตุผลการเลือกเครื่องมือไว้ใน notes/README.md").replace("## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- ","## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- PostgreSQL, Python, Streamlit: มีในแผนหลัก\n- Prophet, MLflow, Airflow, FastAPI, Docker: คอร์สต่อยอด MLOps ขั้น 1–5\n- Kafka, Spark, Ray, Kubernetes, Grafana: คอร์สต่อยอด MLOps ขั้น 6").replace("## เอามาใช้กับงานของเราได้อะไร\n- ","## เอามาใช้กับงานของเราได้อะไร\n- โครง README และบันทึกการตัดสินใจ (หัวข้อ g8, g9)\n- ข้อมูล Rossmann สำหรับฝึก time series");putNote(n)}
@@ -4841,7 +4997,7 @@ DPH=position().cur.ph;renderTopNav();renderFilters();renderAll();
     const snap=await docRef.get();
     if(snap.exists){const v=snap.data()||{};S={status:Object.assign({},v.status||{}),notes:Object.assign({},v.notes||{}),sub:v.sub||{},custom:v.custom||{},skipWhy:v.skipWhy||{},threads:v.threads||{},threadDefault:v.threadDefault||null,doneAt:v.doneAt||{},selfRate:v.selfRate||{},contentOv:v.contentOv||{chap:{},det:{}}};if(typeof applyContentOv==="function")setTimeout(()=>{applyContentOv();renderAll()},0);lastJSON=JSON.stringify({status:S.status,notes:S.notes,sub:S.sub,custom:S.custom,skipWhy:S.skipWhy,threads:S.threads,threadDefault:S.threadDefault});applyThreads();applyPlans();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
     else if(Object.keys(S.status).length||Object.keys(S.notes).length){await docRef.set({status:S.status,notes:S.notes});lastJSON=JSON.stringify({status:S.status,notes:S.notes})}
-    await syncA("data/users/"+uid);await syncR("data/users/"+uid);await syncCal("data/users/"+uid);await syncJobs("data/users/"+uid);await syncBrain("data/users/"+uid);seedExt();A.knMig=false;migrateNotes();
+    await syncA("data/users/"+uid);await syncR("data/users/"+uid);await syncCal("data/users/"+uid);await syncJobs("data/users/"+uid);await syncBrain("data/users/"+uid);await syncEx("data/users/"+uid);seedExt();A.knMig=false;migrateNotes();
     renderAll();
   }catch(e){docRef=null;updateFoot()}
 })();
