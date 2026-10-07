@@ -4856,6 +4856,75 @@ function accountCard(){if(!window.SB)return null;const c=card("",[el("div",{clas
   c.appendChild(el("div",{class:"row"},[el("button",{onclick:()=>fi.click(),text:"📥 นำเข้าไฟล์สำรอง"}),el("button",{class:"ghost",onclick:()=>window.SB_signOut(),text:"ออกจากระบบ"})]));c.appendChild(fi);c.appendChild(msg);
   c.appendChild(el("p",{class:"muted sm",text:"นำเข้าไฟล์ backup-da-map-….json จากเว็บเดิม ข้อมูลในบัญชีนี้จะถูกแทนด้วยข้อมูลในไฟล์"}));return c}
 
+/* ===== ตัวรัน Python (Pyodide ใน Web Worker) + โจทย์เขียนฟังก์ชัน ===== */
+const PY_BASE=window.__PYBASE||"https://cdn.jsdelivr.net/pyodide/v314.0.7/full/";
+let PYW=null,PYQ=new Map(),PYID=0,PYREADY=false;
+const PY_WORKER=`let py=null,pd=false;self.onmessage=async e=>{const {id,base,needPandas,code,vars}=e.data;try{if(!py){const m=await import(base+"pyodide.mjs");py=await m.loadPyodide({indexURL:base})}
+ if(needPandas&&!pd){try{await py.loadPackage("pandas");pd=true}catch(err){}}const ns=py.globals.get("dict")();for(const k in vars)ns.set(k,vars[k]);
+ await py.runPythonAsync(code,{globals:ns});const out=ns.get("OUT");ns.destroy();postMessage({id,ok:true,out})}catch(err){postMessage({id,ok:false,err:String(err&&err.message||err)})}}`;
+function pyRun(code,vars,needPandas,ms){return new Promise((res,rej)=>{if(!PYW){PYW=new Worker(URL.createObjectURL(new Blob([PY_WORKER],{type:"text/javascript"})),{type:"module"});PYW.onmessage=e=>{const q=PYQ.get(e.data.id);if(!q)return;PYQ.delete(e.data.id);clearTimeout(q.t);PYREADY=true;e.data.ok?q.res(e.data.out):q.rej(new Error(pyErr(e.data.err)))};PYW.onerror=e=>{PYQ.forEach(q=>{clearTimeout(q.t);q.rej(new Error("โหลดตัวรัน Python ไม่ได้ (ต้องเปิดจากเว็บใหม่และมีอินเทอร์เน็ต)"))});PYQ.clear();PYW=null}}
+  const id=++PYID;const t=setTimeout(()=>{PYQ.delete(id);try{PYW.terminate()}catch(e){}PYW=null;PYREADY=false;rej(new Error("โค้ดทำงานนานเกิน "+Math.round((ms||15000)/1000)+" วินาที อาจวนลูปไม่จบ"))},PYREADY?(ms||15000):Math.max(ms||15000,90000));
+  PYQ.set(id,{res,rej,t});PYW.postMessage({id,base:PY_BASE,needPandas:!!needPandas,code,vars})})}
+function pyErr(s){const L=String(s).split("\n").filter(Boolean);const i=L.findIndex(l=>l.includes("<โค้ดของคุณ>"));const tail=L.slice(-1)[0]||s;const line=i>=0?(L[i].match(/line (\d+)/)||[])[1]:null;return(line?"บรรทัด "+line+": ":"")+tail}
+const GLUE_DATA=`import json, sys, io
+_buf=io.StringIO(); sys.stdout=_buf
+_T=json.loads(TABLES)
+try:
+    import pandas as pd
+    for _n,_t in _T.items(): globals()[_n]=pd.DataFrame(_t["rows"],columns=_t["columns"])
+except ImportError:
+    pd=None
+    for _n,_t in _T.items(): globals()[_n]=[dict(zip(_t["columns"],_r)) for _r in _t["rows"]]
+result=None
+exec(compile(USER,"<โค้ดของคุณ>","exec"),globals())
+sys.stdout=sys.__stdout__
+def _cv(v):
+    if hasattr(v,"item") and not isinstance(v,(list,dict,str)):
+        try: v=v.item()
+        except Exception: pass
+    if isinstance(v,float) and v!=v: return None
+    return v
+def _out(r):
+    if pd is not None and isinstance(r,pd.DataFrame):
+        return {"columns":[str(c) for c in r.columns],"values":[[_cv(x) for x in row] for row in r.astype(object).where(r.notna(),None).values.tolist()]}
+    if pd is not None and isinstance(r,pd.Series):
+        return _out(r.reset_index())
+    if isinstance(r,(list,tuple)) and r and isinstance(r[0],(list,tuple)):
+        return {"columns":["c%d"%i for i in range(len(r[0]))],"values":[[_cv(x) for x in row] for row in r]}
+    if isinstance(r,dict):
+        return {"columns":["key","value"],"values":[[k,_cv(v)] for k,v in r.items()]}
+    return {"columns":["result"],"values":[[_cv(r)]]}
+OUT=json.dumps({"res":_out(result),"stdout":_buf.getvalue()[-2000:],"has":result is not None},default=str,ensure_ascii=False)`;
+const GLUE_FUNC=`import json, copy, sys, io
+_buf=io.StringIO(); sys.stdout=_buf
+_ns={}
+exec(compile(USER,"<โค้ดของคุณ>","exec"),_ns)
+_f=_ns.get(FN)
+_res=None
+if _f is not None:
+    _res=[]
+    for _t in json.loads(TESTS):
+        try:
+            _o=_f(*copy.deepcopy(_t))
+            _res.append({"ok":True,"out":json.loads(json.dumps(_o,default=str))})
+        except Exception as _e:
+            _res.append({"ok":False,"err":type(_e).__name__+": "+str(_e)[:200]})
+sys.stdout=sys.__stdout__
+OUT=json.dumps({"res":_res,"stdout":_buf.getvalue()[-2000:]},ensure_ascii=False)`;
+async function runPyData(ex,code,variant){const T={};exTables(ex).forEach(t=>{T[t.name]={columns:t.columns,rows:variant?perturb(t,variant):t.rows}});const o=JSON.parse(await pyRun(GLUE_DATA,{TABLES:JSON.stringify(T),USER:code},true));return o}
+async function runPyFunc(code,fn,tests){const o=JSON.parse(await pyRun(GLUE_FUNC,{USER:code,FN:fn,TESTS:JSON.stringify(tests)},false));return o}
+function deepEq(a,b,unordered){if(typeof a==="number"&&typeof b==="number")return Math.abs(a-b)<=Math.max(1e-6,Math.abs(b)*1e-6)||Math.abs(a-b)<0.005;
+  if(Array.isArray(a)&&Array.isArray(b)){if(a.length!==b.length)return false;if(unordered){const ka=a.map(x=>JSON.stringify(x)).sort(),kb=b.map(x=>JSON.stringify(x)).sort();return ka.every((x,i)=>x===kb[i])}return a.every((x,i)=>deepEq(x,b[i]))}
+  if(a&&b&&typeof a==="object"&&typeof b==="object"){const ka=Object.keys(a).sort(),kb=Object.keys(b).sort();return ka.length===kb.length&&ka.every((k,i)=>k===kb[i]&&deepEq(a[k],b[k]))}return a===b}
+const showV=v=>{const s=JSON.stringify(v);return s&&s.length>120?s.slice(0,117)+"…":s};
+async function funcExpected(ex){if(ex._fexp)return ex._fexp;const all=ex.tests.map(t=>t.args);const o=await runPyFunc(ex.ref.code,ex.fn,all);if(!o.res)throw new Error("เฉลยไม่มีฟังก์ชัน "+ex.fn);if(o.res.some(r=>!r.ok))throw new Error("เฉลยพังในบางเคส: "+o.res.find(r=>!r.ok).err);ex._fexp=o.res.map(r=>r.out);return ex._fexp}
+async function gradeFunc(ex,code,onlyVisible){const exp=await funcExpected(ex);const idx=ex.tests.map((t,i)=>i).filter(i=>!onlyVisible||!ex.tests[i].hidden);const o=await runPyFunc(code,ex.fn,idx.map(i=>ex.tests[i].args));
+  if(!o.res)return{ok:false,rows:[],msg:"ไม่เจอฟังก์ชันชื่อ "+ex.fn+" ในโค้ด",stdout:o.stdout};
+  const rows=idx.map((i,k)=>{const r=o.res[k],t=ex.tests[i];const pass=r.ok&&deepEq(r.out,exp[i],!!ex.unordered);return{i,hidden:!!t.hidden,args:t.args,pass,got:r.ok?r.out:null,err:r.ok?null:r.err,exp:exp[i]}});
+  const bad=rows.find(r=>!r.pass);let msg=null;if(bad)msg=bad.hidden?"เคสที่ซ่อนไว้ยังไม่ผ่าน"+(bad.err?" (โค้ดพัง: "+bad.err+")":" ลองนึกถึงกรณีขอบ เช่น ข้อมูลว่าง ค่าซ้ำ ค่าติดลบ"):ex.fn+"("+bad.args.map(showV).join(", ")+") "+(bad.err?"พัง: "+bad.err:"ควรได้ "+showV(bad.exp)+" แต่ได้ "+showV(bad.got));
+  return{ok:!bad,rows,msg,stdout:o.stdout}}
+function funcRows(rows){return el("div",{class:"exscroll"},[el("table",{class:"exdt"},[el("tr",{},["","เรียกด้วย","ของนาย","ควรได้"].map(h=>el("th",{text:h}))),...rows.map(r=>el("tr",{},[el("td",{text:r.pass?"✓":"✗"}),el("td",{text:r.hidden?"(ซ่อน)":r.args.map(showV).join(", ")}),el("td",{text:r.hidden?"":r.err||showV(r.got)}),el("td",{text:r.hidden?"":showV(r.exp)})]))])])}
+
 /* ===== ระบบโจทย์: เลือกตอบ · ข้อมูล (เว็บคิดเฉลยเองด้วย SQL) · เขียนอธิบาย ===== */
 A.ex=A.ex||{};A.exAtt=A.exAtt||[];
 const SQLJS_VER="1.14.2",SQLJS_BASE="https://cdn.jsdelivr.net/npm/sql.js@"+SQLJS_VER+"/dist/";
@@ -4902,11 +4971,18 @@ function exItem(ex,i){const st=UI.exs[ex.id]=UI.exs[ex.id]||{open:false};const a
     const tbl=el("table",{class:"exdt"},[el("tr",{},t.columns.map(c=>el("th",{text:c}))),...t.rows.slice(0,5).map(r=>el("tr",{},r.map(v=>el("td",{text:fmtV(v)}))))]);tb.appendChild(el("div",{class:"exscroll"},[tbl]));if(t.rows.length>5)tb.appendChild(el("p",{class:"muted sm",text:"แสดง 5 แถวแรก ดาวน์โหลด CSV เพื่อดูทั้งหมด"}));b.appendChild(tb)});
   if(st.done){b.appendChild(exResult(ex,st));return w}
   if(ex.type==="mcq"){const ch=el("div",{class:"exch"});ex.choices.forEach((t,k)=>ch.appendChild(el("button",{class:"exc"+(st.pick===k?" on":""),onclick:()=>{st.pick=k;renderAll()}},[String.fromCharCode(65+k)+". "+t])));b.appendChild(ch)}
-  if(ex.type==="data"){const md=st.mode||"number";b.appendChild(pills([["number","ตอบเป็นตัวเลข / ข้อความ"],["sql","ส่งโค้ด SQL ให้เว็บรัน"]],md,v=>{st.mode=v;renderAll()}));
+  if(ex.type==="data"){const md=st.mode||"number";b.appendChild(pills([["number","ตอบเป็นตัวเลข / ข้อความ"],["sql","ส่งโค้ด SQL"],["py","ส่งโค้ด pandas"]],md,v=>{st.mode=v;renderAll()}));
     if(md==="number"){const ip=el("input",{class:"search",placeholder:"คำตอบ",value:st.ans||""});ip.addEventListener("input",()=>st.ans=ip.value);b.appendChild(ip)}
-    else{const ta=el("textarea",{class:"excode",spellcheck:"false",placeholder:"SELECT ... FROM "+(exTables(ex)[0]||{name:"table"}).name});ta.value=st.code||"";ta.addEventListener("input",()=>st.code=ta.value);b.appendChild(ta);
+    else if(md==="sql"){const ta=el("textarea",{class:"excode",spellcheck:"false",placeholder:"SELECT ... FROM "+(exTables(ex)[0]||{name:"table"}).name});ta.value=st.code||"";ta.addEventListener("input",()=>st.code=ta.value);b.appendChild(ta);
       b.appendChild(el("button",{class:"ghost",onclick:async()=>{try{st.preview=await runSQL(ex,st.code||"");st.err=null}catch(e){st.err=e.message;st.preview=null}renderAll()},text:"▶ ลองรัน (ไม่นับคะแนน)"}));
-      if(st.err)b.appendChild(el("p",{class:"warnc sm",text:st.err}));if(st.preview)b.appendChild(resTable(st.preview))}}
+      if(st.err)b.appendChild(el("p",{class:"warnc sm",text:st.err}));if(st.preview)b.appendChild(resTable(st.preview))}
+    else{const tn=exTables(ex).map(t=>t.name);const ta=el("textarea",{class:"excode",spellcheck:"false"});ta.value=st.pcode!=null?st.pcode:"# ตาราง "+tn.join(", ")+" เป็น DataFrame ให้แล้ว (import pandas as pd ไว้แล้ว)\n# เก็บคำตอบสุดท้ายไว้ในตัวแปร result (ตัวเลข, Series หรือ DataFrame)\n\nresult = ";ta.addEventListener("input",()=>st.pcode=ta.value);b.appendChild(ta);
+      b.appendChild(el("button",{class:"ghost",onclick:async()=>{st.busy=PYREADY?"กำลังรัน…":"กำลังโหลดตัวรัน Python ครั้งแรก (10–30 วินาที)…";renderAll();try{const o=await runPyData(ex,st.pcode||ta.value);st.ppre=o;st.err=o.has?null:"ยังไม่ได้เก็บคำตอบไว้ในตัวแปร result"}catch(e){st.err=e.message;st.ppre=null}st.busy=null;renderAll()},text:"▶ ลองรัน (ไม่นับคะแนน)"}));
+      if(st.busy)b.appendChild(el("p",{class:"muted sm",text:st.busy}));if(st.err)b.appendChild(el("p",{class:"warnc sm",text:st.err}));if(st.ppre){if(st.ppre.stdout)b.appendChild(el("pre",{class:"exref",text:st.ppre.stdout}));b.appendChild(resTable(st.ppre.res))}}}
+  if(ex.type==="func"){b.appendChild(el("pre",{class:"exref",text:ex.signature||("def "+ex.fn+"(...):")}));const vis=ex.tests.filter(t=>!t.hidden);b.appendChild(el("p",{class:"muted sm",text:"เคสตัวอย่าง: "+vis.map(t=>ex.fn+"("+t.args.map(showV).join(", ")+")").join(" · ")+" · มีเคสซ่อนอีก "+ex.tests.filter(t=>t.hidden).length+" เคส"}));
+    const ta=el("textarea",{class:"excode",spellcheck:"false"});ta.value=st.pcode!=null?st.pcode:(ex.signature||"def "+ex.fn+"():")+"\n    ";ta.addEventListener("input",()=>st.pcode=ta.value);b.appendChild(ta);
+    b.appendChild(el("button",{class:"ghost",onclick:async()=>{st.busy=PYREADY?"กำลังรัน…":"กำลังโหลดตัวรัน Python ครั้งแรก (10–30 วินาที)…";renderAll();try{st.frun=await gradeFunc(ex,st.pcode||ta.value,true);st.err=null}catch(e){st.err=e.message;st.frun=null}st.busy=null;renderAll()},text:"▶ ลองกับเคสตัวอย่าง"}));
+    if(st.busy)b.appendChild(el("p",{class:"muted sm",text:st.busy}));if(st.err)b.appendChild(el("p",{class:"warnc sm",text:st.err}));if(st.frun){if(st.frun.stdout)b.appendChild(el("pre",{class:"exref",text:st.frun.stdout}));if(st.frun.rows.length)b.appendChild(funcRows(st.frun.rows));else if(st.frun.msg)b.appendChild(el("p",{class:"warnc sm",text:st.frun.msg}))}}
   if(ex.type==="written"){const ta=el("textarea",{class:"chta",placeholder:"เขียนคำตอบ"});ta.value=st.ans||"";ta.addEventListener("input",()=>st.ans=ta.value);b.appendChild(ta)}
   b.appendChild(el("div",{class:"qrow"},[el("span",{class:"ql",text:"มั่นใจแค่ไหน"}),pills([[1,"1"],[2,"2"],[3,"3"],[4,"4"],[5,"5"]],st.conf,v=>{st.conf=v;renderAll()})]));
   if(st.hint&&ex.hint)b.appendChild(el("p",{class:"exhint",text:"💡 "+ex.hint}));if(st.msg)b.appendChild(el("p",{class:"warnc sm",text:st.msg}));
@@ -4918,9 +4994,14 @@ async function exSubmit(ex,st){st.tries=(st.tries||0)+1;st.msg=null;
   if(ex.type==="data"){try{const exp=await expectedOf(ex);
     if((st.mode||"number")==="number"){if(!(st.ans||"").trim()){st.msg="ใส่คำตอบก่อน";renderAll();return}const got={columns:["a"],values:[[isNaN(Number(String(st.ans).replace(/,/g,"")))?st.ans:Number(String(st.ans).replace(/,/g,""))]]};const r=cmpResult(got,exp,ex.tolerance);
       if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:String(st.ans)});return}
+    if(st.mode==="py"){st.busy=PYREADY?"กำลังตรวจ…":"กำลังโหลดตัวรัน Python ครั้งแรก (10–30 วินาที)…";renderAll();const code=st.pcode||"";const o=await runPyData(ex,code);let r=o.has?cmpResult(o.res,exp,ex.tolerance):{ok:false,msg:"ยังไม่ได้เก็บคำตอบไว้ในตัวแปร result"};
+      if(r.ok&&exTables(ex).length){const seed=7+ex.id.length;const ge=await runPyData(ex,code,seed),ee=await runSQL(ex,ex.ref.code,seed);if(!cmpResult(ge.res,ee,ex.tolerance).ok)r={ok:false,msg:"ถูกกับข้อมูลชุดนี้ แต่ผิดกับข้อมูลชุดที่ซ่อนไว้ (ตัวเลขต่างไปเล็กน้อย) โค้ดอาจพิมพ์ค่าตายตัวไว้"}}
+      st.busy=null;if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:code});return}
     const got=await runSQL(ex,st.code||"");let r=cmpResult(got,exp,ex.tolerance);
     if(r.ok&&exTables(ex).length){const seed=7+ex.id.length;const ge=await runSQL(ex,st.code||"",seed),ee=await runSQL(ex,ex.ref.code,seed);if(!cmpResult(ge,ee,ex.tolerance).ok)r={ok:false,msg:"ถูกกับข้อมูลชุดนี้ แต่ผิดกับข้อมูลชุดที่ซ่อนไว้ (ตัวเลขต่างไปเล็กน้อย) โค้ดอาจพิมพ์ค่าตายตัวไว้"}}
     if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:st.code})}catch(e){st.msg="รันไม่ได้: "+e.message;renderAll()}return}
+  if(ex.type==="func"){try{st.busy=PYREADY?"กำลังตรวจทุกเคส…":"กำลังโหลดตัวรัน Python ครั้งแรก (10–30 วินาที)…";renderAll();const r=await gradeFunc(ex,st.pcode||"",false);st.busy=null;st.frun=Object.assign({},r,{rows:r.rows.filter(x=>!x.hidden)});
+      if(!r.ok&&st.tries<3){st.msg=r.msg+" · ลองใหม่ได้อีก "+(3-st.tries)+" ครั้ง";renderAll();return}exFinish(ex,st,{correct:r.ok,given:st.pcode||""})}catch(e){st.busy=null;st.msg=e.message;renderAll()}return}
   if(ex.type==="written"){if(!(st.ans||"").trim()){st.msg="เขียนคำตอบก่อน";renderAll();return}st.grading=true;st.done=true;renderAll()}}
 function exFinish(ex,st,r){const a={id:uidGen(),exId:ex.id,topic:ex.topic,level:ex.level,domain:ex.domain||"",tool:ex.tool||"",type:ex.type,at:Date.now(),conf:st.conf||null,hint:!!st.hint,tries:st.tries||0,revealed:!!r.revealed,correct:!!r.correct,score:r.score!=null?r.score:null,given:(r.given||"").slice(0,2000),done:true};
   A.exAtt.push(a);putAtt(a);st.done=true;st.att=a.id;
@@ -4934,6 +5015,7 @@ function exResult(ex,st){const a=A.exAtt.find(x=>x.id===st.att)||{};const w=el("
   if(ex.type==="mcq"){const ans=ex.fix&&ex.fix.answer!=null?ex.fix.answer:ex.answer;w.appendChild(el("p",{class:"sm",text:"เฉลย: "+String.fromCharCode(65+ans)+". "+ex.choices[ans]}))}
   if(ex.type==="data"){const box=el("div");expectedOf(ex).then(e=>{box.appendChild(el("p",{class:"sm",text:"เฉลย (เว็บคำนวณจากข้อมูลจริง):"}));box.appendChild(resTable(e));if(ex.ref)box.appendChild(el("pre",{class:"exref",text:ex.ref.code}))}).catch(e=>box.appendChild(el("p",{class:"warnc sm",text:e.message})));w.appendChild(box)}
   if(ex.type==="written"&&ex.model)w.appendChild(el("p",{class:"sm",text:"แนวคำตอบ: "+ex.model}));
+  if(ex.type==="func"){if(st.frun&&st.frun.rows&&st.frun.rows.length)w.appendChild(funcRows(st.frun.rows));w.appendChild(el("p",{class:"sm",text:"ตัวอย่างเฉลย:"}));w.appendChild(el("pre",{class:"exref",text:ex.ref.code}))}
   if(a.feedback)w.appendChild(el("p",{class:"sm",text:"ขาด: "+a.feedback}));
   if(ex.explain)w.appendChild(el("p",{class:"sm",text:"คำอธิบาย: "+ex.explain}));(ex.notes||[]).forEach(t=>w.appendChild(el("p",{class:"exnote",text:"📝 คำอธิบายเพิ่มเติม: "+t})));
   const st2=UI.exs[ex.id];w.appendChild(el("div",{class:"row tight"},[el("button",{class:"ghost",onclick:()=>{UI.exs[ex.id]={open:true};renderAll()},text:"ทำอีกครั้ง"}),el("button",{class:"ghost",onclick:()=>{st2.dispute=!st2.dispute;renderAll()},text:"ไม่เข้าใจเฉลย / คิดว่าเฉลยผิด"})]));
@@ -4957,14 +5039,16 @@ function exPrompt(nodes,label){const tools="pandas, SQL, Excel, สถิติ,
   const bySec={};nodes.forEach(n=>{(bySec[n.sec]=bySec[n.sec]||[]).push(n)});
   return["[ใครเรียน] "+aboutMe(),"[งานที่ขอ] สร้างโจทย์ฝึกให้ "+label+" ตอบทีละบท ถ้ามีหลายบท ให้ตอบบทแรกก่อน แล้วท้ายข้อความเขียนว่า \"พิมพ์ ต่อ เพื่อบทถัดไป\"",
    "[หัวข้อทั้งหมด]\n"+Object.entries(bySec).map(([s,ns])=>"## "+s+"\n"+ns.map(n=>`- ${n.id} ${n.t}: ${n.w}\n  หัวข้อย่อย: ${((DET[n.id]||{}).sub||[]).join(" · ")}\n  ความสำคัญ: ${exImportance(n)}\n  โจทย์ที่มีแล้ว: ${exOf(n.id).map(e=>e.q.slice(0,50)).join(" | ")||"ยังไม่มี"}`).join("\n")).join("\n\n"),
-   "[กติกา]\n- จำนวนข้อต่อหัวข้อไม่ตายตัว ตัดสินจากความสำคัญด้านบน หัวข้อแกนที่เป็นฐานของหลายเรื่องหรือประกาศงานขอเยอะ ให้ ⭐⭐⭐ ได้หลายข้อ หัวข้อเสริมให้น้อยลง หัวข้อที่ผู้เรียนอ่อนให้เพิ่ม\n- ระดับ: 1 = เข้าใจแนวคิด (ใช้ type mcq), 2 = ลงมือกับข้อมูล (ใช้ type data), 3 = ตีความและตัดสินใจทางธุรกิจ (ใช้ type written หรือ data ที่ต้องตีความ)\n- หมุนสายงานให้หลากหลาย: "+doms+"\n- หมุนเครื่องมือ: "+tools+" และมีโจทย์ผสมหลายเครื่องมือในระดับ 3\n- type data: ให้ข้อมูลตัวอย่างเป็นตาราง 15–60 แถว ค่าตัวเลขสมจริง มีความสกปรกเล็กน้อยถ้าหัวข้อเกี่ยวกับการล้างข้อมูล และต้องมี ref.code เป็น SQL แบบ SQLite ที่คำนวณคำตอบได้จากตารางนั้น (เว็บจะรัน ref เพื่อหาเฉลยเอง ไม่ต้องเขียนตัวเลขเฉลย) ถึงโจทย์จะให้ทำใน pandas หรือ Excel ก็ต้องมี ref เป็น SQL\n- type mcq: 4 ตัวเลือก มีคำตอบถูกข้อเดียว ตรวจซ้ำทุกข้อก่อนตอบ ตัวลวงต้องเป็นความเข้าใจผิดที่พบบ่อยจริง\n- type written: ให้ rubric 3–5 ประเด็น และ model (แนวคำตอบ)\n- ทุกข้อมี hint (ใบ้ทิศทาง ไม่เฉลย) และ explain\n- ภาษาไทย ศัพท์เทคนิคใช้อังกฤษได้",
-   "[รูปแบบตอบกลับ] JSON ใน code block เดียวต่อบท ไม่มีคำอธิบายอื่น:\n```json\n{\"chapter\":\"ชื่อบท\",\"exercises\":[\n {\"topic\":\"รหัสหัวข้อ\",\"level\":1,\"domain\":\"ประกันภัย\",\"tool\":\"สถิติ\",\"type\":\"mcq\",\"q\":\"...\",\"choices\":[\"...\",\"...\",\"...\",\"...\"],\"answer\":0,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":2,\"domain\":\"...\",\"tool\":\"SQL\",\"type\":\"data\",\"q\":\"...\",\"tables\":[{\"name\":\"claims\",\"columns\":[\"claim_id\",\"amount\"],\"rows\":[[\"C1\",1200.5]]}],\"ref\":{\"lang\":\"sql\",\"code\":\"SELECT ...\"},\"tolerance\":0.01,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":3,\"domain\":\"...\",\"tool\":\"ผสม\",\"type\":\"written\",\"q\":\"...\",\"rubric\":[\"...\"],\"maxScore\":4,\"model\":\"...\",\"hint\":\"...\",\"explain\":\"...\"}\n]}\n```"].join("\n\n")}
+   "[กติกา]\n- จำนวนข้อต่อหัวข้อไม่ตายตัว ตัดสินจากความสำคัญด้านบน หัวข้อแกนที่เป็นฐานของหลายเรื่องหรือประกาศงานขอเยอะ ให้ ⭐⭐⭐ ได้หลายข้อ หัวข้อเสริมให้น้อยลง หัวข้อที่ผู้เรียนอ่อนให้เพิ่ม\n- ระดับ: 1 = เข้าใจแนวคิด (ใช้ type mcq), 2 = ลงมือกับข้อมูล (ใช้ type data), 3 = ตีความและตัดสินใจทางธุรกิจ (ใช้ type written หรือ data ที่ต้องตีความ)\n- หมุนสายงานให้หลากหลาย: "+doms+"\n- หมุนเครื่องมือ: "+tools+" และมีโจทย์ผสมหลายเครื่องมือในระดับ 3\n- type data: ให้ข้อมูลตัวอย่างเป็นตาราง 15–60 แถว ค่าตัวเลขสมจริง มีความสกปรกเล็กน้อยถ้าหัวข้อเกี่ยวกับการล้างข้อมูล และต้องมี ref.code เป็น SQL แบบ SQLite ที่คำนวณคำตอบได้จากตารางนั้น (เว็บจะรัน ref เพื่อหาเฉลยเอง ไม่ต้องเขียนตัวเลขเฉลย) ถึงโจทย์จะให้ทำใน pandas หรือ Excel ก็ต้องมี ref เป็น SQL\n- type mcq: 4 ตัวเลือก มีคำตอบถูกข้อเดียว ตรวจซ้ำทุกข้อก่อนตอบ ตัวลวงต้องเป็นความเข้าใจผิดที่พบบ่อยจริง\n- type func (สำหรับหัวข้อ Python ล้วน เช่น ฟังก์ชัน loop dict list): ให้ fn (ชื่อฟังก์ชัน), signature (บรรทัด def), ref.code เป็นฟังก์ชันเฉลย Python ที่รันได้ และ tests อย่างน้อย 5 เคส แต่ละเคสคือ {\"args\":[...]} ต้องมีกรณีขอบ (ข้อมูลว่าง ค่าซ้ำ ค่าติดลบ) และมีอย่างน้อย 2 เคสที่ \"hidden\":true เว็บจะรันเฉลยเพื่อหาผลที่ถูกเอง ไม่ต้องเขียนผลที่คาดหวัง ถ้าลำดับผลลัพธ์ไม่สำคัญให้ใส่ \"unordered\":true\n- type data ใช้ได้ทั้งโจทย์ SQL และ pandas: ผู้เรียนเลือกส่งตัวเลข โค้ด SQL หรือโค้ด pandas ก็ได้ เว็บตรวจกับผลของ ref SQL เหมือนกัน\n- type written: ให้ rubric 3–5 ประเด็น และ model (แนวคำตอบ)\n- ทุกข้อมี hint (ใบ้ทิศทาง ไม่เฉลย) และ explain\n- ภาษาไทย ศัพท์เทคนิคใช้อังกฤษได้",
+   "[รูปแบบตอบกลับ] JSON ใน code block เดียวต่อบท ไม่มีคำอธิบายอื่น:\n```json\n{\"chapter\":\"ชื่อบท\",\"exercises\":[\n {\"topic\":\"รหัสหัวข้อ\",\"level\":1,\"domain\":\"ประกันภัย\",\"tool\":\"สถิติ\",\"type\":\"mcq\",\"q\":\"...\",\"choices\":[\"...\",\"...\",\"...\",\"...\"],\"answer\":0,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":2,\"domain\":\"...\",\"tool\":\"SQL\",\"type\":\"data\",\"q\":\"...\",\"tables\":[{\"name\":\"claims\",\"columns\":[\"claim_id\",\"amount\"],\"rows\":[[\"C1\",1200.5]]}],\"ref\":{\"lang\":\"sql\",\"code\":\"SELECT ...\"},\"tolerance\":0.01,\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":2,\"domain\":\"ร้านอาหาร\",\"tool\":\"Python\",\"type\":\"func\",\"q\":\"...\",\"fn\":\"top_menu\",\"signature\":\"def top_menu(orders, n):\",\"ref\":{\"lang\":\"python\",\"code\":\"def top_menu(orders, n):\\n    ...\"},\"tests\":[{\"args\":[[{\"menu\":\"a\",\"qty\":2}],1]},{\"args\":[[],3],\"hidden\":true}],\"hint\":\"...\",\"explain\":\"...\"},\n {\"topic\":\"...\",\"level\":3,\"domain\":\"...\",\"tool\":\"ผสม\",\"type\":\"written\",\"q\":\"...\",\"rubric\":[\"...\"],\"maxScore\":4,\"model\":\"...\",\"hint\":\"...\",\"explain\":\"...\"}\n]}\n```"].join("\n\n")}
 function parseExJSON(text){const blocks=[...String(text).matchAll(/```(?:json)?\s*([\s\S]*?)```/g)].map(m=>m[1]);const cands=blocks.length?blocks:[String(text).slice(String(text).indexOf("{"),String(text).lastIndexOf("}")+1)];const out=[];const errs=[];
   cands.forEach(c=>{try{const j=JSON.parse(c.replace(/,\s*([}\]])/g,"$1"));(j.exercises?[j]:Array.isArray(j)?j:[]).forEach(ch=>out.push(ch))}catch(e){errs.push(e.message)}});return{chapters:out,errs}}
 function validateEx(e){const p=[];if(!BY[e.topic])p.push("ไม่รู้จักหัวข้อ "+e.topic);if(![1,2,3].includes(e.level))p.push("ระดับต้องเป็น 1–3");if(!e.q)p.push("ไม่มีคำถาม");
   if(e.type==="mcq"){if(!Array.isArray(e.choices)||e.choices.length<2)p.push("ตัวเลือกไม่ครบ");if(!(e.answer>=0&&e.answer<(e.choices||[]).length))p.push("ไม่มีเฉลยที่ถูกต้อง")}
   else if(e.type==="data"){if(!exTables(e).length)p.push("ไม่มีตารางข้อมูล");if(!e.ref||!e.ref.code)p.push("ไม่มีโค้ดเฉลย SQL");exTables(e).forEach(t=>{if(!t.name||!Array.isArray(t.columns)||!Array.isArray(t.rows))p.push("ตารางไม่ครบส่วน");else if(t.rows.some(r=>r.length!==t.columns.length))p.push("บางแถวในตาราง "+t.name+" จำนวนคอลัมน์ไม่ตรง")})}
-  else if(e.type==="written"){if(!(e.rubric||[]).length)p.push("ไม่มีเกณฑ์ให้คะแนน")}else p.push("ไม่รู้จักชนิดโจทย์ "+e.type);return p}
+  else if(e.type==="written"){if(!(e.rubric||[]).length)p.push("ไม่มีเกณฑ์ให้คะแนน")}
+  else if(e.type==="func"){if(!e.fn)p.push("ไม่มีชื่อฟังก์ชัน");if(!e.ref||!e.ref.code)p.push("ไม่มีโค้ดเฉลย Python");if(!Array.isArray(e.tests)||e.tests.length<3)p.push("เคสทดสอบน้อยกว่า 3");else{if(!e.tests.some(t=>t.hidden))p.push("ต้องมีเคสซ่อนอย่างน้อย 1");if(e.tests.some(t=>!Array.isArray(t.args)))p.push("เคสทดสอบต้องมี args เป็น array")}}
+  else p.push("ไม่รู้จักชนิดโจทย์ "+e.type);return p}
 function exGenPanel(){const G=UI.exGen;G.stage=G.stage||[];const nodes=G.scope==="topic"?[BY[G.topic]]:G.scope==="sec"?nodesOfSec(G.sec,G.ph):NODES.filter(n=>n.ph===G.ph&&!n.plan&&n.tier!=="o");
   const label=G.scope==="topic"?"หัวข้อ "+G.topic+" "+BY[G.topic].t:G.scope==="sec"?"บท "+G.sec:(PH[G.ph]||[G.ph])[0]+" ("+nodes.length+" หัวข้อ)";
   const w=card("soft exgen",[el("div",{class:"row sp tight"},[el("b",{text:"🧩 สร้างโจทย์: "+label}),el("button",{class:"ghost",onclick:()=>{UI.exGen=null;renderAll()},text:"ปิด"})])]);
@@ -4978,7 +5062,7 @@ function exGenPanel(){const G=UI.exGen;G.stage=G.stage||[];const nodes=G.scope==
     w.appendChild(el("p",{class:"sm",text:`รอนำเข้า ${G.stage.length} บท · ${all.length} ข้อ · ⭐ ${all.filter(e=>e.level===1).length} · ⭐⭐ ${all.filter(e=>e.level===2).length} · ⭐⭐⭐ ${all.filter(e=>e.level===3).length}`+(bad.length?` · มีปัญหา ${bad.length} ข้อ (จะไม่นำเข้า)`:"")}));
     bad.slice(0,5).forEach(([e,p])=>w.appendChild(el("p",{class:"warnc sm",text:"• "+(e.topic||"?")+": "+e.q.slice(0,40)+" → "+p.join(", ")})));
     if(bad.length)w.appendChild(el("button",{class:"ghost",onclick:()=>{navigator.clipboard&&navigator.clipboard.writeText("ข้อเหล่านี้มีปัญหา ช่วยแก้แล้วส่ง JSON ใหม่เฉพาะข้อที่แก้ รูปแบบเดิม:\n"+bad.map(([e,p])=>"- "+e.topic+" \""+e.q.slice(0,60)+"\": "+p.join(", ")).join("\n"));toast("คัดลอกข้อความขอแก้แล้ว","วางในแชทเดิมกับ Claude",[])},text:"ขอ Claude แก้ข้อที่มีปัญหา"}));
-    w.appendChild(el("div",{class:"row tight"},[el("button",{class:"primary-btn",onclick:async()=>{let n=0;const tps=new Set();for(const e of all){if(validateEx(e).length)continue;e.id=uidGen();e.created=Date.now();if(e.type==="data"){try{await runSQL(e,e.ref.code)}catch(er){continue}}(A.ex[e.topic]=A.ex[e.topic]||[]).push(e);tps.add(e.topic);n++}
+    w.appendChild(el("div",{class:"row tight"},[el("button",{class:"primary-btn",onclick:async()=>{let n=0;const tps=new Set();for(const e of all){if(validateEx(e).length)continue;e.id=uidGen();e.created=Date.now();if(e.type==="data"){try{await runSQL(e,e.ref.code)}catch(er){continue}}if(e.type==="func"){G.msg="กำลังตรวจเฉลย Python…";try{await funcExpected(e)}catch(er){if(!/โหลดตัวรัน/.test(er.message))continue;e.unchecked=true}}(A.ex[e.topic]=A.ex[e.topic]||[]).push(e);tps.add(e.topic);n++}
       for(const t of tps)await putEx(t);G.stage=[];G.msg="นำเข้าแล้ว "+n+" ข้อ ใน "+tps.size+" หัวข้อ";toast("นำเข้าโจทย์ "+n+" ข้อ","",[]);renderAll()},text:"นำเข้าทั้งหมด"}),el("button",{class:"ghost",onclick:()=>{G.stage=[];G.msg="";renderAll()},text:"ล้างที่รอนำเข้า"})]))}
   return w}
 {const _lp=lessonPage;lessonPage=function(n){const w=_lp(n);try{const c=exCard(n);const subs=[...w.querySelectorAll(".card")].find(x=>x.querySelector(".cap")&&/หัวข้อย่อย/.test(x.querySelector(".cap").textContent));if(subs)subs.after(c);else w.appendChild(c)}catch(e){}return w}}
