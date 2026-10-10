@@ -1030,6 +1030,13 @@ kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-botto
 .exgen{display:flex;flex-direction:column;gap:8px;margin:8px 0}
 .exb .search,.exb input{flex:none!important;height:auto!important;min-height:0!important;padding:10px 12px}
 .exstep{font-size:12px;font-weight:700;color:#B45309;margin:0}
+#cfmBox{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:20px;animation:popin .15s var(--ease)}
+.cfm{background:var(--surface);border-radius:20px;padding:22px 22px 16px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.25);text-align:center}
+.cfm-emo{font-size:32px}.cfm h3{margin:6px 0 4px;font-size:18px}.cfm p{margin:0 0 14px;word-break:break-word}
+.cfm-btns{justify-content:center;gap:10px}.cfm-yes{background:#DC2626!important;color:#fff!important;border:0!important;border-radius:999px!important;padding:9px 22px!important}
+.book{position:relative}.bmenu{position:absolute;top:8px;right:8px;z-index:2;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.88);color:#333;display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transition:opacity .15s}
+.book:hover .bmenu,.book:focus-within .bmenu{opacity:1}@media (hover:none){.bmenu{opacity:1}}
+.dangertxt{color:#DC2626!important}
 </style>
 </head>
 <body>
@@ -2253,7 +2260,7 @@ function renderShelf(box){
       if(it.seriesId&&SBY(it.seriesId)){if(shown.has(it.seriesId))return;shown.add(it.seriesId);grid.appendChild(seriesCard(SBY(it.seriesId)));return}
       const p=progressPct(it),bar=el("div",{class:"pbar"},[el("i")]);bar.firstChild.style.width=p+"%";
       const stale=it.status==="reading"&&lastTouch(it)&&lastTouch(it)<addDays(today(),-7);const z=it.seriesId?SBY(it.seriesId):null;
-      grid.appendChild(el("button",{class:"book",onclick:()=>{R.item=it.id;renderReading()}},[coverEl(it),el("div",{class:"bt",text:it.title}),el("div",{class:"ba",text:z?z.name+" · เล่ม "+(it.vol||"?"):(it.author||RKIND[it.kind][0])}),bar,el("div",{class:"bs",text:RSTATUS[it.status]+(unitOf(it)!=="done"?" · "+Math.round(p)+"%":"")+(stale?" · ไม่ได้แตะเกิน 7 วัน":"")})]))});
+      grid.appendChild(el("button",{class:"book",onclick:()=>{R.item=it.id;renderReading()}},[el("span",{class:"bmenu",role:"button","aria-label":"ตัวเลือก",tabindex:"0",onclick:e=>{e.stopPropagation();const m=el("div",{class:"menu"},[el("button",{onclick:()=>{closePop();R.item=it.id;renderReading()},text:"📖 เปิด"}),el("button",{onclick:()=>{closePop();R.form=Object.assign({},it);R.formBack=null;renderReading()},text:"✏️ แก้ไข"}),el("button",{class:"dangertxt",onclick:()=>{closePop();delItem(it.id);renderReading()},text:"🗑️ ลบ"})]);openPop(m,e.clientX-150,e.clientY+6)},text:"⋯"}),coverEl(it),el("div",{class:"bt",text:it.title}),el("div",{class:"ba",text:z?z.name+" · เล่ม "+(it.vol||"?"):(it.author||RKIND[it.kind][0])}),bar,el("div",{class:"bs",text:RSTATUS[it.status]+(unitOf(it)!=="done"?" · "+Math.round(p)+"%":"")+(stale?" · ไม่ได้แตะเกิน 7 วัน":"")})]))});
   }
   drawGrid();
 }
@@ -5120,8 +5127,40 @@ function seedEx(){if((A.exSeedV||0)>=EX_SEED_V)return;const tps=new Set();EX_SEE
     if(old){if(!old.sid){old.sid=e.sid;tps.add(e.topic)}return}const x=JSON.parse(JSON.stringify(e));x.id=uidGen();x.created=Date.now();x.seed=true;L.push(x);tps.add(e.topic)});
   A.exSeeded=true;A.exSeedV=EX_SEED_V;persistA();tps.forEach(t=>putEx(t))}
 
+
+/* ===== บันทึกการลบ (กันข้อมูลที่ลบแล้วถูกเครื่องอื่นส่งกลับมา) ===== */
+A.tombs=A.tombs||{};
+const TOMB_LISTS=[["b_","items"],["m_","marks"],["z_","series"],["k_","knotes"],["l_","learn"],["s_","sessions"],["r_","reviews"],["cv_","boards"],["xa_","exAtt"]];
+function tomb(docId){A.tombs[docId]=Date.now();persistA();if(dbBase)db.doc(dbBase+"/tombs").set({t:A.tombs}).catch(()=>{})}
+function purgeTombs(){let n=0;TOMB_LISTS.forEach(([pre,key])=>{if(!Array.isArray(A[key]))return;const before=A[key].length;A[key]=A[key].filter(x=>!A.tombs[pre+x.id]);n+=before-A[key].length});
+  Object.keys(A.days||{}).forEach(d=>{if(A.tombs["d_"+d]){delete A.days[d];n++}});
+  (A.plans||[]).forEach(pl=>{if(A.tombs["p_"+pl.id])n++});A.plans=(A.plans||[]).filter(pl=>!A.tombs["p_"+pl.id]);return n}
+async function syncTombs(base){try{const s0=await db.doc(base+"/tombs").get();const rem=s0.exists?(s0.data().t||{}):{};const cut=Date.now()-120*864e5;
+  const merged=Object.assign({},rem);Object.entries(A.tombs).forEach(([k,v])=>{if(!merged[k]||v>merged[k])merged[k]=v});Object.keys(merged).forEach(k=>{if(merged[k]<cut)delete merged[k]});A.tombs=merged;
+  purgeTombs();persistA();await db.doc(base+"/tombs").set({t:A.tombs});const all=await db.collection(base).get();for(const d of all.docs){if(A.tombs[d.id]){try{await db.doc(base+"/"+d.id).delete()}catch(e){}}}}catch(e){}}
+{const T0=[["delItem","b_"],["delMark","m_"],["delSeries","z_"],["delNote","k_"],["delLearn","l_"],["delSession","s_"],["delReview","r_"],["delDay","d_"],["delPlan","p_"],["delBoard","cv_"]];
+ T0.forEach(([fn,pre])=>{const o=window[fn];if(typeof o!=="function")return;window[fn]=function(id){tomb(pre+id);return o.apply(this,arguments)}})}
+/* undo ต้องยกเลิกบันทึกการลบด้วย */
+{const _pu=pushUndo;pushUndo=function(label,restore){_pu(label,()=>{const before=new Set(Object.keys(A.tombs));restore();
+  const lists=TOMB_LISTS.map(([pre,key])=>[pre,A[key]||[]]);lists.forEach(([pre,arr])=>arr.forEach(x=>{if(A.tombs[pre+x.id])delete A.tombs[pre+x.id]}));Object.keys(A.days||{}).forEach(d=>delete A.tombs["d_"+d]);(A.plans||[]).forEach(pl=>delete A.tombs["p_"+pl.id]);
+  persistA();if(dbBase)db.doc(dbBase+"/tombs").set({t:A.tombs}).catch(()=>{})})}}
+/* ===== ยืนยันก่อนลบ (เฉพาะที่ผู้ใช้กดเอง) ===== */
+let DEL_OK=false;
+function confirmBox(title,sub,onYes){const old=document.getElementById("cfmBox");if(old)old.remove();const o=el("div",{id:"cfmBox",role:"dialog","aria-modal":"true"});
+  const close=()=>{o.remove();document.removeEventListener("keydown",kd,true)};const kd=e=>{if(e.key==="Escape"){e.stopPropagation();close()}if(e.key==="Enter"){e.preventDefault();close();onYes()}};
+  o.appendChild(el("div",{class:"cfm"},[el("div",{class:"cfm-emo",text:"🗑️"}),el("h3",{text:title}),sub?el("p",{class:"muted sm",text:sub}):null,el("div",{class:"row cfm-btns"},[el("button",{class:"ghost",onclick:close,text:"ยกเลิก"}),el("button",{class:"danger cfm-yes",onclick:()=>{close();onYes()},text:"ลบ"})])]));
+  o.addEventListener("pointerdown",e=>{if(e.target===o)close()});document.body.appendChild(o);document.addEventListener("keydown",kd,true);setTimeout(()=>{const y=o.querySelector(".cfm-yes");if(y)y.focus()},30)}
+{const W=[["delItem","ลบหนังสือเล่มนี้?",id=>IBY(id)&&IBY(id).title,"หมุดของเล่มนี้จะถูกลบด้วย"],["delSeries","ลบชุดหนังสือนี้?",id=>SBY(id)&&SBY(id).name,""],["delNote","ลบโน้ตนี้?",id=>KBY(id)&&KBY(id).title,""],["delSession","ลบรอบเรียนนี้?",id=>{const x=A.sessions.find(y=>y.id===id);return x?thDate(x.date)+" · "+(x.focusMin||0)+" นาที":""},""],["delDay","ลบบันทึกวันนี้?",id=>thDate(id),""],["delMark","ลบหมุดนี้?",id=>{const m=A.marks.find(x=>x.id===id);return m?(m.text||"").slice(0,60):""},""],["delLearn","ลบรายการนอกแผนนี้?",id=>{const x=(A.learn||[]).find(y=>y.id===id);return x?x.text:""},""],["delPlan","ลบแผนนี้?",id=>{const x=(A.plans||[]).find(y=>y.id===id);return x?x.name:""},"หัวข้อในแผนนี้จะถูกลบด้วย"]];
+ W.forEach(([fn,title,name,extra])=>{const o=window[fn];if(typeof o!=="function")return;window[fn]=function(id){const ev=window.event;const user=ev&&/^(click|pointerup|keydown|touchend)$/.test(ev.type);
+   if(DEL_OK||!user)return o.apply(this,arguments);const args=arguments,self=this;let nm="";try{nm=name(id)||""}catch(e){}
+   confirmBox(title,[nm,extra,"กดเลิกทำได้ภายใน 5 วินาทีหลังลบ"].filter(Boolean).join(" · "),()=>{DEL_OK=true;try{o.apply(self,args)}finally{DEL_OK=false}renderAll()});return false}})}
+/* ===== โน้ตตัวอย่าง: id คงที่ ไม่สร้างซ้ำ และรวมตัวที่ซ้ำอยู่แล้ว ===== */
+function seedRepoNote(){const T="repo: sales-forecast-mlops-at-scale";const dups=(A.knotes||[]).filter(n=>n.type==="repo"&&n.title===T&&n.id!=="seedrepo1");
+  if(!A.knotes.some(n=>n.id==="seedrepo1")&&!A.tombs["k_seedrepo1"]){const keep=dups.sort((a,b)=>(b.updated||0)-(a.updated||0))[0];if(keep){const c=Object.assign({},keep,{id:"seedrepo1"});A.knotes.push(c);putNote(c)}else if(!A.repoSeeded||dups.length===0){const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},T);A.knotes=A.knotes.filter(x=>x.id!==n.id);if(dbBase)db.doc(dbBase+"/k_"+n.id).delete().catch(()=>{});n.id="seedrepo1";A.knotes.push(n);putNote(n)}}
+  dups.forEach(n=>{A.knotes=A.knotes.filter(x=>x.id!==n.id);if(dbBase)db.doc(dbBase+"/k_"+n.id).delete().catch(()=>{})});A.repoSeeded=true;persistA()}
+
 applyPlans();seedExt();migrateNotes();
-if(!A.repoSeeded){A.repoSeeded=true;const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},"repo: sales-forecast-mlops-at-scale");n.body=n.body.replace("## ทำอะไร (สรุป 2 บรรทัด)\n","## ทำอะไร (สรุป 2 บรรทัด)\nระบบพยากรณ์ยอดขายรายร้านที่ทำงานเองครบวงจร: ข้อมูลไหลเข้า ฝึกโมเดลรายสัปดาห์ เก็บผล และหน้าเว็บให้ผู้ใช้ดูและสั่งฝึกใหม่ ใช้ข้อมูล Rossmann 1,115 ร้าน\n").replace("## README ดีตรงไหน\n- ","## README ดีตรงไหน\n- เปิดด้วยประโยคเดียวว่าระบบทำอะไร แล้วตามด้วยแผนภาพและวิดีโอสาธิต\n- มีส่วน \"ทำงานยังไง\" เป็นขั้น 1–11 ก่อนวิธีติดตั้ง\n- บอกข้อจำกัดตรง ๆ เช่น เครื่องสเปกต่ำจะค้างตอนเปิดครั้งแรก").replace("## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- ","## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- หนึ่งโมเดลต่อร้าน เพราะแต่ละร้านมีรูปแบบยอดขายของตัวเอง\n- แยกเหตุผลการเลือกเครื่องมือไว้ใน notes/README.md").replace("## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- ","## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- PostgreSQL, Python, Streamlit: มีในแผนหลัก\n- Prophet, MLflow, Airflow, FastAPI, Docker: คอร์สต่อยอด MLOps ขั้น 1–5\n- Kafka, Spark, Ray, Kubernetes, Grafana: คอร์สต่อยอด MLOps ขั้น 6").replace("## เอามาใช้กับงานของเราได้อะไร\n- ","## เอามาใช้กับงานของเราได้อะไร\n- โครง README และบันทึกการตัดสินใจ (หัวข้อ g8, g9)\n- ข้อมูล Rossmann สำหรับฝึก time series");putNote(n)}
+if(!A.repoSeeded&&!window.SB){A.repoSeeded=true;const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},"repo: sales-forecast-mlops-at-scale");n.body=n.body.replace("## ทำอะไร (สรุป 2 บรรทัด)\n","## ทำอะไร (สรุป 2 บรรทัด)\nระบบพยากรณ์ยอดขายรายร้านที่ทำงานเองครบวงจร: ข้อมูลไหลเข้า ฝึกโมเดลรายสัปดาห์ เก็บผล และหน้าเว็บให้ผู้ใช้ดูและสั่งฝึกใหม่ ใช้ข้อมูล Rossmann 1,115 ร้าน\n").replace("## README ดีตรงไหน\n- ","## README ดีตรงไหน\n- เปิดด้วยประโยคเดียวว่าระบบทำอะไร แล้วตามด้วยแผนภาพและวิดีโอสาธิต\n- มีส่วน \"ทำงานยังไง\" เป็นขั้น 1–11 ก่อนวิธีติดตั้ง\n- บอกข้อจำกัดตรง ๆ เช่น เครื่องสเปกต่ำจะค้างตอนเปิดครั้งแรก").replace("## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- ","## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- หนึ่งโมเดลต่อร้าน เพราะแต่ละร้านมีรูปแบบยอดขายของตัวเอง\n- แยกเหตุผลการเลือกเครื่องมือไว้ใน notes/README.md").replace("## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- ","## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- PostgreSQL, Python, Streamlit: มีในแผนหลัก\n- Prophet, MLflow, Airflow, FastAPI, Docker: คอร์สต่อยอด MLOps ขั้น 1–5\n- Kafka, Spark, Ray, Kubernetes, Grafana: คอร์สต่อยอด MLOps ขั้น 6").replace("## เอามาใช้กับงานของเราได้อะไร\n- ","## เอามาใช้กับงานของเราได้อะไร\n- โครง README และบันทึกการตัดสินใจ (หัวข้อ g8, g9)\n- ข้อมูล Rossmann สำหรับฝึก time series");putNote(n)}
 setTimeout(()=>{renderRail();const mt=document.getElementById("miniT");if(mt)document.getElementById("rail").prepend(mt)},0);
 if(!A.baseline){ensureBaseline();A.baselineFresh=true}
 DPH=position().cur.ph;renderTopNav();renderFilters();renderAll();
@@ -5134,7 +5173,7 @@ DPH=position().cur.ph;renderTopNav();renderFilters();renderAll();
     const snap=await docRef.get();
     if(snap.exists){const v=snap.data()||{};S={status:Object.assign({},v.status||{}),notes:Object.assign({},v.notes||{}),sub:v.sub||{},custom:v.custom||{},skipWhy:v.skipWhy||{},threads:v.threads||{},threadDefault:v.threadDefault||null,doneAt:v.doneAt||{},selfRate:v.selfRate||{},contentOv:v.contentOv||{chap:{},det:{}}};if(typeof applyContentOv==="function")setTimeout(()=>{applyContentOv();renderAll()},0);lastJSON=JSON.stringify({status:S.status,notes:S.notes,sub:S.sub,custom:S.custom,skipWhy:S.skipWhy,threads:S.threads,threadDefault:S.threadDefault});applyThreads();applyPlans();try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
     else if(Object.keys(S.status).length||Object.keys(S.notes).length){await docRef.set({status:S.status,notes:S.notes});lastJSON=JSON.stringify({status:S.status,notes:S.notes})}
-    await syncA("data/users/"+uid);await syncR("data/users/"+uid);await syncCal("data/users/"+uid);await syncJobs("data/users/"+uid);await syncBrain("data/users/"+uid);await syncEx("data/users/"+uid);seedExt();seedEx();A.knMig=false;migrateNotes();
+    await syncTombs("data/users/"+uid);await syncA("data/users/"+uid);await syncR("data/users/"+uid);await syncCal("data/users/"+uid);await syncJobs("data/users/"+uid);await syncBrain("data/users/"+uid);await syncEx("data/users/"+uid);seedExt();seedEx();if(purgeTombs())persistA();seedRepoNote();A.knMig=false;migrateNotes();
     renderAll();
   }catch(e){docRef=null;updateFoot()}
 })();
