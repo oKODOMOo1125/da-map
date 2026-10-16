@@ -2156,7 +2156,7 @@ function queueSave(sv){
   },700);
 }
 /* ===== รอบ A: วันนี้ · จับเวลา · จดหลังรอบ · ทบทวน · ไม่เรียนวันนี้ · เหตุผลของฉัน · สถิติ ===== */
-const PIN_DATE="2027-01-13",START_DATE="2026-10-12",PIN_HOURS=285;
+const PIN_DATE="2027-01-29",START_DATE="2026-10-19",PIN_HOURS=285;
 function pinLabel(){const d=new Date(PIN_DATE+"T12:00:00");return d.getDate()+" "+["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."][d.getMonth()]}
 function trialDays(){const out=[];for(let d=START_DATE;out.length<5;d=addDays(d,1))if(isWeekday(d))out.push(d);return out}
 function mainStart(){let d=addDays(trialDays()[4],1);while(!isWeekday(d))d=addDays(d,1);return d}
