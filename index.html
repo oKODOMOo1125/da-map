@@ -1505,6 +1505,147 @@ body.nt-fsopen::after{content:"";position:fixed;inset:0;background:rgba(15,15,15
 .nt-zl{font-size:12px;color:var(--muted);min-width:38px;text-align:center;font-variant-numeric:tabular-nums;cursor:default}
 .nb-imgsz{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:2px 8px;border-radius:6px;display:none}
 .nb-imgf.sizing .nb-imgsz{display:block}.nb-imgf.sizing{outline:2px solid var(--focus);outline-offset:2px;border-radius:8px}
+
+/* ===== รอบ UX ===== */
+/* ตัวเลือกหัวข้อ */
+.tpbox{position:relative}
+.tpchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.tpchips:empty{display:none}
+.tpchip{display:inline-flex;align-items:baseline;gap:6px;padding:6px 6px 6px 12px;border-radius:999px;background:var(--found-bg);color:var(--ink);font-size:14px;max-width:100%}
+.tpchip b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tpchip small{color:var(--muted);font-size:12px;white-space:nowrap}
+.tpchip .tpx{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:0 6px;border-radius:999px}
+.tpchip .tpx:hover{background:var(--hover);color:var(--ink)}
+.tpwrap{position:relative}
+.tpin{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:9px 12px;font:inherit;font-size:15px;color:var(--ink)}
+.tpin:focus{outline:2px solid var(--focus);outline-offset:-1px;background:var(--surface)}
+.tpres{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:40;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.14);padding:6px;max-height:320px;overflow:auto}
+.tpbox.open .tpres:not(:empty){display:block}
+.tpg{font-size:12px;color:var(--muted);padding:8px 8px 4px}
+.tpo{display:flex;flex-direction:column;align-items:flex-start;gap:1px;width:100%;text-align:left;border:0;background:transparent;padding:7px 10px;border-radius:8px;cursor:pointer;color:var(--ink);font:inherit}
+.tpo:hover,.tpo.on{background:var(--hover)}
+.tpo .tpt{font-size:15px}
+.tpo .tpm{font-size:12px;color:var(--muted)}
+
+/* หน้าเตรียมเริ่ม */
+.prep2{display:flex;flex-direction:column;gap:10px}
+.prep2 .cap{font-size:18px;font-weight:600;color:var(--ink)}
+.lbl3{font-size:13px;color:var(--muted);margin-top:4px}
+.seg5{display:flex;flex-wrap:wrap;gap:6px}
+.seg5 button,.sp-amb button,.cap-tabs button,.sp-tabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+.seg5 button.on,.sp-amb button.on,.cap-tabs button.on,.sp-tabs button.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.presets{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.presets .pre{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;font-size:13.5px;cursor:pointer;transition:transform .12s var(--ease,ease),border-color .12s}
+.presets .pre:hover{border-color:var(--muted)}
+.presets .pre:active{transform:scale(.97)}
+.presets .pre.on{border-color:var(--found);background:var(--found-bg);box-shadow:inset 0 0 0 1px var(--found)}
+.presets .pic{font-size:20px;line-height:1}
+.stps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.stp{display:flex;flex-direction:column;gap:4px;padding:8px 10px;border-radius:12px;background:var(--surface2)}
+.stl{font-size:12.5px;color:var(--muted)}
+.stc{display:flex;align-items:center;gap:6px}
+.stc b{min-width:34px;text-align:center;font-size:20px;font-variant-numeric:tabular-nums}
+.stc button{width:34px;height:34px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer;line-height:1}
+.pstrip{display:flex;gap:3px;height:30px;border-radius:9px;overflow:hidden}
+.ps{position:relative;display:flex;align-items:center;justify-content:center;min-width:6px;font-size:12px;font-weight:600;overflow:hidden}
+.ps span{position:relative;z-index:1}
+.ps-w{background:var(--found-bg);color:var(--found)}
+.ps-b,.ps-l{background:var(--biz-bg);color:var(--biz)}
+.ps-l{background:color-mix(in srgb,var(--biz) 30%,var(--biz-bg))}
+.ps.past{opacity:.45}
+.ps.now{box-shadow:inset 0 0 0 2px currentColor}
+.ps #tbar{position:absolute;left:0;top:0;bottom:0;background:currentColor;opacity:.22;width:0;transition:width .5s linear}
+.pexp{margin:0;font-size:14.5px;line-height:1.5}
+.prex2 summary,.tm-tl summary,.cap-more summary{cursor:pointer;color:var(--muted);font-size:13.5px;padding:4px 0;list-style:none}
+.prex2 summary::before,.tm-tl summary::before,.cap-more summary::before{content:"▸ ";display:inline-block;transition:transform .15s}
+.prex2[open] summary::before,.tm-tl[open] summary::before,.cap-more[open] summary::before{transform:rotate(90deg)}
+.prex2[open]{padding-bottom:4px}
+.gorow{display:flex;align-items:center;gap:10px;margin-top:4px}
+.gorow .gob{width:auto!important;min-width:140px;font-size:16px;padding:11px 22px}
+.ghost.sndbtn{font-size:13px}
+
+/* ระหว่างจับเวลา */
+.tmr2{display:flex;flex-direction:column;gap:8px}
+.tm-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tm-st{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--found)}
+.tm-st i{font-style:normal}
+.tmr2.brk .tm-st{color:var(--biz)}
+.tmr2.pz .tm-st{color:var(--muted)}
+.tmr2:not(.brk):not(.pz) .tm-st i{animation:tmpulse 1.6s ease-in-out infinite}
+@keyframes tmpulse{50%{opacity:.25}}
+.tm-r{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tm-topic{font-size:17px;font-weight:600}
+.tmr2 .tbig{margin:0}
+.tm-next{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:14px}
+.tm-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.tm-btns button{border-radius:999px;padding:8px 14px;font:inherit;font-size:14.5px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tm-btns .tm-main{min-width:110px;font-weight:600}
+.tm-btns .endb{margin-left:auto}
+.tm-goal{margin:0;font-size:14px;color:var(--muted)}
+.sndwarn{align-self:flex-start;border:1px dashed var(--here);color:var(--here);background:transparent;border-radius:999px;padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+@media (max-width:700px){.presets{grid-template-columns:repeat(3,1fr)}.tm-btns .endb{margin-left:0}.gorow .gob{flex:1}}
+
+/* ปลุก */
+#alarmov{position:fixed;inset:0;z-index:200;background:rgba(10,16,20,.55);display:flex;align-items:center;justify-content:center;padding:16px;animation:alin .2s ease}
+@keyframes alin{from{opacity:0}}
+.alcard{background:var(--surface);color:var(--ink);border-radius:22px;padding:28px 26px 20px;max-width:420px;width:100%;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:alshake .6s ease 2}
+@keyframes alshake{20%{transform:rotate(-2deg) scale(1.02)}40%{transform:rotate(2deg) scale(1.02)}60%{transform:rotate(-1deg)}80%{transform:rotate(1deg)}}
+.alic{font-size:52px;line-height:1.1}
+.alt{font-size:22px;font-weight:600;margin-top:8px}
+.als{font-size:15.5px;color:var(--muted);margin:6px 0 16px}
+.albtn{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.albtn button{border-radius:999px;padding:12px 16px;font:inherit;font-size:16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+@media (prefers-reduced-motion:reduce){.alcard,#alarmov,.tm-st i{animation:none!important}}
+
+/* เพลง */
+#sndpanel{position:fixed;right:16px;bottom:16px;z-index:60;width:min(380px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,.22);padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;box-sizing:border-box}
+.sp-h{display:flex;align-items:center;justify-content:space-between}
+.sp-tabs,.cap-tabs{display:flex;gap:6px}
+.sp-x{border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:2px 8px;border-radius:8px}
+.sp-x:hover{background:var(--hover);color:var(--ink)}
+.sp-now{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:var(--found-bg)}
+.sp-now b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#sndpanel .row.tight{display:flex;gap:6px;align-items:center}
+#sndpanel .row.tight .search{flex:1;min-width:0}
+#sndpanel input[type=range]{flex:1;accent-color:var(--found)}
+.sp-list{display:flex;flex-direction:column;gap:2px;max-height:180px;overflow:auto}
+.sp-it{display:flex;align-items:center;border-radius:8px}
+.sp-it.on{background:var(--hover)}
+.sp-it>button,.sp-pl{flex:1;text-align:left;border:0;background:transparent;color:var(--ink);font:inherit;font-size:13.5px;padding:6px 8px;cursor:pointer;border-radius:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-it>button:hover{background:var(--hover)}
+.sp-del{flex:0!important;color:var(--muted)!important;font-size:16px!important}
+.sp-amb{display:flex;flex-wrap:wrap;gap:6px}
+.sp-chk{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.sp-chk input{width:18px;height:18px;accent-color:var(--found)}
+#mpstage{position:fixed;left:-10000px;bottom:0;width:352px;z-index:61}
+#mpstage iframe{width:100%;border:0;border-radius:12px;display:block;height:198px}
+#mpstage iframe.mp-sp{height:152px}
+#mpstage iframe.mp-sc{height:166px}
+#mpstage audio{width:100%}
+#mpstage.show{left:auto;right:30px}
+#mpmini{position:fixed;right:16px;bottom:16px;z-index:55;display:flex;align-items:center;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow);padding:3px}
+#mpmini button{border:0;background:transparent;color:var(--ink);font:inherit;font-size:13.5px;cursor:pointer;border-radius:999px;padding:6px 10px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mpmini button:hover{background:var(--hover)}
+@media (max-width:700px){#sndpanel,#mpmini{bottom:calc(72px + env(safe-area-inset-bottom,0px))}#sndpanel{right:8px;left:8px;width:auto}#mpstage.show{right:20px;width:calc(100vw - 40px)}}
+
+/* จดนอกแผน */
+.cap2{display:flex;flex-direction:column;gap:8px}
+.cap-ti{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:19px;font-weight:600;padding:8px 2px}
+.cap-ti:focus{outline:none;border-bottom-color:var(--found)}
+.cap-wt{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:9px 12px;font:inherit;font-size:15px;color:var(--ink);resize:vertical}
+.cap-sug{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.cap-sug:empty{display:none}
+.cap-more{display:flex;flex-direction:column;gap:6px}
+.cap-more[open]{display:block}
+.qchips .capq{opacity:.9}
+
+.tmi{display:inline-flex;margin-right:6px;vertical-align:-2px}
+.tpres .tpo{border:0!important;box-shadow:none!important;margin:0!important}
+.goalin{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:9px 12px;font:inherit;font-size:14.5px;color:var(--ink)}.goalin:focus{outline:2px solid var(--focus);outline-offset:-1px;background:var(--surface)}
+#sndpanel button:not(.on):not(.sp-x):not(.sp-pl):not(.sp-del):not(.primary-btn){border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+#sndpanel .primary-btn{border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;background:var(--ink);color:var(--surface);border:1px solid var(--ink)}
+#sndpanel button:hover{filter:brightness(.97)}
+#mpstage.show{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.18);box-sizing:border-box}
 </style>
 
 <script>var supabase=(function(e){function t(e,t){var n={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.indexOf(r)<0&&(n[r]=e[r]);if(e!=null&&typeof Object.getOwnPropertySymbols==`function`)for(var i=0,r=Object.getOwnPropertySymbols(e);i<r.length;i++)t.indexOf(r[i])<0&&Object.prototype.propertyIsEnumerable.call(e,r[i])&&(n[r[i]]=e[r[i]]);return n}function n(e,t,n,r){function i(e){return e instanceof n?e:new n(function(t){t(e)})}return new(n||=Promise)(function(n,a){function o(e){try{c(r.next(e))}catch(e){a(e)}}function s(e){try{c(r.throw(e))}catch(e){a(e)}}function c(e){e.done?n(e.value):i(e.value).then(o,s)}c((r=r.apply(e,t||[])).next())})}let r=e=>e?(...t)=>e(...t):(...e)=>fetch(...e);var i=class extends Error{constructor(e,t=`FunctionsError`,n){super(e),this.name=t,this.context=n}toJSON(){return{name:this.name,message:this.message,context:this.context}}},a=class extends i{constructor(e){super(`Failed to send a request to the Edge Function`,`FunctionsFetchError`,e)}},o=class extends i{constructor(e){super(`Relay Error invoking the Edge Function`,`FunctionsRelayError`,e)}},s=class extends i{constructor(e){super(`Edge Function returned a non-2xx status code`,`FunctionsHttpError`,e)}},c;(function(e){e.Any=`any`,e.ApNortheast1=`ap-northeast-1`,e.ApNortheast2=`ap-northeast-2`,e.ApSouth1=`ap-south-1`,e.ApSoutheast1=`ap-southeast-1`,e.ApSoutheast2=`ap-southeast-2`,e.CaCentral1=`ca-central-1`,e.EuCentral1=`eu-central-1`,e.EuWest1=`eu-west-1`,e.EuWest2=`eu-west-2`,e.EuWest3=`eu-west-3`,e.SaEast1=`sa-east-1`,e.UsEast1=`us-east-1`,e.UsWest1=`us-west-1`,e.UsWest2=`us-west-2`})(c||={});var l=class{constructor(e,{headers:t={},customFetch:n,region:i=c.Any}={}){this.url=e,this.headers=t,this.region=i,this.fetch=r(n)}setAuth(e){this.headers.Authorization=`Bearer ${e}`}invoke(e){return n(this,arguments,void 0,function*(e,t={}){var n;let r,i,c;try{let{headers:n,method:l,body:u,signal:d,timeout:f}=t,p={},{region:m}=t;m||=this.region;let h=new URL(`${this.url}/${e}`);m&&m!==`any`&&(p[`x-region`]=m,h.searchParams.set(`forceFunctionRegion`,m));let g,ee=!!n&&Object.keys(n).some(e=>e.toLowerCase()===`content-type`);u&&!ee?typeof Blob<`u`&&u instanceof Blob||u instanceof ArrayBuffer?(p[`Content-Type`]=`application/octet-stream`,g=u):typeof u==`string`?(p[`Content-Type`]=`text/plain`,g=u):typeof FormData<`u`&&u instanceof FormData?g=u:(p[`Content-Type`]=`application/json`,g=JSON.stringify(u)):g=u&&typeof u!=`string`&&!(typeof Blob<`u`&&u instanceof Blob)&&!(u instanceof ArrayBuffer)&&!(typeof FormData<`u`&&u instanceof FormData)?JSON.stringify(u):u;let te=d;f&&(i=new AbortController,r=setTimeout(()=>i.abort(),f),d?(te=i.signal,c=()=>i.abort(),d.addEventListener(`abort`,c)):te=i.signal);let _=yield this.fetch(h.toString(),{method:l||`POST`,headers:Object.assign(Object.assign(Object.assign({},p),this.headers),n),body:g,signal:te}).catch(e=>{throw new a(e)}),ne=_.headers.get(`x-relay-error`);if(ne&&ne===`true`)throw new o(_);if(!_.ok)throw new s(_);let re=(_.headers.get(`Content-Type`)??`text/plain`).split(`;`)[0].trim().toLowerCase(),ie;return ie=re===`application/json`?yield _.json():re===`application/octet-stream`||re===`application/pdf`?yield _.blob():re===`text/event-stream`?_:re===`multipart/form-data`?yield _.formData():yield _.text(),{data:ie,error:null,response:_}}catch(e){return{data:null,error:e,response:e instanceof s||e instanceof o?e.context:void 0}}finally{r&&clearTimeout(r),c&&((n=t.signal)==null||n.removeEventListener(`abort`,c))}})}},u=class extends Error{constructor(e){super(e.message),this.name=`PostgrestError`,this.details=e.details,this.hint=e.hint,this.code=e.code}toJSON(){return{name:this.name,message:this.message,details:this.details,hint:this.hint,code:this.code}}};let d=e=>Math.min(1e3*2**e,3e4),f=[520,503],p=[`GET`,`HEAD`,`OPTIONS`];function m(e){"@babel/helpers - typeof";return m=typeof Symbol==`function`&&typeof Symbol.iterator==`symbol`?function(e){return typeof e}:function(e){return e&&typeof Symbol==`function`&&e.constructor===Symbol&&e!==Symbol.prototype?`symbol`:typeof e},m(e)}function h(e,t){if(m(e)!=`object`||!e)return e;var n=e[Symbol.toPrimitive];if(n!==void 0){var r=n.call(e,t||`default`);if(m(r)!=`object`)return r;throw TypeError(`@@toPrimitive must return a primitive value.`)}return(t===`string`?String:Number)(e)}function g(e){var t=h(e,`string`);return m(t)==`symbol`?t:t+``}function ee(e,t,n){return(t=g(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function te(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),n.push.apply(n,r)}return n}function _(e){for(var t=1;t<arguments.length;t++){var n=arguments[t]==null?{}:arguments[t];t%2?te(Object(n),!0).forEach(function(t){ee(e,t,n[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):te(Object(n)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))})}return e}function ne(e,t){return new Promise(n=>{if(t?.aborted){n();return}let r=setTimeout(()=>{t?.removeEventListener(`abort`,i),n()},e);function i(){clearTimeout(r),n()}t?.addEventListener(`abort`,i)})}function re(e,t,n,r){return!(!r||n>=3||!p.includes(e)||!f.includes(t))}async function ie(e,t,n,r){let i=0;for(;;){let a=_({},n.headers);i>0&&(a[`X-Retry-Count`]=String(i));let o;try{o=await e(t,{method:n.method,headers:a,body:n.body,signal:n.signal})}catch(e){if(e?.name===`AbortError`||e?.code===`ABORT_ERR`||!p.includes(n.method))throw e;if(r&&i<3){let e=d(i);i++,await ne(e,n.signal);continue}throw e}if(re(n.method,o.status,i,r)){let e=o.headers?.get(`Retry-After`)??null,t=e===null?d(i):Math.max(0,parseInt(e,10)||0)*1e3;await o.text(),i++,await ne(t,n.signal);continue}return o}}var ae=class{constructor(e){this.shouldThrowOnError=!1,this.retryEnabled=!0,this.method=e.method,this.url=e.url,this.headers=new Headers(e.headers),this.schema=e.schema,this.body=e.body,this.shouldThrowOnError=e.shouldThrowOnError??!1,this.signal=e.signal,this.isMaybeSingle=e.isMaybeSingle??!1,this.shouldStripNulls=e.shouldStripNulls??!1,this.urlLengthLimit=e.urlLengthLimit??8e3,this.retryEnabled=e.retry??!0,e.fetch?this.fetch=e.fetch:this.fetch=fetch}throwOnError(){return this.shouldThrowOnError=!0,this}stripNulls(){if(this.headers.get(`Accept`)===`text/csv`)throw Error(`stripNulls() cannot be used with csv()`);return this.shouldStripNulls=!0,this}setHeader(e,t){return this.headers=new Headers(this.headers),this.headers.set(e,t),this}retry(e){return this.retryEnabled=e,this}then(e,t){var n=this;if(this.schema===void 0||([`GET`,`HEAD`].includes(this.method)?this.headers.set(`Accept-Profile`,this.schema):this.headers.set(`Content-Profile`,this.schema)),this.method!==`GET`&&this.method!==`HEAD`&&this.headers.set(`Content-Type`,`application/json`),this.shouldStripNulls){let e=this.headers.get(`Accept`);e===`application/vnd.pgrst.object+json`?this.headers.set(`Accept`,`application/vnd.pgrst.object+json;nulls=stripped`):(!e||e===`application/json`)&&this.headers.set(`Accept`,`application/vnd.pgrst.array+json;nulls=stripped`)}let r=this.fetch,i=(async()=>{let e={};n.headers.forEach((t,n)=>{e[n]=t});let t=await ie(r,n.url.toString(),{method:n.method,headers:e,body:JSON.stringify(n.body,(e,t)=>typeof t==`bigint`?t.toString():t),signal:n.signal},n.retryEnabled);return await n.processResponse(t)})();return this.shouldThrowOnError||(i=i.catch(e=>{let t=``,n=``,r=``,i=e?.cause;if(i){let n=i?.message??``,r=i?.code??``;t=`${e?.name??`FetchError`}: ${e?.message}`,t+=`\n\nCaused by: ${i?.name??`Error`}: ${n}`,r&&(t+=` (${r})`),i?.stack&&(t+=`\n${i.stack}`)}else t=e?.stack??``;let a=this.url.toString().length;return e?.name===`AbortError`||e?.code===`ABORT_ERR`?(r=``,n=`Request was aborted (timeout or manual cancellation)`,a>this.urlLengthLimit&&(n+=`. Note: Your request URL is ${a} characters, which may exceed server limits. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [many IDs])), consider using an RPC function to pass values server-side.`)):(i?.name===`HeadersOverflowError`||i?.code===`UND_ERR_HEADERS_OVERFLOW`)&&(r=``,n=`HTTP headers exceeded server limits (typically 16KB)`,a>this.urlLengthLimit&&(n+=`. Your request URL is ${a} characters. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [200+ IDs])), consider using an RPC function instead.`)),{success:!1,error:{message:`${e?.name??`FetchError`}: ${e?.message}`,details:t,hint:n,code:r},data:null,count:null,status:0,statusText:``}})),i.then(e,t)}async processResponse(e){var t=this;let n=null,r=null,i=null,a=e.status,o=e.statusText;if(e.ok){if(t.method!==`HEAD`){let i=await e.text();if(i!==``)if(t.headers.get(`Accept`)===`text/csv`)r=i;else if(t.headers.get(`Accept`)&&t.headers.get(`Accept`)?.includes(`application/vnd.pgrst.plan+text`))r=i;else try{r=JSON.parse(i)}catch{if(n={message:i},r=null,t.shouldThrowOnError)throw new u({message:i,details:``,hint:``,code:``})}}let s=t.headers.get(`Prefer`)?.match(/count=(exact|planned|estimated)/),c=e.headers.get(`content-range`)?.split(`/`);if(s&&c&&c.length>1&&(i=parseInt(c[1])),t.isMaybeSingle&&Array.isArray(r))if(r.length>1){if(n={code:`PGRST116`,details:`Results contain ${r.length} rows, application/vnd.pgrst.object+json requires 1 row`,hint:null,message:`JSON object requested, multiple (or no) rows returned`},r=null,i=null,a=406,o=`Not Acceptable`,t.shouldThrowOnError)throw new u(_(_({},n),{},{hint:n.hint??``}))}else r=r.length===1?r[0]:null}else{let i=await e.text();try{n=JSON.parse(i),Array.isArray(n)&&e.status===404&&(r=[],n=null,a=200,o=`OK`)}catch{e.status===404&&i===``?(a=204,o=`No Content`):n={message:i}}if(n&&t.shouldThrowOnError)throw new u(n)}return{success:n===null,error:n,data:r,count:i,status:a,statusText:o}}returns(){return this}overrideTypes(){return this}},oe=class extends ae{throwOnError(){return super.throwOnError()}select(e){let t=!1,n=(e??`*`).split(``).map(e=>/\s/.test(e)&&!t?``:(e===`"`&&(t=!t),e)).join(``);return this.url.searchParams.set(`select`,n),this.headers.append(`Prefer`,`return=representation`),this}order(e,{ascending:t=!0,nullsFirst:n,foreignTable:r,referencedTable:i=r}={}){let a=i?`${i}.order`:`order`,o=this.url.searchParams.get(a);return this.url.searchParams.set(a,`${o?`${o},`:``}${e}.${t?`asc`:`desc`}${n===void 0?``:n?`.nullsfirst`:`.nullslast`}`),this}limit(e,{foreignTable:t,referencedTable:n=t}={}){let r=n===void 0?`limit`:`${n}.limit`;return this.url.searchParams.set(r,`${e}`),this}range(e,t,{foreignTable:n,referencedTable:r=n}={}){let i=r===void 0?`offset`:`${r}.offset`,a=r===void 0?`limit`:`${r}.limit`;return this.url.searchParams.set(i,`${e}`),this.url.searchParams.set(a,`${t-e+1}`),this}abortSignal(e){return this.signal=e,this}single(){return this.headers.set(`Accept`,`application/vnd.pgrst.object+json`),this}maybeSingle(){return this.isMaybeSingle=!0,this}csv(){return this.headers.set(`Accept`,`text/csv`),this}geojson(){return this.headers.set(`Accept`,`application/geo+json`),this}explain({analyze:e=!1,verbose:t=!1,settings:n=!1,buffers:r=!1,wal:i=!1,format:a=`text`}={}){let o=[e?`analyze`:null,t?`verbose`:null,n?`settings`:null,r?`buffers`:null,i?`wal`:null].filter(Boolean).join(`|`),s=this.headers.get(`Accept`)??`application/json`;return this.headers.set(`Accept`,`application/vnd.pgrst.plan+${a}; for="${s}"; options=${o};`),this}rollback(){return this.headers.append(`Prefer`,`tx=rollback`),this}returns(){return this}maxAffected(e){return this.headers.append(`Prefer`,`handling=strict`),this.headers.append(`Prefer`,`max-affected=${e}`),this}};let se=RegExp(`[,()]`);var ce=class extends oe{throwOnError(){return super.throwOnError()}eq(e,t){return this.url.searchParams.append(e,`eq.${t}`),this}neq(e,t){return this.url.searchParams.append(e,`neq.${t}`),this}gt(e,t){return this.url.searchParams.append(e,`gt.${t}`),this}gte(e,t){return this.url.searchParams.append(e,`gte.${t}`),this}lt(e,t){return this.url.searchParams.append(e,`lt.${t}`),this}lte(e,t){return this.url.searchParams.append(e,`lte.${t}`),this}like(e,t){return this.url.searchParams.append(e,`like.${t}`),this}likeAllOf(e,t){return this.url.searchParams.append(e,`like(all).{${t.join(`,`)}}`),this}likeAnyOf(e,t){return this.url.searchParams.append(e,`like(any).{${t.join(`,`)}}`),this}ilike(e,t){return this.url.searchParams.append(e,`ilike.${t}`),this}ilikeAllOf(e,t){return this.url.searchParams.append(e,`ilike(all).{${t.join(`,`)}}`),this}ilikeAnyOf(e,t){return this.url.searchParams.append(e,`ilike(any).{${t.join(`,`)}}`),this}regexMatch(e,t){return this.url.searchParams.append(e,`match.${t}`),this}regexIMatch(e,t){return this.url.searchParams.append(e,`imatch.${t}`),this}is(e,t){return this.url.searchParams.append(e,`is.${t}`),this}isDistinct(e,t){return this.url.searchParams.append(e,`isdistinct.${t}`),this}in(e,t){let n=Array.from(new Set(t)).map(e=>typeof e==`string`&&se.test(e)?`"${e}"`:`${e}`).join(`,`);return this.url.searchParams.append(e,`in.(${n})`),this}notIn(e,t){let n=Array.from(new Set(t)).map(e=>typeof e==`string`&&se.test(e)?`"${e}"`:`${e}`).join(`,`);return this.url.searchParams.append(e,`not.in.(${n})`),this}contains(e,t){return typeof t==`string`?this.url.searchParams.append(e,`cs.${t}`):Array.isArray(t)?this.url.searchParams.append(e,`cs.{${t.join(`,`)}}`):this.url.searchParams.append(e,`cs.${JSON.stringify(t)}`),this}containedBy(e,t){return typeof t==`string`?this.url.searchParams.append(e,`cd.${t}`):Array.isArray(t)?this.url.searchParams.append(e,`cd.{${t.join(`,`)}}`):this.url.searchParams.append(e,`cd.${JSON.stringify(t)}`),this}rangeGt(e,t){return this.url.searchParams.append(e,`sr.${t}`),this}rangeGte(e,t){return this.url.searchParams.append(e,`nxl.${t}`),this}rangeLt(e,t){return this.url.searchParams.append(e,`sl.${t}`),this}rangeLte(e,t){return this.url.searchParams.append(e,`nxr.${t}`),this}rangeAdjacent(e,t){return this.url.searchParams.append(e,`adj.${t}`),this}overlaps(e,t){return typeof t==`string`?this.url.searchParams.append(e,`ov.${t}`):this.url.searchParams.append(e,`ov.{${t.join(`,`)}}`),this}textSearch(e,t,{config:n,type:r}={}){let i=``;r===`plain`?i=`pl`:r===`phrase`?i=`ph`:r===`websearch`&&(i=`w`);let a=n===void 0?``:`(${n})`;return this.url.searchParams.append(e,`${i}fts${a}.${t}`),this}match(e){return Object.entries(e).filter(([e,t])=>t!==void 0).forEach(([e,t])=>{this.url.searchParams.append(e,`eq.${t}`)}),this}not(e,t,n){return this.url.searchParams.append(e,`not.${t}.${n}`),this}or(e,{foreignTable:t,referencedTable:n=t}={}){let r=n?`${n}.or`:`or`;return this.url.searchParams.append(r,`(${e})`),this}filter(e,t,n){return this.url.searchParams.append(e,`${t}.${n}`),this}},le=class{constructor(e,{headers:t={},schema:n,fetch:r,urlLengthLimit:i=8e3,retry:a}){this.url=e,this.headers=new Headers(t),this.schema=n,this.fetch=r,this.urlLengthLimit=i,this.retry=a}cloneRequestState(){return{url:new URL(this.url.toString()),headers:new Headers(this.headers)}}select(e,t){let{head:n=!1,count:r}=t??{},i=n?`HEAD`:`GET`,a=!1,o=(e??`*`).split(``).map(e=>/\s/.test(e)&&!a?``:(e===`"`&&(a=!a),e)).join(``),{url:s,headers:c}=this.cloneRequestState();return s.searchParams.set(`select`,o),r&&c.append(`Prefer`,`count=${r}`),new ce({method:i,url:s,headers:c,schema:this.schema,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}insert(e,{count:t,defaultToNull:n=!0}={}){let{url:r,headers:i}=this.cloneRequestState();if(t&&i.append(`Prefer`,`count=${t}`),n||i.append(`Prefer`,`missing=default`),Array.isArray(e)){let t=e.reduce((e,t)=>e.concat(Object.keys(t)),[]);if(t.length>0){let e=[...new Set(t)].map(e=>`"${e}"`);r.searchParams.set(`columns`,e.join(`,`))}}return new ce({method:`POST`,url:r,headers:i,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}upsert(e,{onConflict:t,ignoreDuplicates:n=!1,count:r,defaultToNull:i=!0}={}){let{url:a,headers:o}=this.cloneRequestState();if(o.append(`Prefer`,`resolution=${n?`ignore`:`merge`}-duplicates`),t!==void 0&&a.searchParams.set(`on_conflict`,t),r&&o.append(`Prefer`,`count=${r}`),i||o.append(`Prefer`,`missing=default`),Array.isArray(e)){let t=e.reduce((e,t)=>e.concat(Object.keys(t)),[]);if(t.length>0){let e=[...new Set(t)].map(e=>`"${e}"`);a.searchParams.set(`columns`,e.join(`,`))}}return new ce({method:`POST`,url:a,headers:o,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}update(e,{count:t}={}){let{url:n,headers:r}=this.cloneRequestState();return t&&r.append(`Prefer`,`count=${t}`),new ce({method:`PATCH`,url:n,headers:r,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}delete({count:e}={}){let{url:t,headers:n}=this.cloneRequestState();return e&&n.append(`Prefer`,`count=${e}`),new ce({method:`DELETE`,url:t,headers:n,schema:this.schema,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}};function ue(e,t){try{let t=JSON.parse(e);if(t&&typeof t==`object`&&!Array.isArray(t))return new u({message:String(t.message??e),details:t.details??``,hint:t.hint??``,code:t.code??``})}catch{}return new u({message:e||t,details:``,hint:``,code:``})}function de(e,t,n){let r=e;return{success:!1,error:new u({message:`${r?.name??`FetchError`}: ${r?.message}`,details:``,hint:``,code:``}),data:null,count:null,status:t,statusText:n}}var fe=class e{constructor(e,{headers:t={},schema:n,fetch:r,timeout:i,urlLengthLimit:a=8e3,retry:o}={}){this.url=e,this.headers=new Headers(t),this.schemaName=n,this.urlLengthLimit=a;let s=r??globalThis.fetch;i!==void 0&&i>0?this.fetch=(e,t)=>{let n=new AbortController,r=setTimeout(()=>n.abort(),i),a=t?.signal;if(a){if(a.aborted)return clearTimeout(r),s(e,t);let i=()=>{clearTimeout(r),n.abort()};return a.addEventListener(`abort`,i,{once:!0}),s(e,_(_({},t),{},{signal:n.signal})).finally(()=>{clearTimeout(r),a.removeEventListener(`abort`,i)})}return s(e,_(_({},t),{},{signal:n.signal})).finally(()=>clearTimeout(r))}:this.fetch=s,this.retry=o}from(e){if(!e||typeof e!=`string`||e.trim()===``)throw Error(`Invalid relation name: relation must be a non-empty string.`);return new le(new URL(`${this.url}/${e}`),{headers:new Headers(this.headers),schema:this.schemaName,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}schema(t){return new e(this.url,{headers:this.headers,schema:t,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}async getOpenApiSpec(){var e=this;let t=new Headers(e.headers);t.set(`Accept`,`application/openapi+json`),e.schemaName&&t.set(`Accept-Profile`,e.schemaName);let n={};t.forEach((e,t)=>{n[t]=e});let r=e.fetch??globalThis.fetch,i;try{i=await ie(r,`${e.url}/`,{method:`GET`,headers:n},e.retry??!0)}catch(e){return de(e,0,``)}let a;try{a=await i.text()}catch(e){return de(e,i.status,i.statusText)}if(i.ok)try{return{success:!0,error:null,data:JSON.parse(a),count:null,status:i.status,statusText:i.statusText}}catch{}return{success:!1,error:ue(a,i.statusText),data:null,count:null,status:i.status,statusText:i.statusText}}rpc(e,t={},{head:n=!1,get:r=!1,count:i}={}){let a,o=new URL(`${this.url}/rpc/${e}`),s,c=e=>typeof e==`object`&&!!e&&(!Array.isArray(e)||e.some(c)),l=n&&Object.values(t).some(c);l?(a=`POST`,s=t):n||r?(a=n?`HEAD`:`GET`,Object.entries(t).filter(([e,t])=>t!==void 0).map(([e,t])=>[e,Array.isArray(t)?`{${t.join(`,`)}}`:`${t}`]).forEach(([e,t])=>{o.searchParams.append(e,t)})):(a=`POST`,s=t);let u=new Headers(this.headers);return l?u.set(`Prefer`,i?`count=${i},return=minimal`:`return=minimal`):i&&u.set(`Prefer`,`count=${i}`),new ce({method:a,url:o,headers:u,schema:this.schemaName,body:s,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}},pe=class{constructor(){}static detectEnvironment(){if(typeof WebSocket<`u`)return{type:`native`,wsConstructor:WebSocket};let e=globalThis;if(typeof globalThis<`u`&&e.WebSocket!==void 0)return{type:`native`,wsConstructor:e.WebSocket};let t=typeof global<`u`?global:void 0;if(t&&t.WebSocket!==void 0)return{type:`native`,wsConstructor:t.WebSocket};if(typeof globalThis<`u`&&e.WebSocketPair!==void 0&&globalThis.WebSocket===void 0)return{type:`cloudflare`,error:`Cloudflare Workers detected. WebSocket clients are not supported in Cloudflare Workers.`,workaround:`Use Cloudflare Workers WebSocket API for server-side WebSocket handling, or deploy to a different runtime.`};if(typeof globalThis<`u`&&e.EdgeRuntime||typeof navigator<`u`&&navigator.userAgent?.includes(`Vercel-Edge`))return{type:`unsupported`,error:`Edge runtime detected (Vercel Edge/Netlify Edge). WebSockets are not supported in edge functions.`,workaround:`Use serverless functions or a different deployment target for WebSocket functionality.`};let n=globalThis.process;if(n){let e=n.versions;if(e&&e.node)return{type:`unsupported`,error:`Node.js detected but native WebSocket not found.`,workaround:`Ensure you are running Node.js 22+ or provide a WebSocket implementation via the transport option.`}}return{type:`unsupported`,error:`Unknown JavaScript runtime without WebSocket support.`,workaround:`Ensure you're running in a supported environment (browser, Node.js, Deno) or provide a custom WebSocket implementation.`}}static getWebSocketConstructor(){let e=this.detectEnvironment();if(e.wsConstructor)return e.wsConstructor;let t=e.error||`WebSocket not supported in this environment.`;throw e.workaround&&(t+=`\n\nSuggested solution: ${e.workaround}`),Error(t)}static isWebSocketSupported(){try{return this.detectEnvironment().type===`native`}catch{return!1}}};let v={closed:`closed`,errored:`errored`,joined:`joined`,joining:`joining`,leaving:`leaving`},me={close:`phx_close`,error:`phx_error`,join:`phx_join`,reply:`phx_reply`,leave:`phx_leave`,access_token:`access_token`},he={connecting:`connecting`,open:`open`,closing:`closing`,closed:`closed`};var ge=class{constructor(e){this.HEADER_LENGTH=1,this.USER_BROADCAST_PUSH_META_LENGTH=6,this.KINDS={userBroadcastPush:3,userBroadcast:4},this.BINARY_ENCODING=0,this.JSON_ENCODING=1,this.BROADCAST_EVENT=`broadcast`,this.allowedMetadataKeys=[],this.allowedMetadataKeys=e??[]}encode(e,t){if(e.event===this.BROADCAST_EVENT&&!(e.payload instanceof ArrayBuffer)&&typeof e.payload.event==`string`)return t(this._binaryEncodeUserBroadcastPush(e));let n=[e.join_ref,e.ref,e.topic,e.event,e.payload];return t(JSON.stringify(n))}_binaryEncodeUserBroadcastPush(e){return this._isArrayBuffer(e.payload?.payload)?this._encodeBinaryUserBroadcastPush(e):this._encodeJsonUserBroadcastPush(e)}_encodeBinaryUserBroadcastPush(e){let t=e.payload?.payload??new ArrayBuffer(0);return this._encodeUserBroadcastPush(e,this.BINARY_ENCODING,t)}_encodeJsonUserBroadcastPush(e){let t=e.payload?.payload??{},n=new TextEncoder().encode(JSON.stringify(t)).buffer;return this._encodeUserBroadcastPush(e,this.JSON_ENCODING,n)}_encodeUserBroadcastPush(e,t,n){let r=new TextEncoder,i=r.encode(e.topic),a=r.encode(e.ref??``),o=r.encode(e.join_ref??``),s=r.encode(e.payload.event),c=this.allowedMetadataKeys?this._pick(e.payload,this.allowedMetadataKeys):{},l=r.encode(Object.keys(c).length===0?``:JSON.stringify(c));if(o.length>255)throw Error(`joinRef length ${o.length} exceeds maximum of 255`);if(a.length>255)throw Error(`ref length ${a.length} exceeds maximum of 255`);if(i.length>255)throw Error(`topic length ${i.length} exceeds maximum of 255`);if(s.length>255)throw Error(`userEvent length ${s.length} exceeds maximum of 255`);if(l.length>255)throw Error(`metadata length ${l.length} exceeds maximum of 255`);let u=this.USER_BROADCAST_PUSH_META_LENGTH+o.length+a.length+i.length+s.length+l.length,d=new ArrayBuffer(this.HEADER_LENGTH+u),f=new DataView(d),p=new Uint8Array(d),m=0;f.setUint8(m++,this.KINDS.userBroadcastPush),f.setUint8(m++,o.length),f.setUint8(m++,a.length),f.setUint8(m++,i.length),f.setUint8(m++,s.length),f.setUint8(m++,l.length),f.setUint8(m++,t),p.set(o,m),m+=o.length,p.set(a,m),m+=a.length,p.set(i,m),m+=i.length,p.set(s,m),m+=s.length,p.set(l,m),m+=l.length;var h=new Uint8Array(d.byteLength+n.byteLength);return h.set(new Uint8Array(d),0),h.set(new Uint8Array(n),d.byteLength),h.buffer}decode(e,t){if(this._isArrayBuffer(e))return t(this._binaryDecode(e));if(typeof e==`string`){let[n,r,i,a,o]=JSON.parse(e);return t({join_ref:n,ref:r,topic:i,event:a,payload:o})}return t({})}_binaryDecode(e){let t=new DataView(e),n=t.getUint8(0),r=new TextDecoder;switch(n){case this.KINDS.userBroadcast:return this._decodeUserBroadcast(e,t,r)}}_decodeUserBroadcast(e,t,n){let r=t.getUint8(1),i=t.getUint8(2),a=t.getUint8(3),o=t.getUint8(4),s=this.HEADER_LENGTH+4,c=n.decode(e.slice(s,s+r));s+=r;let l=n.decode(e.slice(s,s+i));s+=i;let u=n.decode(e.slice(s,s+a));s+=a;let d=e.slice(s,e.byteLength),f=o===this.JSON_ENCODING?JSON.parse(n.decode(d)):d,p={type:this.BROADCAST_EVENT,event:l,payload:f};return a>0&&(p.meta=JSON.parse(u)),{join_ref:null,ref:null,topic:c,event:this.BROADCAST_EVENT,payload:p}}_isArrayBuffer(e){return e instanceof ArrayBuffer||e?.constructor?.name===`ArrayBuffer`}_pick(e,t){return!e||typeof e!=`object`?{}:Object.fromEntries(Object.entries(e).filter(([e])=>t.includes(e)))}},y;(function(e){e.abstime=`abstime`,e.bool=`bool`,e.date=`date`,e.daterange=`daterange`,e.float4=`float4`,e.float8=`float8`,e.int2=`int2`,e.int4=`int4`,e.int4range=`int4range`,e.int8=`int8`,e.int8range=`int8range`,e.json=`json`,e.jsonb=`jsonb`,e.money=`money`,e.numeric=`numeric`,e.oid=`oid`,e.reltime=`reltime`,e.text=`text`,e.time=`time`,e.timestamp=`timestamp`,e.timestamptz=`timestamptz`,e.timetz=`timetz`,e.tsrange=`tsrange`,e.tstzrange=`tstzrange`})(y||={});let _e=(e,t,n={})=>{let r=n.skipTypes??[];return t?Object.keys(t).reduce((n,i)=>(n[i]=ve(i,e,t,r),n),{}):{}},ve=(e,t,n,r)=>{let i=t.find(t=>t.name===e)?.type,a=n[e];return i&&!r.includes(i)?ye(i,a):be(a)},ye=(e,t)=>{if(e.charAt(0)===`_`)return we(t,e.slice(1,e.length));switch(e){case y.bool:return xe(t);case y.float4:case y.float8:case y.int2:case y.int4:case y.int8:case y.numeric:case y.oid:return Se(t);case y.json:case y.jsonb:return Ce(t);case y.timestamp:return Te(t);case y.abstime:case y.date:case y.daterange:case y.int4range:case y.int8range:case y.money:case y.reltime:case y.text:case y.time:case y.timestamptz:case y.timetz:case y.tsrange:case y.tstzrange:return be(t);default:return be(t)}},be=e=>e,xe=e=>{switch(e){case`t`:return!0;case`f`:return!1;default:return e}},Se=e=>{if(typeof e==`string`){let t=parseFloat(e);if(!Number.isNaN(t))return t}return e},Ce=e=>{if(typeof e==`string`)try{return JSON.parse(e)}catch{return e}return e},we=(e,t)=>{if(typeof e!=`string`)return e;let n=e.length-1,r=e[n];if(e[0]===`{`&&r===`}`){let r,i=e.slice(1,n);try{r=JSON.parse(`[`+i+`]`)}catch{r=i?i.split(`,`):[]}return r.map(e=>ye(t,e))}return e},Te=e=>typeof e==`string`?e.replace(` `,`T`):e,Ee=e=>{let t=new URL(e);return t.protocol=t.protocol.replace(/^ws/i,`http`),t.pathname=t.pathname.replace(/\/+$/,``).replace(/\/socket\/websocket$/i,``).replace(/\/socket$/i,``).replace(/\/websocket$/i,``),t.pathname===``||t.pathname===`/`?t.pathname=`/api/broadcast`:t.pathname+=`/api/broadcast`,t.href};var b=e=>typeof e==`function`?e:function(){return e},De=typeof self<`u`?self:null,Oe=typeof window<`u`?window:null,x=De||Oe||globalThis,ke=`2.0.0`,Ae=1e4,je=1e3,Me=100,S={connecting:0,open:1,closing:2,closed:3},C={closed:`closed`,errored:`errored`,joined:`joined`,joining:`joining`,leaving:`leaving`},w={close:`phx_close`,error:`phx_error`,join:`phx_join`,reply:`phx_reply`,leave:`phx_leave`},Ne={longpoll:`longpoll`,websocket:`websocket`},Pe={complete:4},Fe=`base64url.bearer.phx.`,Ie=class{constructor(e,t,n,r){this.channel=e,this.event=t,this.payload=n||function(){return{}},this.receivedResp=null,this.timeout=r,this.timeoutTimer=null,this.recHooks=[],this.sent=!1,this.ref=void 0}resend(e){this.timeout=e,this.reset(),this.send()}send(){this.hasReceived(`timeout`)||(this.startTimeout(),this.sent=!0,this.channel.socket.push({topic:this.channel.topic,event:this.event,payload:this.payload(),ref:this.ref,join_ref:this.channel.joinRef()}))}receive(e,t){return this.hasReceived(e)&&t(this.receivedResp.response),this.recHooks.push({status:e,callback:t}),this}reset(){this.cancelRefEvent(),this.ref=null,this.refEvent=null,this.receivedResp=null,this.sent=!1}destroy(){this.cancelRefEvent(),this.cancelTimeout()}matchReceive({status:e,response:t,_ref:n}){this.recHooks.filter(t=>t.status===e).forEach(e=>e.callback(t))}cancelRefEvent(){this.refEvent&&this.channel.off(this.refEvent)}cancelTimeout(){clearTimeout(this.timeoutTimer),this.timeoutTimer=null}startTimeout(){this.timeoutTimer&&this.cancelTimeout(),this.ref=this.channel.socket.makeRef(),this.refEvent=this.channel.replyEventName(this.ref),this.channel.on(this.refEvent,e=>{this.cancelRefEvent(),this.cancelTimeout(),this.receivedResp=e,this.matchReceive(e)}),this.timeoutTimer=setTimeout(()=>{this.trigger(`timeout`,{})},this.timeout)}hasReceived(e){return this.receivedResp&&this.receivedResp.status===e}trigger(e,t){this.channel.trigger(this.refEvent,{status:e,response:t})}},Le=class{constructor(e,t){this.callback=e,this.timerCalc=t,this.timer=void 0,this.tries=0}reset(){this.tries=0,clearTimeout(this.timer)}scheduleTimeout(){clearTimeout(this.timer),this.timer=setTimeout(()=>{this.tries+=1,this.callback()},this.timerCalc(this.tries+1))}},Re=class{constructor(e,t,n){this.state=C.closed,this.topic=e,this.params=b(t||{}),this.socket=n,this.bindings=[],this.bindingRef=0,this.timeout=this.socket.timeout,this.joinedOnce=!1,this.joinPush=new Ie(this,w.join,this.params,this.timeout),this.pushBuffer=[],this.stateChangeRefs=[],this.rejoinTimer=new Le(()=>{this.socket.isConnected()&&this.rejoin()},this.socket.rejoinAfterMs),this.stateChangeRefs.push(this.socket.onError(()=>this.rejoinTimer.reset())),this.stateChangeRefs.push(this.socket.onOpen(()=>{this.rejoinTimer.reset(),this.isErrored()&&this.rejoin()})),this.joinPush.receive(`ok`,()=>{this.state=C.joined,this.rejoinTimer.reset(),this.pushBuffer.forEach(e=>e.send()),this.pushBuffer=[]}),this.joinPush.receive(`error`,e=>{this.state=C.errored,this.socket.hasLogger()&&this.socket.log(`channel`,`error ${this.topic}`,e),this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.onClose(()=>{this.rejoinTimer.reset(),this.socket.hasLogger()&&this.socket.log(`channel`,`close ${this.topic}`),this.state=C.closed,this.socket.remove(this)}),this.onError(e=>{this.socket.hasLogger()&&this.socket.log(`channel`,`error ${this.topic}`,e),this.isJoining()&&this.joinPush.reset(),this.state=C.errored,this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.joinPush.receive(`timeout`,()=>{this.socket.hasLogger()&&this.socket.log(`channel`,`timeout ${this.topic}`,this.joinPush.timeout),new Ie(this,w.leave,b({}),this.timeout).send(),this.state=C.errored,this.joinPush.reset(),this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.on(w.reply,(e,t)=>{this.trigger(this.replyEventName(t),e)})}join(e=this.timeout){if(this.joinedOnce)throw Error(`tried to join multiple times. 'join' can only be called a single time per channel instance`);return this.timeout=e,this.joinedOnce=!0,this.rejoin(),this.joinPush}teardown(){this.pushBuffer.forEach(e=>e.destroy()),this.pushBuffer=[],this.rejoinTimer.reset(),this.joinPush.destroy(),this.state=C.closed,this.bindings=[]}onClose(e){this.on(w.close,e)}onError(e){return this.on(w.error,t=>e(t))}on(e,t){let n=this.bindingRef++;return this.bindings.push({event:e,ref:n,callback:t}),n}off(e,t){this.bindings=this.bindings.filter(n=>!(n.event===e&&(t===void 0||t===n.ref)))}canPush(){return this.socket.isConnected()&&this.isJoined()}push(e,t,n=this.timeout){if(t||={},!this.joinedOnce)throw Error(`tried to push '${e}' to '${this.topic}' before joining. Use channel.join() before pushing events`);let r=new Ie(this,e,function(){return t},n);return this.canPush()?r.send():(r.startTimeout(),this.pushBuffer.push(r)),r}leave(e=this.timeout){this.rejoinTimer.reset(),this.joinPush.cancelTimeout(),this.state=C.leaving;let t=()=>{this.socket.hasLogger()&&this.socket.log(`channel`,`leave ${this.topic}`),this.trigger(w.close,`leave`)},n=new Ie(this,w.leave,b({}),e);return n.receive(`ok`,()=>t()).receive(`timeout`,()=>t()),n.send(),this.canPush()||n.trigger(`ok`,{}),n}onMessage(e,t,n){return t}filterBindings(e,t,n){return!0}isMember(e,t,n,r){return this.topic===e?r&&r!==this.joinRef()?(this.socket.hasLogger()&&this.socket.log(`channel`,`dropping outdated message`,{topic:e,event:t,payload:n,joinRef:r}),!1):!0:!1}joinRef(){return this.joinPush.ref}rejoin(e=this.timeout){this.isLeaving()||(this.socket.leaveOpenTopic(this.topic),this.state=C.joining,this.joinPush.resend(e))}trigger(e,t,n,r){let i=this.onMessage(e,t,n,r);if(t&&!i)throw Error(`channel onMessage callbacks must return the payload, modified or unmodified`);let a=this.bindings.filter(r=>r.event===e&&this.filterBindings(r,t,n));for(let e=0;e<a.length;e++)a[e].callback(i,n,r||this.joinRef())}replyEventName(e){return`chan_reply_${e}`}isClosed(){return this.state===C.closed}isErrored(){return this.state===C.errored}isJoined(){return this.state===C.joined}isJoining(){return this.state===C.joining}isLeaving(){return this.state===C.leaving}},ze=class{static request(e,t,n,r,i,a,o){if(x.XDomainRequest){let n=new x.XDomainRequest;return this.xdomainRequest(n,e,t,r,i,a,o)}else if(x.XMLHttpRequest){let s=new x.XMLHttpRequest;return this.xhrRequest(s,e,t,n,r,i,a,o)}else if(x.fetch&&x.AbortController)return this.fetchRequest(e,t,n,r,i,a,o);else throw Error(`No suitable XMLHttpRequest implementation found`)}static fetchRequest(e,t,n,r,i,a,o){let s={method:e,headers:n,body:r},c=null;return i&&(c=new AbortController,setTimeout(()=>c.abort(),i),s.signal=c.signal),x.fetch(t,s).then(e=>e.text()).then(e=>this.parseJSON(e)).then(e=>o&&o(e)).catch(e=>{e.name===`AbortError`&&a?a():o&&o(null)}),c}static xdomainRequest(e,t,n,r,i,a,o){return e.timeout=i,e.open(t,n),e.onload=()=>{let t=this.parseJSON(e.responseText);o&&o(t)},a&&(e.ontimeout=a),e.onprogress=()=>{},e.send(r),e}static xhrRequest(e,t,n,r,i,a,o,s){e.open(t,n,!0),e.timeout=a;for(let[t,n]of Object.entries(r))e.setRequestHeader(t,n);return e.onerror=()=>s&&s(null),e.onreadystatechange=()=>{e.readyState===Pe.complete&&s&&s(this.parseJSON(e.responseText))},o&&(e.ontimeout=o),e.send(i),e}static parseJSON(e){if(!e||e===``)return null;try{return JSON.parse(e)}catch{return console&&console.log(`failed to parse JSON response`,e),null}}static serialize(e,t){let n=[];for(var r in e){if(!Object.prototype.hasOwnProperty.call(e,r))continue;let i=t?`${t}[${r}]`:r,a=e[r];typeof a==`object`?n.push(this.serialize(a,i)):n.push(encodeURIComponent(i)+`=`+encodeURIComponent(a))}return n.join(`&`)}static appendParams(e,t){return Object.keys(t).length===0?e:`${e}${e.match(/\?/)?`&`:`?`}${this.serialize(t)}`}},Be=e=>{let t=``,n=new Uint8Array(e),r=n.byteLength;for(let e=0;e<r;e++)t+=String.fromCharCode(n[e]);return btoa(t)},Ve=class{constructor(e,t){t&&t.length===2&&t[1].startsWith(Fe)&&(this.authToken=atob(t[1].slice(Fe.length))),this.endPoint=null,this.token=null,this.skipHeartbeat=!0,this.reqs=new Set,this.awaitingBatchAck=!1,this.currentBatch=null,this.currentBatchTimer=null,this.batchBuffer=[],this.onopen=function(){},this.onerror=function(){},this.onmessage=function(){},this.onclose=function(){},this.pollEndpoint=this.normalizeEndpoint(e),this.readyState=S.connecting,setTimeout(()=>this.poll(),0)}normalizeEndpoint(e){return e.replace(`ws://`,`http://`).replace(`wss://`,`https://`).replace(RegExp(`(.*)/`+Ne.websocket),`$1/`+Ne.longpoll)}endpointURL(){return ze.appendParams(this.pollEndpoint,{token:this.token})}closeAndRetry(e,t,n){this.close(e,t,n),this.readyState=S.connecting}ontimeout(){this.onerror(`timeout`),this.closeAndRetry(1005,`timeout`,!1)}isActive(){return this.readyState===S.open||this.readyState===S.connecting}poll(){let e={Accept:`application/json`};this.authToken&&(e[`X-Phoenix-AuthToken`]=this.authToken),this.ajax(`GET`,e,null,()=>this.ontimeout(),e=>{if(e){var{status:t,token:n,messages:r}=e;if(t===410&&this.token!==null){this.onerror(410),this.closeAndRetry(3410,`session_gone`,!1);return}this.token=n}else t=0;switch(t){case 200:r.forEach(e=>{setTimeout(()=>this.onmessage({data:e}),0)}),this.poll();break;case 204:this.poll();break;case 410:this.readyState=S.open,this.onopen({}),this.poll();break;case 403:this.onerror(403),this.close(1008,`forbidden`,!1);break;case 0:case 500:this.onerror(500),this.closeAndRetry(1011,`internal server error`,500);break;default:throw Error(`unhandled poll status ${t}`)}})}send(e){typeof e!=`string`&&(e=Be(e)),this.currentBatch?this.currentBatch.push(e):this.awaitingBatchAck?this.batchBuffer.push(e):(this.currentBatch=[e],this.currentBatchTimer=setTimeout(()=>{this.batchSend(this.currentBatch),this.currentBatch=null},0))}batchSend(e,t=0){this.awaitingBatchAck=!0;let n=t+Me,r=e.slice(t,n);this.ajax(`POST`,{"Content-Type":`application/x-ndjson`},r.join(`
@@ -6427,7 +6568,7 @@ function ntHlKey(k){const s=getSelection();if(!NT.ed||!s.rangeCount||s.isCollaps
 
 /* ---------- บล็อก: กรอบ + ที่จับลาก + ปุ่ม + ---------- */
 function ntWrapBlock(type,inner,get,focus){const w=el("div",{class:"nb nb-"+type,"data-t":type});
-  const plus=ntIB("plus","เพิ่มบล็อกด้านล่าง",e=>{e.stopPropagation();ntSlashFrom(w,e.currentTarget)},"nb-add",16);
+  const plus=ntIB("plus","เพิ่มบล็อกด้านล่าง",e=>{e.stopPropagation();if(NT.sl&&NT.sl.w===w){ntSlClose();return}ntSlashFrom(w,e.currentTarget)},"nb-add",16);
   const grip=ntIB("grip","ลากเพื่อย้าย · กดเพื่อเปิดเมนู",e=>{e.stopPropagation();ntBlockMenu(w,e.currentTarget)},"nb-grip",16);grip.setAttribute("draggable","true");
   grip.addEventListener("dragstart",e=>{NT.drag=w;w.classList.add("dragging");try{e.dataTransfer.setData("text/plain","");e.dataTransfer.effectAllowed="move";e.dataTransfer.setDragImage(w,10,10)}catch(_){}});
   grip.addEventListener("dragend",()=>{w.classList.remove("dragging");NT.drag=null;ntDropMark(null)});
@@ -6596,7 +6737,7 @@ function ntSlashWatch(d){const s=getSelection();if(!s.rangeCount||!s.isCollapsed
   NT.sl={d,node:nd,start:s.anchorOffset-m[2].length-1,end:s.anchorOffset,q:m[2],ix:NT.sl&&NT.sl.q===m[2]?NT.sl.ix:0};
   const r=document.createRange();r.setStart(nd,NT.sl.start);r.setEnd(nd,NT.sl.end);ntSlRender(r.getBoundingClientRect())}
 function ntSlashFrom(w,anchor){ntSlClose();NT.sl={w,q:"",ix:0,anchor};ntSlRender(anchor.getBoundingClientRect(),true)}
-function ntSlRender(rect,withInput){const P=NT.sl;if(!P)return;let box=document.getElementById("ntSl");if(!box){box=el("div",{id:"ntSl",role:"listbox","aria-label":"เลือกบล็อก"});document.body.appendChild(box)}box.textContent="";
+function ntSlRender(rect,withInput){const P=NT.sl;if(!P)return;let box=document.getElementById("ntSl");if(!box){box=el("div",{id:"ntSl",role:"listbox","aria-label":"เลือกบล็อก"});document.body.appendChild(box);setTimeout(()=>{if(NT.sl){document.addEventListener("mousedown",ntSlOut,true);addEventListener("scroll",ntSlScroll,true)}},0)}box.textContent="";
   if(withInput){const inp=el("input",{class:"nt-slq",placeholder:"ค้นหาบล็อก…","aria-label":"ค้นหาบล็อก"});inp.value=P.q;inp.addEventListener("input",()=>{P.q=inp.value;P.ix=0;ntSlRender(null,true);const i2=document.querySelector("#ntSl .nt-slq");if(i2){i2.focus();i2.setSelectionRange(i2.value.length,i2.value.length)}});
     inp.addEventListener("keydown",e=>{if(["ArrowDown","ArrowUp","Enter","Escape"].includes(e.key)){e.preventDefault();e.stopPropagation();ntSlKey(e)}});box.appendChild(inp);setTimeout(()=>inp.focus(),0)}
   P.items=ntSlashItems(P.q);P.ix=Math.max(0,Math.min(P.ix,P.items.length-1));
@@ -6604,7 +6745,9 @@ function ntSlRender(rect,withInput){const P=NT.sl;if(!P)return;let box=document.
   if(!P.items.length)box.appendChild(el("div",{class:"nt-ddsec",text:"ไม่มีบล็อกชื่อนี้"}));
   if(rect){const top=rect.bottom+6,h=Math.min(360,box.offsetHeight||360);box.style.left=Math.max(8,Math.min(innerWidth-250,rect.left))+"px";box.style.top=(top+h>innerHeight-8?Math.max(8,rect.top-h-6):top)+"px"}
   const on=box.querySelector(".on");if(on)on.scrollIntoView({block:"nearest"})}
-function ntSlClose(){NT.sl=null;const b=document.getElementById("ntSl");if(b)b.remove()}
+function ntSlClose(){NT.sl=null;const b=document.getElementById("ntSl");if(b)b.remove();document.removeEventListener("mousedown",ntSlOut,true);removeEventListener("scroll",ntSlScroll,true)}
+function ntSlOut(e){const b=document.getElementById("ntSl");if(b&&!b.contains(e.target)&&!(e.target.closest&&e.target.closest(".nb-add")))ntSlClose()}
+function ntSlScroll(e){const b=document.getElementById("ntSl");if(b&&!b.contains(e.target))ntSlClose()}
 function ntSlKey(e){const P=NT.sl;if(!P)return;if(e.key==="ArrowDown"){P.ix=Math.min(P.items.length-1,P.ix+1);ntSlRender(null,!!P.w);ntSlRefocus()}else if(e.key==="ArrowUp"){P.ix=Math.max(0,P.ix-1);ntSlRender(null,!!P.w);ntSlRefocus()}else if(e.key==="Enter"||e.key==="Tab")ntSlChoose();else if(e.key==="Escape"){const d=P.d;ntSlClose();if(d)d.focus()}}
 function ntSlRefocus(){const i=document.querySelector("#ntSl .nt-slq");if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}}
 function ntSlChoose(){const P=NT.sl;if(!P)return;const it=P.items[P.ix];ntSlClose();if(!it){if(P.d)P.d.focus();return}const k=it[0];
@@ -7221,6 +7364,302 @@ function ntTodayCard(){const box=document.getElementById("today");if(!box||box.h
   const c=card("ntrev-card",[el("div",{class:"row sp tight"},[el("div",{},[el("b",{text:"🧠 ทบทวนจากโน้ต"}),el("div",{class:"muted sm",text:n+" คำถามถึงกำหนดวันนี้"})]),el("button",{class:"primary-btn",text:"เริ่มทบทวน",onclick:()=>{NT.rv=null;NT.page="review";go("notes")}})])]);
   const anchor=box.querySelector(".calstat")||box.querySelector(".thead");if(anchor)anchor.after(c);else box.prepend(c)}
 {const _rt=renderToday;renderToday=function(){const r=_rt.apply(this,arguments);try{ntTodayCard()}catch(e){}return r}}
+/* ===== รอบ UX: ตัวเลือกหัวข้อ · จับเวลาแบบเข้าใจง่าย · เสียงเตือนดัง · เพลง · จดเร็ว ===== */
+A.settings.snd=Object.assign({vol:.9,style:"alarm",warn:2,voice:true,notify:false,pauseOnBreak:false,list:[]},A.settings.snd||{});
+const SND=()=>A.settings.snd;
+function sndSave(){persistA();putRec("app",{})}
+
+/* ---------- ค้นหัวข้อแบบไม่ต้องจำรหัส ---------- */
+const tpNorm=s=>String(s||"").toLowerCase().replace(/\s+/g," ").trim();
+function tpScore(n,q,toks){const id=n.id.toLowerCase(),t=tpNorm(n.t),hay=id+" "+t+" "+tpNorm(n.sec)+" "+tpNorm(n.w);
+  if(id===q)return 100;let s=0;
+  if(id.startsWith(q))s=80;else if(t.startsWith(q))s=70;else if(t.includes(q))s=60;
+  else if(toks.every(k=>hay.includes(k)))s=toks.every(k=>t.includes(k))?50:30;
+  else{let i=0;for(const ch of q.replace(/ /g,"")){i=t.indexOf(ch,i);if(i<0)return 0;i++}s=10}
+  if(!isDoneLike(n.id))s+=3;return s}
+function topicSearch(q,limit=8,skip=[]){q=tpNorm(q);if(!q)return[];const toks=q.split(" ");const cur=position().cur;
+  return NODES.filter(n=>!skip.includes(n.id)).map(n=>[n,tpScore(n,q,toks)]).filter(x=>x[1]>0)
+    .sort((a,b)=>b[1]-a[1]||Math.abs(a[0].o-cur.o)-Math.abs(b[0].o-cur.o)).slice(0,limit).map(x=>x[0])}
+function topicSuggest(skip=[]){const g=[],seen=new Set(skip),add=(l,ids)=>{const xs=ids.filter(id=>BY[id]&&!seen.has(id));xs.forEach(id=>seen.add(id));if(xs.length)g.push([l,xs.slice(0,4)])};
+  const ln=lastNext(),pos=position();add("ต่อจากเดิม",[ln&&ln.node,pos.cur.id,pos.next&&pos.next.id].filter(Boolean));
+  add("แผนวันนี้",(A.planned[today()]||[]).filter(x=>x.type==="topic").map(x=>x.ref));
+  const rec=[];for(let i=A.sessions.length-1;i>=0&&rec.length<6;i--){const s=A.sessions[i];if(s.node&&!rec.includes(s.node))rec.push(s.node)}add("ล่าสุด",rec);return g}
+function tpRow(n,on){return el("button",{class:"tpo",type:"button",onmousedown:e=>e.preventDefault(),onclick:()=>on(n.id)},[el("span",{class:"tpt",text:n.t}),el("span",{class:"tpm",text:(isDoneLike(n.id)?"✓ ":"")+n.sec+" · "+n.id})])}
+function tpBox(o){/* o: {multi, get(), set(ids), ph} */
+  const w=el("div",{class:"tpbox"});const chips=el("div",{class:"tpchips"});const inp=el("input",{type:"search",class:"tpin",placeholder:o.ph||"พิมพ์ชื่อเรื่อง เช่น join, กราฟ, เฉลี่ย","aria-label":"เลือกหัวข้อ",autocomplete:"off"});
+  const out=el("div",{class:"tpres",role:"listbox"});let act=-1;
+  const sel=()=>o.get();
+  const pick=id=>{if(o.multi){const a=sel();if(!a.includes(id))a.push(id);o.set(a)}else o.set([id]);inp.value="";draw();if(o.multi){inp.focus();list()}else{out.textContent="";w.classList.remove("open");inp.blur()}};
+  const draw=()=>{chips.textContent="";const a=sel();
+    a.forEach(id=>{const n=BY[id];chips.appendChild(el("span",{class:"tpchip"},[el("b",{text:n?n.t:id}),el("small",{text:n?n.sec:""}),el("button",{type:"button",class:"tpx","aria-label":"เอาออก",onclick:()=>{o.set(sel().filter(x=>x!==id));draw()}},["×"])]))});
+    inp.placeholder=a.length&&!o.multi?"เปลี่ยนหัวข้อ…":(o.ph||"พิมพ์ชื่อเรื่อง เช่น join, กราฟ, เฉลี่ย")};
+  const list=()=>{out.textContent="";act=-1;const q=inp.value;const skip=o.multi?sel():[];
+    if(!q.trim()){const g=topicSuggest(skip);if(!g.length){w.classList.remove("open");return}g.forEach(([l,ids])=>{out.appendChild(el("div",{class:"tpg",text:l}));ids.forEach(id=>out.appendChild(tpRow(BY[id],pick)))})}
+    else{const r=topicSearch(q,8,skip);if(!r.length)out.appendChild(el("div",{class:"tpg",text:"ไม่เจอ ลองคำอื่น"}));r.forEach(n=>out.appendChild(tpRow(n,pick)))}
+    w.classList.add("open")};
+  inp.addEventListener("focus",list);inp.addEventListener("input",list);
+  inp.addEventListener("blur",()=>setTimeout(()=>{if(document.activeElement!==inp){w.classList.remove("open");out.textContent=""}},120));
+  inp.addEventListener("keydown",e=>{const bs=[...out.querySelectorAll(".tpo")];
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();if(!bs.length)return;act=(act+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length;bs.forEach((b,i)=>b.classList.toggle("on",i===act));bs[act].scrollIntoView({block:"nearest"})}
+    else if(e.key==="Enter"){e.preventDefault();const b=bs[act>=0?act:0];if(b)b.click()}
+    else if(e.key==="Escape"&&w.classList.contains("open")){e.preventDefault();e.stopPropagation();w.classList.remove("open");out.textContent="";inp.blur()}
+    else if(e.key==="Backspace"&&!inp.value&&o.multi){const a=sel();if(a.length){o.set(a.slice(0,-1));draw()}}});
+  w.append(chips,el("div",{class:"tpwrap"},[inp,out]));draw();w.__focus=()=>inp.focus();return w}
+nodePicker=function(val,on){let v=val?[val]:[];return tpBox({get:()=>v,set:a=>{v=a.slice(-1);on(v[0]||"")}})};
+topicsPicker=function(arr){return tpBox({multi:true,ph:"โยงกับหัวข้อ (พิมพ์ชื่อเรื่อง)",get:()=>arr,set:a=>{arr.splice(0,arr.length,...a)}})};
+
+/* ---------- เสียง: ปลุกให้รู้ตัว ---------- */
+const AL={nodes:[],key:"",endAt:0,ring:null,warned:"",out:null};
+function ensureAC(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state!=="running")AC.resume();if(!AL.out){const c=AC.createDynamicsCompressor();c.threshold.value=-10;c.ratio.value=4;const g=AC.createGain();g.gain.value=SND().vol;g.connect(c);c.connect(AC.destination);AL.out=g}}catch(e){}return AC}
+const acOn=()=>!!(AC&&AC.state==="running");
+function sTone(t,f,d,type,peak,list){if(!AL.out)ensureAC();const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;o.connect(g);g.connect(AL.out);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.012);g.gain.setValueAtTime(peak,t+Math.max(.015,d*.6));g.gain.exponentialRampToValueAtTime(0.0001,t+d);o._t=t;o.start(t);o.stop(t+d+.02);if(list)list.push(o);return o}
+/* kind: warn | break | back | end | remind  · คืนค่าความยาว (วินาที) */
+function sPattern(kind,t,list){const st=SND().style;
+  if(kind==="warn"){sTone(t,988,.22,"sine",.7,list);sTone(t+.26,1319,.4,"sine",.7,list);return .8}
+  if(st==="bell"){const ch=kind==="back"?[880,1109,1319]:kind==="end"?[523,659,784,1047]:[784,988,1175];
+    for(let i=0;i<3;i++)ch.forEach((f,j)=>sTone(t+i*1.25+j*.07,f,1.1,"sine",.45,list));return 3.9}
+  const f=kind==="back"?1320:kind==="end"?784:kind==="remind"?1175:1047;
+  for(let i=0;i<3;i++)for(let j=0;j<4;j++)sTone(t+i*1.1+j*.15,j%2?f*1.26:f,.1,"square",.32,list);
+  if(kind==="end")[523,659,784,1047].forEach((x,j)=>sTone(t+3.4+j*.14,x,.35,"triangle",.6,list));return kind==="end"?4.2:3.4}
+function sPlayNow(kind){if(!ensureAC())return 0;const l=[];const d=sPattern(kind,AC.currentTime+.05,l);duckMusic(d+.5);return d}
+function alarmCancel(all){const now=AC?AC.currentTime:0;AL.nodes.forEach(o=>{if(all||o._t>now)try{o.stop(0)}catch(e){}});AL.nodes=[];AL.endAt=0}
+/* ตั้งเสียงล่วงหน้าบนนาฬิกาเสียง: ดังตรงเวลาแม้แท็บอยู่เบื้องหลัง */
+function alarmArm(){const k=T&&T.phase!=="done"&&T.phaseEnd&&!T.pausedAt?T.id+T.phase+T.round+"@"+T.phaseEnd:"";
+  if(k===AL.key&&(!k||AL.nodes.length||!acOn()))return;if(k&&!acOn()){AL.key="";return}
+  alarmCancel();AL.key=k;if(!k)return;
+  const left=(T.phaseEnd-Date.now())/1000;if(left<=0)return;const t0=AC.currentTime;
+  const kind=T.phase!=="work"?"back":T.mode==="count"&&T.round>=T.rounds?"end":"break";
+  sPattern(kind,t0+left,AL.nodes);AL.endAt=T.phaseEnd;
+  const wm=T.phase==="work"?SND().warn:1;const len=(T.phaseEnd-T.phaseStart)/60000;
+  if(wm&&len>wm*2&&left>wm*60)sPattern("warn",t0+left-wm*60,AL.nodes)}
+/* ตอนเปลี่ยนช่วง (tick เรียก beep) */
+const _beep0=beep;
+beep=function(n){const now=Date.now();let kind="remind";
+  if(T&&T.phase!=="done"){if(T.phase==="work"&&T.phaseEnd&&now>=T.phaseEnd&&T.mode==="count"&&T.round>=T.rounds)kind="end";else if(now-T.phaseStart<2500)kind=T.phase==="work"?"back":"break"}
+  alarmFire(kind)};
+function alarmMsg(kind){const r=T?T.round:0,R=T?T.rounds:0;
+  if(kind==="break")return{ic:"☕",t:"หมดเวลาเรียน ช่วง "+r+"/"+R,s:"พัก "+(T.phase==="long"?T.long:T.short)+" นาที · ลุก ยืด ดื่มน้ำ",v:"หมดเวลาเรียน ได้เวลาพัก"};
+  if(kind==="back")return{ic:"📘",t:"หมดเวลาพัก",s:"กลับมาเรียนช่วงที่ "+r+" จาก "+R,v:"หมดเวลาพัก กลับมาเรียนต่อ"};
+  if(kind==="end")return{ic:"🎉",t:"ครบทุกช่วงแล้ว",s:"จดสั้น ๆ ว่าได้อะไร แล้วพักได้เลย",v:"ครบเวลาแล้ว เก่งมาก"};
+  if(kind==="warn")return{ic:"⏳",t:"",s:"",v:""};
+  return{ic:"🔔",t:"แจ้งเตือน",s:"",v:""}}
+function speak(txt){if(!SND().voice||!txt||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang="th-TH";u.volume=1;u.rate=1;const v=speechSynthesis.getVoices().find(x=>/^th/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+function notifyOS(t,s){if(!SND().notify||!("Notification" in window)||Notification.permission!=="granted")return;try{const n=new Notification(t,{body:s,tag:"da-timer",requireInteraction:true});n.onclick=()=>{focus();n.close()}}catch(e){}}
+function alarmFire(kind){const m=alarmMsg(kind);
+  if(kind==="remind"){sPlayNow("remind");if(navigator.vibrate)try{navigator.vibrate([300,120,300])}catch(e){}return}
+  const pre=AL.endAt&&Math.abs(Date.now()-AL.endAt)<90000;AL.endAt=0;
+  if(!pre)sPlayNow(kind);else duckMusic(4.5);
+  if(navigator.vibrate)try{navigator.vibrate([400,150,400,150,400])}catch(e){}
+  setTimeout(()=>speak(m.v),pre?3600:3800);notifyOS(m.t,m.s);
+  musicOnPhase();
+  /* ดังซ้ำทุก 15 วิ จนกว่าจะกดรับทราบ (สูงสุด 2 นาที) */
+  if(AL.ring)clearInterval(AL.ring.iv);const t0=Date.now();AL.ring={kind,iv:setInterval(()=>{if(Date.now()-t0>120000){alarmStop(false);return}sPlayNow(kind)},15000)};
+  alarmShow(kind,m)}
+function alarmStop(close=true){if(AL.ring){clearInterval(AL.ring.iv);AL.ring=null}alarmCancel(true);AL.key="";try{speechSynthesis.cancel()}catch(e){}if(close){const o=document.getElementById("alarmov");if(o)o.remove()}}
+function alarmShow(kind,m){let o=document.getElementById("alarmov");if(o)o.remove();
+  const ok=(fn)=>()=>{alarmStop();if(fn)fn();renderToday();if(document.getElementById("focus"))drawFocus()};
+  const btns=[];
+  if(kind==="break"){btns.push(el("button",{class:"primary-btn",onclick:ok(),text:"โอเค พักแล้ว"}),el("button",{onclick:ok(()=>{if(T&&T.phase!=="work")toWork()}),text:"ข้ามพัก เรียนต่อ"}))}
+  else if(kind==="back"){btns.push(el("button",{class:"primary-btn",onclick:ok(),text:"โอเค เรียนต่อ"}),el("button",{onclick:ok(()=>{if(T&&T.phase==="work"){T.round=Math.max(1,T.round-1);toBreak(false);T.phaseEnd=Date.now()+5*60000;persistT()}}),text:"ขอพักอีก 5 นาที"}))}
+  else btns.push(el("button",{class:"primary-btn",onclick:ok(()=>go("today")),text:"จดหลังรอบ"}));
+  o=el("div",{id:"alarmov",role:"alertdialog","aria-label":m.t},[el("div",{class:"alcard"},[el("div",{class:"alic",text:m.ic}),el("div",{class:"alt",text:m.t}),el("div",{class:"als",text:m.s}),el("div",{class:"albtn"},btns),el("div",{class:"muted sm",text:"เสียงจะดังซ้ำจนกว่าจะกดปุ่ม"})])]);
+  o.addEventListener("click",e=>{if(e.target===o){alarmStop();renderToday()}});document.body.appendChild(o);setTimeout(()=>{const b=o.querySelector(".primary-btn");if(b)b.focus()},30)}
+addEventListener("keydown",e=>{if(e.key==="Escape"&&document.getElementById("alarmov")){e.stopImmediatePropagation();alarmStop();renderToday()}},true);
+/* เตือนใกล้หมด: พูดบอกด้วย */
+setInterval(()=>{alarmArm();if(!T||T.phase==="done"||!T.phaseEnd||T.pausedAt)return;const left=T.phaseEnd-Date.now();const wm=T.phase==="work"?SND().warn:1;const len=(T.phaseEnd-T.phaseStart)/60000;
+  const k=T.id+T.phase+T.round;if(wm&&len>wm*2&&left<=wm*60000&&left>wm*60000-4000&&AL.warned!==k){AL.warned=k;
+    speak(T.phase==="work"?"อีก "+wm+" นาที หมดเวลาเรียน":"อีก 1 นาที กลับมาเรียน");if(!AL.nodes.length&&acOn())sPlayNow("warn");
+    toast(T.phase==="work"?"⏳ อีก "+wm+" นาทีหมดช่วงนี้":"⏳ อีก 1 นาทีหมดพัก","",[])}},1000);
+/* แตะครั้งแรกหลังโหลดหน้า = ปลดล็อกเสียง */
+addEventListener("pointerdown",()=>{if(T&&T.phase!=="done"&&!acOn()){ensureAC();setTimeout(()=>{alarmArm();if(VIEW==="today")renderToday()},150)}},true);
+
+/* ---------- เพลงและเสียงพื้นหลัง ---------- */
+const MP={src:null,el:null,open:false,tab:"music",amb:false,files:[],playing:false};
+function parseMusic(u){u=String(u||"").trim();if(!u)return null;let x;try{x=new URL(u)}catch(e){return null}const h=x.hostname.replace(/^www\.|^m\.|^music\./,"");
+  if(h==="youtu.be"||h.endsWith("youtube.com")){let id=h==="youtu.be"?x.pathname.slice(1):x.searchParams.get("v");const m=x.pathname.match(/^\/(shorts|embed|live)\/([\w-]{6,})/);if(m)id=m[2];const list=x.searchParams.get("list");
+    if(!id&&!list)return null;const q="enablejsapi=1&autoplay=1&playsinline=1&rel=0";return{kind:"yt",url:u,embed:id?"https://www.youtube-nocookie.com/embed/"+id+"?"+q+(list?"&list="+list:"&loop=1&playlist="+id):"https://www.youtube-nocookie.com/embed/videoseries?list="+list+"&"+q,name:"YouTube"}}
+  if(h==="open.spotify.com"){const m=x.pathname.match(/(track|album|playlist|episode|show|artist)\/([A-Za-z0-9]+)/);if(!m)return null;return{kind:"sp",url:u,embed:"https://open.spotify.com/embed/"+m[1]+"/"+m[2],name:"Spotify"}}
+  if(h==="soundcloud.com"||h==="on.soundcloud.com")return{kind:"sc",url:u,embed:"https://w.soundcloud.com/player/?url="+encodeURIComponent(u)+"&auto_play=true&visual=false",name:"SoundCloud"};
+  if(/\.(mp3|m4a|aac|ogg|oga|opus|wav|flac|webm)$/i.test(x.pathname))return{kind:"audio",url:u,name:decodeURIComponent(x.pathname.split("/").pop())};
+  return{kind:"web",url:u,name:h}}
+function mpHost(){let b=document.getElementById("mpstage");if(!b){b=el("div",{id:"mpstage"});document.body.appendChild(b)}return b}
+function mpStopMedia(){const s=mpHost();s.textContent="";MP.src=null;MP.el=null;MP.playing=false}
+function mpPlay(src,name){if(!src)return;ensureAC();
+  if(src.kind==="web"){window.open(src.url,"_blank","noopener");toast("ลิงก์นี้เล่นในเว็บไม่ได้ เปิดแท็บใหม่ให้แล้ว","",[]);return}
+  mpStopMedia();const s=mpHost();MP.src=Object.assign({},src,{name:name||src.name});
+  if(src.kind==="audio"||src.kind==="file"){const a=el("audio",{controls:"",autoplay:"",loop:"",preload:"auto"});a.src=src.url;a.volume=1;s.appendChild(a);MP.el=a;a.play().catch(()=>{});a.onplay=()=>{MP.playing=true;drawMini()};a.onpause=()=>{MP.playing=false;drawMini()}}
+  else{const f=el("iframe",{src:src.embed,allow:"autoplay; encrypted-media; picture-in-picture; clipboard-write",title:"เครื่องเล่นเพลง",loading:"eager"});f.className="mp-"+src.kind;s.appendChild(f);MP.el=f;MP.playing=true}
+  s.className=MP.open?"show":"";
+  if(src.kind!=="file"){const L=SND().list;const i=L.findIndex(x=>x.url===src.url);const it=i>=0?L.splice(i,1)[0]:{url:src.url,name:name||src.name};L.unshift(it);SND().list=L.slice(0,10);sndSave()}
+  drawSound();drawMini()}
+function ytCmd(func,args){if(MP.el&&MP.el.tagName==="IFRAME"&&MP.src&&MP.src.kind==="yt")try{MP.el.contentWindow.postMessage(JSON.stringify({event:"command",func,args:args||[]}),"*")}catch(e){}}
+function mpPause(){if(!MP.el)return;if(MP.el.tagName==="AUDIO")MP.el.pause();else ytCmd("pauseVideo");MP.playing=false;drawMini()}
+function mpResume(){if(!MP.el)return;if(MP.el.tagName==="AUDIO")MP.el.play().catch(()=>{});else ytCmd("playVideo");MP.playing=true;drawMini()}
+function duckMusic(sec){if(!MP.el)return;if(MP.el.tagName==="AUDIO"){MP.el.volume=.2;clearTimeout(MP.dk);MP.dk=setTimeout(()=>{if(MP.el&&MP.el.tagName==="AUDIO")MP.el.volume=1},sec*1000)}else{ytCmd("setVolume",[15]);clearTimeout(MP.dk);MP.dk=setTimeout(()=>ytCmd("setVolume",[100]),sec*1000)}}
+function musicOnPhase(){if(!SND().pauseOnBreak||!T)return;if(T.phase==="work")mpResume();else mpPause()}
+{const _ps=pauseTimer;pauseTimer=function(){_ps();if(SND().pauseOnBreak)mpPause()}}
+{const _rs=resumeTimer;resumeTimer=function(){_rs();if(SND().pauseOnBreak&&T&&T.phase==="work")mpResume()}}
+function playAmb(k){A.ui.sound=k;persistA();MP.amb=k!=="off";playNoise(k);drawSound();drawMini()}
+{const _pn=playNoise;playNoise=function(kind){if(kind==="brown"){stopNoise();try{ensureAC();const len=AC.sampleRate*2,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);let l=0;for(let i=0;i<len;i++){l=(l+.02*(Math.random()*2-1))/1.02;d[i]=l*3.5}const s=AC.createBufferSource();s.buffer=buf;s.loop=true;const g=AC.createGain();g.gain.value=.5;s.connect(g);g.connect(AC.destination);s.start();NOISE={src:s,g}}catch(e){}return}_pn(kind)}}
+{const _cf=closeFocus;closeFocus=function(){_cf();if(MP.amb&&A.ui.sound&&A.ui.sound!=="off")playNoise(A.ui.sound)}}
+function openSound(tab){MP.open=true;if(tab)MP.tab=tab;drawSound()}
+function drawMini(){let m=document.getElementById("mpmini");const on=MP.src||MP.amb;if(!on||MP.open){if(m)m.remove();return}
+  if(!m){m=el("div",{id:"mpmini"});document.body.appendChild(m)}m.textContent="";
+  const nm=MP.src?MP.src.name:({rain:"ฝนตก",white:"เสียงขาว",brown:"เสียงทุ้ม"})[A.ui.sound]||"";
+  m.append(el("button",{class:"mpm-n",onclick:()=>openSound("music"),title:"เปิดเครื่องเล่น"},["🎵 ",nm]),
+    MP.src&&MP.src.kind!=="sp"&&MP.src.kind!=="sc"?el("button",{class:"mpm-b","aria-label":MP.playing?"หยุด":"เล่น",onclick:()=>MP.playing?mpPause():mpResume(),text:MP.playing?"⏸":"▶"}):null,
+    el("button",{class:"mpm-b","aria-label":"ปิดเสียงทั้งหมด",onclick:()=>{mpStopMedia();if(MP.amb)playAmb("off");drawMini()},text:"✕"}))}
+function drawSound(){let p=document.getElementById("sndpanel");const stg=mpHost();
+  if(!MP.open){if(p)p.remove();stg.className="";stg.style.bottom="0";drawMini();return}
+  if(!p){p=el("div",{id:"sndpanel",role:"dialog","aria-label":"เพลงและเสียงเตือน"});document.body.appendChild(p)}p.textContent="";stg.className=MP.src?"show":"";
+  const S0=SND();const close=()=>{MP.open=false;drawSound()};
+  p.appendChild(el("div",{class:"sp-h"},[el("div",{class:"sp-tabs"},[["music","🎵 เพลง"],["alarm","🔔 เสียงเตือน"]].map(([k,l])=>el("button",{class:MP.tab===k?"on":"",onclick:()=>{MP.tab=k;drawSound()},text:l}))),el("button",{class:"sp-x","aria-label":"ปิด",onclick:close,text:"×"})]));
+  if(MP.tab==="music"){
+    if(MP.src)p.appendChild(el("div",{class:"sp-now"},[el("span",{class:"muted sm",text:"กำลังเล่น"}),el("b",{text:MP.src.name}),el("button",{class:"ghost",onclick:()=>{mpStopMedia();drawSound()},text:"หยุด"})]));
+    const inp=el("input",{class:"search",placeholder:"วางลิงก์ YouTube · Spotify · SoundCloud · ไฟล์ .mp3","aria-label":"ลิงก์เพลง"});const err=el("div",{class:"err"});
+    const go1=()=>{const s=parseMusic(inp.value);if(!s){err.textContent="ลิงก์นี้ใช้ไม่ได้ ลองคัดลอกจากปุ่มแชร์";return}mpPlay(s)};
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")go1()});
+    const fi=el("input",{type:"file",accept:"audio/*",multiple:"",hidden:""});fi.addEventListener("change",()=>{const fs=[...fi.files];if(!fs.length)return;MP.files=fs.map(f=>({kind:"file",url:URL.createObjectURL(f),name:f.name}));mpPlay(MP.files[0],MP.files[0].name)});
+    p.append(el("div",{class:"row tight"},[inp,el("button",{class:"primary-btn",onclick:go1,text:"เล่น"})]),err,
+      el("div",{class:"row tight"},[el("button",{class:"ghost",onclick:()=>fi.click(),text:"📁 เพลงในเครื่อง"}),fi]));
+    if(MP.files.length>1)p.appendChild(el("div",{class:"sp-list"},MP.files.map(f=>el("button",{class:"sp-it"+(MP.src&&MP.src.url===f.url?" on":""),onclick:()=>mpPlay(f,f.name)},[el("span",{text:"♪ "+f.name})]))));
+    if(S0.list.length){p.appendChild(el("div",{class:"lbl2",text:"เคยเปิด"}));p.appendChild(el("div",{class:"sp-list"},S0.list.map(x=>el("div",{class:"sp-it"+(MP.src&&MP.src.url===x.url?" on":"")},[el("button",{class:"sp-pl",onclick:()=>mpPlay(parseMusic(x.url),x.name),title:x.url},[x.name+" · "+x.url.replace(/^https?:\/\/(www\.)?/,"").slice(0,34)]),el("button",{class:"sp-del","aria-label":"ลบ",onclick:()=>{S0.list=S0.list.filter(y=>y!==x);sndSave();drawSound()},text:"×"})]))))}
+    p.appendChild(el("div",{class:"lbl2",text:"เสียงพื้นหลัง (ไม่ต้องใช้เน็ต)"}));
+    p.appendChild(el("div",{class:"sp-amb"},[["off","ปิด"],["rain","🌧 ฝน"],["white","〰 เสียงขาว"],["brown","🌊 เสียงทุ้ม"]].map(([k,l])=>el("button",{class:(MP.amb?A.ui.sound:"off")===k?"on":"",onclick:()=>playAmb(k),text:l}))));
+    p.appendChild(el("label",{class:"sp-chk"},[(()=>{const c=el("input",{type:"checkbox"});c.checked=S0.pauseOnBreak;c.addEventListener("change",()=>{S0.pauseOnBreak=c.checked;sndSave()});return c})()," หยุดเพลงตอนพัก เล่นต่อตอนเรียน"]));
+    p.appendChild(el("p",{class:"muted sm",text:"Spotify เล่นเต็มเพลงเมื่อล็อกอิน Spotify ในเบราว์เซอร์นี้ · ไฟล์ในเครื่องต้องเลือกใหม่ทุกครั้งที่เปิดเว็บ"}))}
+  else{
+    const vol=el("input",{type:"range",min:"0.2",max:"1",step:"0.05",value:String(S0.vol),"aria-label":"ความดัง"});vol.addEventListener("input",()=>{S0.vol=+vol.value;if(AL.out)AL.out.gain.value=S0.vol});vol.addEventListener("change",sndSave);
+    const seg=(k,opts)=>el("div",{class:"sp-amb"},opts.map(([v,l])=>el("button",{class:S0[k]===v?"on":"",onclick:()=>{S0[k]=v;sndSave();AL.key="";drawSound()},text:l})));
+    p.append(...[el("div",{class:"lbl2",text:"ดังแค่ไหน"}),el("div",{class:"row tight"},[vol,el("button",{onclick:()=>sPlayNow("break"),text:"▶ ลองฟัง"})]),
+      el("div",{class:"lbl2",text:"แบบเสียง"}),seg("style",[["alarm","⏰ นาฬิกาปลุก (ดัง)"],["bell","🔔 กระดิ่ง (นุ่ม)"]]),
+      el("div",{class:"lbl2",text:"เตือนก่อนหมดเวลาเรียน"}),seg("warn",[[0,"ไม่เตือน"],[1,"1 นาที"],[2,"2 นาที"],[5,"5 นาที"]]),
+      el("label",{class:"sp-chk"},[(()=>{const c=el("input",{type:"checkbox"});c.checked=S0.voice;c.addEventListener("change",()=>{S0.voice=c.checked;sndSave();if(c.checked)speak("เปิดเสียงพูดแล้ว")});return c})()," พูดบอกเป็นภาษาไทย"]),
+      el("label",{class:"sp-chk"},[(()=>{const c=el("input",{type:"checkbox"});c.checked=S0.notify;c.addEventListener("change",async()=>{S0.notify=c.checked;if(c.checked&&"Notification" in window&&Notification.permission==="default"){try{await Notification.requestPermission()}catch(e){}}sndSave();drawSound()});return c})()," แจ้งเตือนบนเครื่องด้วย (เห็นแม้อยู่แอปอื่น)"]),
+      "Notification" in window&&S0.notify&&Notification.permission==="denied"?el("p",{class:"err",text:"เบราว์เซอร์บล็อกการแจ้งเตือนไว้ เปิดได้ที่ไอคอนแม่กุญแจข้างช่องลิงก์"}):null,
+      el("p",{class:"muted sm",text:"เสียงดังซ้ำทุก 15 วินาทีจนกว่าจะกดรับทราบ · ถ้าเปิดเพลงไว้ เพลงจะเบาลงตอนเตือน · เปิดหน้านี้ทิ้งไว้ได้ ไม่ต้องอยู่หน้าเว็บ"})].filter(Boolean))}
+  requestAnimationFrame(()=>{stg.style.bottom=MP.src?(innerHeight-p.getBoundingClientRect().top+8)+"px":"0"});drawMini()}
+addEventListener("pointerdown",e=>{if(!MP.open)return;const t=e.target;if(t.closest&&(t.closest("#sndpanel")||t.closest("#mpstage")||t.closest(".sndbtn")||t.closest("#mpmini")))return;MP.open=false;drawSound()},true);
+addEventListener("keydown",e=>{if(e.key==="Escape"&&MP.open){MP.open=false;drawSound()}});
+CMDS.push(["เพลง / เสียงเตือน","M",()=>openSound()],["+ อยากรู้","Q",()=>openCapture("wish")]);
+{const _rr=renderRail;renderRail=function(){_rr();const tools=document.querySelector("#rail .rtools");if(!tools||tools.querySelector(".sndbtn"))return;
+  const b=el("button",{class:"rb sm sndbtn","aria-label":"เพลงและเสียงเตือน","data-tip":"เพลง / เสียงเตือน · M",onclick:e=>{e.stopPropagation();MP.open?(MP.open=false,drawSound()):openSound()}});
+  b.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>';
+  tools.insertBefore(b,tools.children[2]||null)}}
+
+/* ---------- หน้าเตรียมเริ่ม: เลือกแบบง่าย ---------- */
+const TPRESETS=[["p25","⚡","ลองแค่ 25",{mode:"count",work:25,short:5,rounds:1}],["pomo","🍅","25 · พัก 5",{mode:"count",work:25,short:5,rounds:4}],["deep","🎯","50 · พัก 10",{mode:"count",work:50,short:10,rounds:3}],["free","∞","ไม่จำกัด",{mode:"watch"}]];
+const TYPE_S=[["learn","📘 เรียน"],["practice","✍️ ฝึก"],["review","🔁 ทวน"],["read","📖 อ่าน"],["project","🛠️ โปรเจกต์"]];
+function presetOf(p){if(p.mode==="watch")return"free";const f=TPRESETS.find(x=>x[3].mode==="count"&&x[3].work===p.work&&x[3].rounds===p.rounds&&(p.rounds===1||x[3].short===p.short));return p.custom?"custom":f?f[0]:"custom"}
+const durTxt=m=>m>=60?Math.floor(m/60)+" ชม."+(m%60?" "+m%60+" นาที":""):m+" นาที";
+function planSegs(p){const s=[];for(let i=1;i<=p.rounds;i++){s.push(["w",p.work,i]);if(i<p.rounds){const lg=p.long&&p.rounds>4&&i%4===0;s.push([lg?"l":"b",lg?p.long:p.short,i])}}return s}
+function planStrip(p,live){const segs=planSegs(p);const tot=segs.reduce((a,x)=>a+x[1],0)||1;const bar=el("div",{class:"pstrip"});
+  let cur=-1;if(live&&T){cur=T.phase==="work"?(T.round-1)*2:(T.round-1)*2+1}
+  segs.forEach((x,i)=>{const d=el("div",{class:"ps ps-"+x[0]+(live?(i<cur?" past":i===cur?" now":""):"")});d.style.flexGrow=x[1];d.title=(x[0]==="w"?"เรียนช่วง "+x[2]:"พัก")+" "+x[1]+" นาที";
+    d.appendChild(el("span",{text:x[0]==="w"?(x[1]>=15||segs.length<6?String(x[1]):""):x[0]==="l"?"🛋":(x[1]>=8&&segs.length<8?"☕":"")}));if(i===cur)d.appendChild(el("i",{id:"tbar"}));bar.appendChild(d)});
+  bar.__tot=tot;return bar}
+prePanel=function(){const p=UI.pre;p.pre=p.pre||{};
+  const w=card("prep2",[]);
+  const head=el("div",{class:"row sp tight"},[el("div",{class:"cap",text:"เริ่มรอบเรียน"}),el("button",{class:"ghost sndbtn",onclick:e=>{e.stopPropagation();openSound()},text:"🎵 เพลง/เสียง"})]);w.appendChild(head);
+  w.appendChild(el("div",{class:"seg5"},TYPE_S.map(([k,l])=>el("button",{class:p.type===k?"on":"",onclick:()=>{p.type=k;renderToday()},text:l}))));
+  if(p.type==="read"){const its=A.items.filter(i=>i.status==="reading"||i.status==="want"||i.status==="paused");
+    w.appendChild(el("div",{class:"lbl3",text:"อ่านเรื่องไหน"}));
+    if(its.length)w.appendChild(pills(its.map(i=>[i.id,i.title]),p.itemId,v=>{p.itemId=v;const it=IBY(v);if(it&&it.topics&&it.topics[0]&&!p.node)p.node=it.topics[0];renderToday()}));
+    w.appendChild(el("button",{class:"ghost",onclick:()=>{UI.rd.form={kind:"general",status:"reading",unit:"page",tags:[],topics:[],chapters:[]};UI.rd.formBack="today";go("reading")},text:"+ เรื่องใหม่"}))}
+  w.appendChild(el("div",{class:"lbl3",text:p.type==="read"?"เกี่ยวกับหัวข้อ (ไม่ต้องก็ได้)":"หัวข้อ"}));w.appendChild(nodePicker(p.node,v=>p.node=v));
+  w.appendChild(el("div",{class:"lbl3",text:"นานแค่ไหน"}));
+  const pk=presetOf(p);
+  w.appendChild(el("div",{class:"presets"},TPRESETS.map(([k,ic,l,o])=>el("button",{class:"pre"+(pk===k?" on":""),onclick:()=>{Object.assign(p,o);p.custom=false;if(o.mode==="count"){A.settings.work=o.work;A.settings.short=o.short;A.settings.rounds=o.rounds;putRec("app",{})}renderToday()}},[el("span",{class:"pic",text:ic}),el("span",{text:l})])).concat([el("button",{class:"pre"+(pk==="custom"?" on":""),onclick:()=>{p.custom=true;p.mode="count";renderToday()}},[el("span",{class:"pic",text:"⚙"}),el("span",{text:"ตั้งเอง"})])])));
+  if(p.mode==="count"){
+    if(pk==="custom"){const step=(k,l,mn,mx,st)=>{const v=el("b",{text:String(p[k])});const ch=d=>{p[k]=Math.max(mn,Math.min(mx,(+p[k]||0)+d));if(k!=="long"){A.settings[k]=p[k];putRec("app",{})}renderToday()};
+        return el("div",{class:"stp"},[el("span",{class:"stl",text:l}),el("div",{class:"stc"},[el("button",{"aria-label":"ลด",onclick:()=>ch(-st),text:"−"}),v,el("button",{"aria-label":"เพิ่ม",onclick:()=>ch(st),text:"+"})])])};
+      w.appendChild(el("div",{class:"stps"},[step("work","เรียนช่วงละ (นาที)",5,180,5),step("short","พักระหว่างช่วง (นาที)",0,60,5),step("rounds","กี่ช่วง",1,12,1),p.rounds>4?step("long","พักยาวหลังช่วงที่ 4",5,60,5):null].filter(Boolean)))}
+    const segs=planSegs(p),tot=segs.reduce((a,x)=>a+x[1],0);
+    w.appendChild(planStrip(p,false));
+    w.appendChild(el("p",{class:"pexp"},[p.rounds===1?el("span",{text:"เรียน "+p.work+" นาทีรวดเดียว"}):el("span",{},["เรียน ",el("b",{text:p.work+" นาที"})," → พัก ",el("b",{text:p.short+" นาที"})," ทำ ",el("b",{text:p.rounds+" ช่วง"})]),
+      el("span",{class:"muted",text:" · รวม "+durTxt(tot)+" · เสร็จราว "+hm(Date.now()+tot*60000)})]))}
+  else w.appendChild(el("p",{class:"pexp muted",text:"นับขึ้นไปเรื่อย ๆ กดจบเมื่อพอ (ไม่มีเสียงเตือน)"}));
+  const gi=el("input",{class:"goalin",placeholder:"เป้ารอบนี้ เช่น ทำโจทย์ JOIN 5 ข้อ (ไม่ใส่ก็ได้)","aria-label":"เป้ารอบนี้"});
+  if(p.goal==null){const ln=lastNext();p.goal=ln&&ln.node===p.node&&ln.next?ln.next:""}gi.value=p.goal;gi.addEventListener("input",()=>p.goal=gi.value);
+  gi.addEventListener("keydown",e=>{if(e.key==="Enter")startBtn.click()});w.appendChild(gi);
+  if(A.ui.dl!=="light"){const d=el("details",{class:"prex2"},[el("summary",{text:"เช็กสภาพก่อนเริ่ม · เรียนที่ไหน"})]);if(p.openX)d.open=true;d.addEventListener("toggle",()=>p.openX=d.open);
+    PRE_Q.forEach(([k,l,opts])=>d.appendChild(el("div",{class:"qrow"},[el("span",{class:"ql",text:l}),pills(opts,p.pre[k],v=>{p.pre[k]=p.pre[k]===v?undefined:v;renderToday()})])));
+    d.appendChild(el("div",{class:"qrow"},[el("span",{class:"ql",text:"เรียนที่ไหน"}),pills(LOCS,A.ui.loc,v=>{A.ui.loc=v;persistA();renderToday()})]));w.appendChild(d)}
+  const perr=el("div",{class:"err"});
+  const gpl=morningGuard(p);if(gpl&&!p.guardOk)w.appendChild(el("div",{class:"bad"},[el("p",{text:"รอบเช้าเก็บไว้ให้แผน DA (แผน \""+gpl.name+"\" ไม่ใช้รอบเช้า)"}),el("div",{class:"row"},[el("button",{onclick:()=>{p.node=position().cur.id;renderToday()},text:"เปลี่ยนเป็นหัวข้อแผน DA"}),el("button",{class:"ghost",onclick:()=>{p.guardOk=true;logEvent("morning_override",{plan:gpl.id});renderToday()},text:"ใช้ต่อครั้งนี้"})])]));
+  const startBtn=el("button",{class:"primary-btn gob",onclick:()=>{if(p.type==="read"&&!p.itemId){perr.textContent="เลือกเรื่องที่จะอ่านก่อน";return}if(morningGuard(p)&&!p.guardOk){perr.textContent="เลือกก่อนว่าจะเปลี่ยนหัวข้อหรือใช้ต่อครั้งนี้";return}
+    ensureAC();if(SND().notify&&"Notification" in window&&Notification.permission==="default")try{Notification.requestPermission()}catch(e){}
+    if(p.mode==="count"&&!p.long)p.long=A.settings.long||30;startTimer(p);setTimeout(alarmArm,300)}},["▶ เริ่ม"]);
+  w.appendChild(el("div",{class:"gorow"},[startBtn,el("button",{class:"ghost",onclick:()=>{UI.pre=null;renderToday()},text:"ยกเลิก"})]));w.appendChild(perr);
+  return w};
+addEventListener("keydown",e=>{if(e.key!=="Escape"||!UI.pre||T||VIEW!=="today")return;if(document.getElementById("alarmov")||MP.open||document.getElementById("popcard"))return;const a=document.activeElement;if(a&&a.classList&&a.classList.contains("tpin")&&a.closest(".tpbox.open"))return;UI.pre=null;renderToday()});
+
+/* ---------- ระหว่างจับเวลา ---------- */
+timerPanel=function(){const now=Date.now(),left=phaseLeft(now);const brk=T.phase!=="work";
+  const st=T.pausedAt?["❚❚","หยุดชั่วคราว"]:brk?(T.phase==="long"?["🛋️","พักยาว"]:["☕","พัก · ลุก ยืด ดื่มน้ำ"]):["●",T.type==="read"?"กำลังอ่าน":"กำลังเรียน"];
+  const topic=(T.node&&BY[T.node]?BY[T.node].t:"")||T.title||STYPE[T.type];
+  const w=card("hero timer tmr2"+(brk?" brk":"")+(T.pausedAt?" pz":""),[]);
+  const pr=pulseRow();if(pr)w.appendChild(pr);
+  w.appendChild(el("div",{class:"tm-top"},[el("span",{class:"tm-st"},[el("i",{text:st[0]}),st[1]]),T.mode==="count"&&T.rounds>1?el("span",{class:"tm-r",text:"ช่วง "+T.round+"/"+T.rounds}):null]));
+  w.appendChild(el("div",{class:"tm-topic",text:topic}));
+  w.appendChild(el("div",{class:"tbig",id:"tbig",text:left!=null?mmss(left):mmss(workMs(now))}));
+  if(T.mode==="count"){w.appendChild(planStrip(T,true));
+    let nx;if(T.pausedAt)nx="หยุดอยู่ กด ไปต่อ เมื่อพร้อม";else if(!brk)nx=(T.round>=T.rounds?"ต่อไป: จบ 🎉":"ต่อไป: พัก "+((T.long&&T.rounds>4&&T.round%4===0)?T.long:T.short)+" นาที")+" · "+hm(T.phaseEnd);else nx="ต่อไป: เรียนช่วงที่ "+(T.round+1)+" · "+hm(T.phaseEnd);
+    w.appendChild(el("div",{class:"tm-next"},[el("span",{text:nx}),el("span",{class:"muted"},["โฟกัสแล้ว ",el("span",{id:"twork",text:Math.floor(workMs(now)/60000)+" นาที"})])]))}
+  else w.appendChild(el("div",{class:"tm-next"},[el("span",{class:"muted"},["จับเวลาเรื่อย ๆ · โฟกัสแล้ว ",el("span",{id:"twork",text:Math.floor(workMs(now)/60000)+" นาที"})])]));
+  const row=el("div",{class:"tm-btns"});
+  {const ic=k=>{const sp=el("span",{class:"tmi"});sp.innerHTML=k==="play"?'<svg viewBox="0 0 16 16" width="14" height="14"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>':'<svg viewBox="0 0 16 16" width="14" height="14"><rect x="3.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/><rect x="9.5" y="2.5" width="3" height="11" rx="1" fill="currentColor"/></svg>';return sp};
+  row.appendChild(T.pausedAt?el("button",{class:"primary-btn tm-main",onclick:resumeTimer},[ic("play"),"ไปต่อ"]):el("button",{class:"tm-main",onclick:pauseTimer},[ic("pause"),"หยุด"]))}
+  if(!brk)row.appendChild(el("button",{class:"dist",onclick:distract2},["วอกแวก ",el("span",{id:"dcount",text:String(T.distractions)})]));
+  else row.appendChild(el("button",{onclick:()=>{toWork();renderToday()},text:"ข้ามพัก"}));
+  row.appendChild(el("button",{class:"cfbtn",onclick:()=>{UI.cfOpen=!UI.cfOpen;renderToday()},text:"❓ งง"}));
+  const more=el("button",{"aria-label":"เพิ่มเติม",class:"tm-more",onclick:e=>{const it=[];
+    if(!brk)it.push(["☕ พักตอนนี้",()=>{toBreak(false);renderToday()}]);
+    if(T.phaseEnd)it.push(["+5 นาที",()=>extendTimer(5)],["+15 นาที",()=>extendTimer(15)]);
+    if(T.itemId&&IBY(T.itemId))it.push(["📌 หมุดจากหนังสือ",()=>{UI.qmark={_live:true,type:"quote",loc:null,text:"",meaning:"",example:"",tags:[],topics:[],fav:false,remember:false};renderToday()}]);
+    it.push(["⤢ โหมดโฟกัส · F",openFocus],["🎵 เพลง / เสียง",()=>openSound()]);
+    const m=el("div",{class:"menu"},it.map(([l,f])=>el("button",{onclick:()=>{closePop();f()},text:l})));const r=more.getBoundingClientRect();openPop(m,r.left,r.bottom+4)},text:"⋯"});
+  row.appendChild(more);row.appendChild(el("button",{class:"endb",onclick:finishTimer,text:"จบรอบ"}));w.appendChild(row);
+  if(T.goal)w.appendChild(el("p",{class:"tm-goal",text:"🎯 "+T.goal}));
+  if(UI.cfOpen)w.appendChild(confusionForm({node:T.node||"",itemId:T.itemId||"",src:"timer",min:Math.round(workMs(Date.now())/60000)},()=>{UI.cfOpen=false;renderToday()}));
+  if(T.phaseEnd&&!acOn())w.appendChild(el("button",{class:"sndwarn",onclick:()=>{ensureAC();setTimeout(()=>{alarmArm();sPlayNow("warn");renderToday()},120)},text:"🔇 เสียงเตือนยังปิดอยู่ แตะเพื่อเปิด"}));
+  if((T.ev||[]).length>1){const d=el("details",{class:"tm-tl"},[el("summary",{text:"ไทม์ไลน์รอบนี้"}),sessionTimeline(T,Date.now())]);if(UI.tlOpen)d.open=true;d.addEventListener("toggle",()=>UI.tlOpen=d.open);w.appendChild(d)}
+  return w};
+{const _rt=renderToday;renderToday=function(){_rt();const box=$("#today");if(!box||box.hidden)return;
+  const fb=box.querySelector(".tmr2 > .focusbtn");if(fb)fb.remove();
+  const q=box.querySelector(".qchips");if(q&&!q.querySelector(".capq")){q.append(el("button",{class:"capq",onclick:()=>openCapture("learned"),text:"💡 ได้เรียนรู้"}),el("button",{class:"capq",onclick:()=>openCapture("wish"),text:"❓ อยากรู้"}))}}}
+
+/* ---------- จดนอกแผน: ช่องเดียวจบ ที่เหลือพับไว้ ---------- */
+openCapture=function(kind){if(UI.cap){if(kind)UI.cap.kind=kind;UI.capFocus=true;drawCapture();return}const d=UI.capDraft;UI.cap=d&&!d.id?Object.assign(d,{kind:kind||d.kind}):{kind:kind||"learned",title:"",what:"",src:"",link:"",tags:[],topics:[]};UI.capDraft=null;UI.capFocus=true;drawCapture()};
+function capClose(){const f=UI.cap;if(f&&!f.id&&((f.title||"").trim()||(f.what||"").trim()))UI.capDraft=f;UI.cap=null;drawCapture()}
+drawCapture=function(){let sh=document.getElementById("capsheet");if(!UI.cap){if(sh)sh.remove();return}
+  if(!sh){sh=el("div",{id:"capsheet",role:"dialog","aria-label":"จดสิ่งที่ได้เรียนรู้หรืออยากรู้"});document.body.appendChild(sh)}
+  sh.textContent="";const f=UI.cap;const wish=f.kind==="wish";
+  const w=card("cap2",[]);
+  w.appendChild(el("div",{class:"row sp tight"},[el("div",{class:"cap-tabs"},[["learned","💡 ได้เรียนรู้"],["wish","❓ อยากรู้"]].map(([k,l])=>el("button",{class:f.kind===k?"on":"",onclick:()=>{f.kind=k;UI.capFocus=true;drawCapture()},text:l}))),el("button",{class:"sp-x","aria-label":"ปิด",onclick:capClose,text:"×"})]));
+  const msg=el("div",{class:"err"});
+  const save=()=>{if(!(f.title||"").trim()){msg.textContent="พิมพ์เรื่องก่อน";ti.focus();return}
+    const isNew=!f.id;if(isNew){f.id=uidGen();f.created=today();A.learn.push(f)}else{const i=A.learn.findIndex(x=>x.id===f.id);A.learn[i]=f}putLearn(f);UI.cap=null;UI.capDraft=null;drawCapture();toast(wish?"จดเรื่องที่อยากรู้แล้ว":"จดแล้ว","",[]);if(VIEW==="list")renderAll()};
+  const ti=el("input",{class:"cap-ti",placeholder:wish?"อยากรู้เรื่องอะไร":"ได้เรียนรู้อะไร (หัวเรื่องสั้น ๆ)","aria-label":"เรื่อง"});ti.value=f.title||"";
+  const sug=el("div",{class:"cap-sug"});
+  const drawSug=()=>{sug.textContent="";const q=(f.title||"").trim();if(q.length<2)return;const r=topicSearch(q,3,f.topics).filter(n=>tpScore(n,tpNorm(q),tpNorm(q).split(" "))>=30);if(!r.length)return;
+    sug.appendChild(el("span",{class:"muted sm",text:"โยงกับ"}));r.forEach(n=>sug.appendChild(el("button",{class:"pill",onclick:()=>{f.topics.push(n.id);drawCapture()},text:"+ "+n.t})))};
+  ti.addEventListener("input",()=>{f.title=ti.value;msg.textContent="";clearTimeout(drawSug.t);drawSug.t=setTimeout(drawSug,200)});
+  ti.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();if(e.metaKey||e.ctrlKey)save();else wt.focus()}});
+  const wt=el("textarea",{class:"cap-wt",rows:"3",placeholder:wish?"ทำไมสนใจ (ไม่ใส่ก็ได้)":"สรุปด้วยคำของตัวเอง (ไม่ใส่ก็ได้)","aria-label":"รายละเอียด"});wt.value=f.what||"";wt.addEventListener("input",()=>f.what=wt.value);
+  wt.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();save()}});
+  w.append(ti,sug,wt);
+  w.appendChild(el("div",{class:"lbl3",text:"หัวข้อที่เกี่ยว"}));w.appendChild(topicsPicker(f.topics));
+  const n=[f.src,f.link,(f.tags||[]).length?"#":""].filter(Boolean).length;
+  const d=el("details",{class:"cap-more"},[el("summary",{text:"มาจากไหน · ลิงก์ · แท็ก"+(n?" ("+n+")":"")})]);if(UI.capMore)d.open=true;d.addEventListener("toggle",()=>UI.capMore=d.open);
+  d.appendChild(pills(SRC,f.src,v=>{f.src=f.src===v?"":v;drawCapture()}));
+  d.appendChild(field("ลิงก์",f.link,"https://",v=>f.link=v));d.appendChild(field("แท็ก (คั่นด้วย ,)",(f.tags||[]).join(", "),"",v=>f.tags=v.split(",").map(x=>x.trim()).filter(Boolean)));w.appendChild(d);
+  w.appendChild(el("div",{class:"gorow"},[el("button",{class:"primary-btn gob",onclick:save,text:"บันทึก"}),el("span",{class:"muted sm",text:"⌘Enter บันทึก · Esc ปิด (ข้อความยังอยู่)"})]));w.appendChild(msg);
+  sh.appendChild(w);drawSug();if(UI.capFocus){UI.capFocus=false;setTimeout(()=>ti.focus(),0)}};
+addEventListener("keydown",e=>{if(e.key!=="Escape"||!UI.cap)return;const a=document.activeElement;if(a&&a.closest&&a.closest(".tpbox.open"))return;e.stopPropagation();capClose()},true);
+addEventListener("pointerdown",e=>{if(!UI.cap)return;const t=e.target;if(!t.closest||t.closest("#capsheet")||t.closest("#popcard")||t.closest("#rail")||t.closest(".capq")||t.closest("#palette"))return;capClose()},true);
+
+{const _pr=pulseRow;pulseRow=function(){const r=_pr();if(r&&UI.pulse){const sp=r.querySelector("span");if(sp)sp.textContent="ช่วงที่ "+UI.pulse.round+" โฟกัสแค่ไหน"}return r}}
 
 applyPlans();seedExt();migrateNotes();if(!window.SB)seedBooks();
 if(!A.repoSeeded&&!window.SB){A.repoSeeded=true;const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},"repo: sales-forecast-mlops-at-scale");n.body=n.body.replace("## ทำอะไร (สรุป 2 บรรทัด)\n","## ทำอะไร (สรุป 2 บรรทัด)\nระบบพยากรณ์ยอดขายรายร้านที่ทำงานเองครบวงจร: ข้อมูลไหลเข้า ฝึกโมเดลรายสัปดาห์ เก็บผล และหน้าเว็บให้ผู้ใช้ดูและสั่งฝึกใหม่ ใช้ข้อมูล Rossmann 1,115 ร้าน\n").replace("## README ดีตรงไหน\n- ","## README ดีตรงไหน\n- เปิดด้วยประโยคเดียวว่าระบบทำอะไร แล้วตามด้วยแผนภาพและวิดีโอสาธิต\n- มีส่วน \"ทำงานยังไง\" เป็นขั้น 1–11 ก่อนวิธีติดตั้ง\n- บอกข้อจำกัดตรง ๆ เช่น เครื่องสเปกต่ำจะค้างตอนเปิดครั้งแรก").replace("## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- ","## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- หนึ่งโมเดลต่อร้าน เพราะแต่ละร้านมีรูปแบบยอดขายของตัวเอง\n- แยกเหตุผลการเลือกเครื่องมือไว้ใน notes/README.md").replace("## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- ","## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- PostgreSQL, Python, Streamlit: มีในแผนหลัก\n- Prophet, MLflow, Airflow, FastAPI, Docker: คอร์สต่อยอด MLOps ขั้น 1–5\n- Kafka, Spark, Ray, Kubernetes, Grafana: คอร์สต่อยอด MLOps ขั้น 6").replace("## เอามาใช้กับงานของเราได้อะไร\n- ","## เอามาใช้กับงานของเราได้อะไร\n- โครง README และบันทึกการตัดสินใจ (หัวข้อ g8, g9)\n- ข้อมูล Rossmann สำหรับฝึก time series");putNote(n)}
