@@ -80,3 +80,24 @@ grant select, insert, update, delete on public.sources, public.notes, public.tag
 -- รอบ 1.5 (16 ต.ค. 2026) · migration ชื่อ notes_pin_icon
 alter table public.notes add column if not exists pinned boolean not null default false;
 alter table public.notes add column if not exists icon text;
+
+-- รอบ 1.6 (16 ต.ค. 2026) · migration ชื่อ note_reviews · คิวทบทวนจากบล็อกพับได้
+create table public.note_reviews (
+    id           uuid primary key default gen_random_uuid(),
+    user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+    note_id      uuid not null references public.notes(id) on delete cascade,
+    block_id     text not null,
+    step         int  not null default 0,
+    due_on       date not null default (current_date + 1),
+    last_at      timestamptz,
+    last_answer  text,
+    n_right      int  not null default 0,
+    n_wrong      int  not null default 0,
+    created_at   timestamptz not null default now(),
+    unique (note_id, block_id)
+);
+create index note_reviews_due_idx on public.note_reviews (user_id, due_on);
+alter table public.note_reviews enable row level security;
+create policy own_note_reviews on public.note_reviews for all to authenticated
+    using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+grant select, insert, update, delete on public.note_reviews to authenticated;
