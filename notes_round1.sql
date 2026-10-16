@@ -76,3 +76,7 @@ create policy own_note_tags on public.note_tags for all to authenticated
     );
 
 grant select, insert, update, delete on public.sources, public.notes, public.tags, public.note_tags to authenticated;
+
+-- รอบ 1.5 (16 ต.ค. 2026) · migration ชื่อ notes_pin_icon
+alter table public.notes add column if not exists pinned boolean not null default false;
+alter table public.notes add column if not exists icon text;
