@@ -1064,12 +1064,25 @@ kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-botto
 </div>
 <p class="foot" id="foot"></p>
 </div>
-<style>#sbLogin{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:var(--bg,#FBFBFA);padding:20px}
-.sbl-box{width:min(380px,100%);text-align:center;display:flex;flex-direction:column;gap:12px}
-.sbl-emo{font-size:48px}.sbl-box h1{font-size:24px;margin:0}.sbl-sub{color:var(--muted,#787774);margin:0 0 6px}
-#sblEmail{border:1px solid var(--line,#E8E7E4);border-radius:12px;padding:12px 14px;font-size:16px;background:var(--surface,#fff);color:var(--ink,#2F2E2B)}
-#sblGo{border:0;border-radius:999px;padding:12px;font-size:16px;background:var(--ink,#2F2E2B);color:var(--bg,#fff);cursor:pointer}#sblGo:disabled{opacity:.6}
-.sbl-msg{font-size:14px;color:var(--muted,#787774);min-height:1.4em}
+<style>#sbLogin,#sbPw{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:var(--bg,#FBFBFA);padding:20px;padding-top:max(20px,env(safe-area-inset-top));overflow:auto}
+#sbPw{z-index:210}
+.sbl-box{width:min(360px,100%);text-align:center;display:flex;flex-direction:column;gap:10px}
+.sbl-ic{width:64px;height:64px;border-radius:16px;margin:0 auto 4px;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.sbl-emo{font-size:48px}.sbl-box h1{font-size:23px;margin:0}.sbl-sub{color:var(--muted,#787774);margin:0 0 8px;font-size:15px}
+.sbl-form{display:flex;flex-direction:column;gap:10px;margin:0}
+.sbl-form input{width:100%;box-sizing:border-box;border:1px solid var(--line,#E8E7E4);border-radius:12px;padding:13px 14px;font-size:16px;background:var(--surface,#fff);color:var(--ink,#2F2E2B);font-family:inherit}
+.sbl-form input:focus{outline:none;border-color:var(--ink,#2F2E2B)}.sbl-form input[readonly]{opacity:.65}
+.sbl-pw{position:relative}.sbl-pw input{padding-right:64px}
+.sbl-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--muted,#787774);font:inherit;font-size:13.5px;padding:8px;cursor:pointer}
+#sblCode{text-align:center;font-size:22px!important;letter-spacing:6px;font-variant-numeric:tabular-nums}
+#sblGo{border:0;border-radius:999px;padding:13px;font-size:16px;font-family:inherit;background:var(--ink,#2F2E2B);color:var(--bg,#fff);cursor:pointer;margin-top:2px}#sblGo:disabled{opacity:.6}
+.sbl-links{display:flex;justify-content:center;align-items:center;gap:6px}
+.sbl-link{border:0;background:none;color:var(--muted,#787774);font:inherit;font-size:14.5px;padding:6px 4px;cursor:pointer}.sbl-link:hover{color:var(--ink,#2F2E2B)}
+.sbl-dot{color:var(--line,#E8E7E4)}
+.sbl-or{display:flex;align-items:center;gap:10px;color:var(--muted,#787774);font-size:13px;margin:4px 0}.sbl-or::before,.sbl-or::after{content:"";flex:1;height:1px;background:var(--line,#E8E7E4)}
+.sbl-alt{border:1px solid var(--line,#E8E7E4);border-radius:999px;padding:11px;background:var(--surface,#fff);color:var(--ink,#2F2E2B);font:inherit;font-size:14.5px;cursor:pointer}
+.sbl-msg{font-size:14px;color:var(--muted,#787774);min-height:1.4em;margin:2px 0 0;line-height:1.5}.sbl-msg.sbl-bad{color:#C8323A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sbl-msg.sbl-bad{color:#F0857F}}
 /* การ์ดเคส */
 .casecard{display:block}
 .cs-tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
@@ -2115,20 +2128,83 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
   const SB_URL="https://tppcsgnpbjyzmhhhafpi.supabase.co",SB_KEY="sb_publishable_uKC2qbLFs2Qpgwu7l0ngnw_mYBNqXGX";
   const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   window.SB=sb;let resolveUser,USER=null;const userReady=new Promise(r=>resolveUser=r);
-  const cleanUrl=()=>{try{if(/access_token|refresh_token|error_description/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}};
+  const HASH0=location.hash||"";
+  const cleanUrl=()=>{try{if(/access_token|refresh_token|error_description|error_code/.test(location.hash))history.replaceState(null,"",location.pathname+location.search)}catch(e){}};
   const setUser=u=>{cleanUrl();if(USER)return;USER=u;hideLogin();resolveUser(u)};
+  const BACK=()=>location.origin+location.pathname;
+  /* --- แปลงข้อความ error เป็นภาษาไทย --- */
+  function thErr(e){const m=String((e&&(e.message||e.error_description))||e||"");
+    if(/Invalid login credentials/i.test(m))return"อีเมลหรือรหัสผ่านไม่ถูก — ถ้ายังไม่เคยตั้งรหัส ให้กด \"เข้าด้วยรหัสจากอีเมล\" ด้านล่างก่อน";
+    if(/Email not confirmed/i.test(m))return"ยังไม่ได้ยืนยันอีเมล — เปิดเมลแล้วกดลิงก์ยืนยันก่อน แล้วกลับมาเข้าใช้ด้วยรหัสผ่าน";
+    if(/already registered|already been registered/i.test(m))return"อีเมลนี้มีบัญชีแล้ว — กลับไปหน้าเข้าใช้ หรือกด \"ลืมรหัส?\"";
+    if(/Password should be at least|weak/i.test(m))return"รหัสผ่านต้องยาวอย่างน้อย 6 ตัว";
+    if(/different from the old|same as/i.test(m))return"รหัสใหม่ต้องไม่ซ้ำกับรหัสเดิม";
+    if(/expired|invalid.*(token|otp)|token.*invalid|otp_expired/i.test(m))return"รหัสหรือลิงก์หมดอายุ / ไม่ถูก — ขอใหม่อีกครั้ง";
+    if(/rate limit|security purposes|after \d+ seconds|too many/i.test(m))return"ขอถี่เกินไป รอสักครู่ (ราว 1 นาที) แล้วลองใหม่";
+    if(/Signups not allowed|not found|not allowed for otp/i.test(m))return"ยังไม่มีบัญชีด้วยอีเมลนี้ — กด \"สมัครใหม่\"";
+    if(/fetch|network|Failed to/i.test(m))return"เชื่อมต่อไม่ได้ เช็กอินเทอร์เน็ตแล้วลองใหม่";
+    return"ไม่สำเร็จ: "+m}
+  let FIRSTMSG="";{const h=new URLSearchParams(HASH0.replace(/^#/,""));const d=h.get("error_description")||h.get("error");if(d)FIRSTMSG=thErr(d.replace(/\+/g," "))}
   /* --- หน้าล็อกอิน --- */
   function hideLogin(){const o=document.getElementById("sbLogin");if(o)o.remove()}
-  function showLogin(msg){if(USER||document.getElementById("sbLogin"))return;const o=document.createElement("div");o.id="sbLogin";
-    o.innerHTML='<div class="sbl-box"><div class="sbl-emo">🧭</div><h1>แผนที่การเรียน DA</h1><p class="sbl-sub">ใส่อีเมล แล้วกดลิงก์ในอีเมลเพื่อเข้าใช้</p><input id="sblEmail" type="email" autocomplete="email" placeholder="อีเมลของนาย"><button id="sblGo">ส่งลิงก์เข้าใช้</button><p id="sblMsg" class="sbl-msg"></p></div>';
-    document.body.appendChild(o);const em=o.querySelector("#sblEmail"),go=o.querySelector("#sblGo"),m=o.querySelector("#sblMsg");if(msg)m.textContent=msg;
-    try{em.value=localStorage.getItem("sbLastEmail")||""}catch(e){}
-    const send=async()=>{const email=em.value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){m.textContent="ใส่อีเมลให้ถูกรูปแบบก่อน";return}go.disabled=true;m.textContent="กำลังส่ง…";
-      try{localStorage.setItem("sbLastEmail",email)}catch(e){}
-      const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});go.disabled=false;
-      m.textContent=error?("ส่งไม่สำเร็จ: "+error.message):"ส่งแล้ว ✉️ เปิดอีเมลแล้วกดลิงก์ (ถ้าไม่เห็น ลองดูในจดหมายขยะ)"};
-    go.addEventListener("click",send);em.addEventListener("keydown",e=>{if(e.key==="Enter")send()});setTimeout(()=>em.focus(),50)}
-  sb.auth.onAuthStateChange((ev,session)=>{if(session&&session.user)setUser(session.user)});
+  const H=(t,a,k)=>{const x=document.createElement(t);if(a)for(const n in a){if(n==="text")x.textContent=a[n];else if(n.startsWith("on"))x.addEventListener(n.slice(2),a[n]);else x.setAttribute(n,a[n])}(k||[]).forEach(c=>c&&x.appendChild(typeof c==="string"?document.createTextNode(c):c));return x};
+  function pwField(id,ac,ph){const i=H("input",{id,type:"password",autocomplete:ac,placeholder:ph||"รหัสผ่าน",minlength:"6",required:""});
+    const eye=H("button",{type:"button",class:"sbl-eye","aria-label":"แสดงรหัสผ่าน",text:"แสดง",onclick:()=>{const s=i.type==="password";i.type=s?"text":"password";eye.textContent=s?"ซ่อน":"แสดง";i.focus()}});
+    return H("div",{class:"sbl-pw"},[i,eye])}
+  let MODE="login",OTPSENT=false;
+  function showLogin(msg){if(USER)return;let o=document.getElementById("sbLogin");if(!o){o=H("div",{id:"sbLogin"});document.body.appendChild(o)}drawLogin(o,msg||FIRSTMSG);FIRSTMSG=""}
+  function drawLogin(o,msg){o.textContent="";let last="";try{last=localStorage.getItem("sbLastEmail")||""}catch(e){}
+    const em=H("input",{id:"sblEmail",type:"email",autocomplete:"username",inputmode:"email",placeholder:"อีเมล",required:""});em.value=(o._em||last);
+    const m=H("p",{class:"sbl-msg",role:"status",text:msg||""});
+    const setMsg=(t,bad)=>{m.textContent=t;m.classList.toggle("sbl-bad",!!bad)};if(msg)m.classList.add("sbl-bad");
+    const go=(t,mode)=>{o._em=em.value.trim();MODE=mode;OTPSENT=false;drawLogin(o,t)};
+    const btn=H("button",{type:"submit",id:"sblGo"});
+    const busy=(b,t)=>{btn.disabled=b;if(t)btn.textContent=t};
+    const remember=email=>{try{localStorage.setItem("sbLastEmail",email)}catch(e){}};
+    const okEmail=()=>{const e=em.value.trim();if(!/^\S+@\S+\.\S+$/.test(e)){setMsg("ใส่อีเมลให้ถูกรูปแบบก่อน",true);em.focus();return""}remember(e);return e};
+    const form=H("form",{class:"sbl-form",novalidate:""});const kids=[];let title="แผนที่การเรียน DA",sub="",submit;
+    if(MODE==="login"){sub="เข้าใช้ด้วยอีเมลและรหัสผ่าน";const pw=pwField("sblPw","current-password");kids.push(em,pw);btn.textContent="เข้าใช้";
+      submit=async()=>{const e=okEmail();if(!e)return;const p=pw.querySelector("input").value;if(!p){setMsg("ใส่รหัสผ่านก่อน",true);return}busy(true,"กำลังเข้า…");
+        const {error}=await sb.auth.signInWithPassword({email:e,password:p});busy(false,"เข้าใช้");if(error)setMsg(thErr(error),true)};
+      kids.push(btn,H("div",{class:"sbl-links"},[H("button",{type:"button",class:"sbl-link",text:"ลืมรหัส?",onclick:()=>go("","forgot")}),H("span",{class:"sbl-dot",text:"·"}),H("button",{type:"button",class:"sbl-link",text:"สมัครใหม่",onclick:()=>go("","signup")})]),
+        H("div",{class:"sbl-or"},[H("span",{text:"หรือ"})]),H("button",{type:"button",class:"sbl-alt",text:"✉️ เข้าด้วยรหัสจากอีเมล (ไม่ต้องใช้รหัสผ่าน)",onclick:()=>go("","otp")}))}
+    else if(MODE==="signup"){title="สมัครใช้งาน";sub="ตั้งรหัสผ่านอย่างน้อย 6 ตัว";const pw=pwField("sblPw","new-password","ตั้งรหัสผ่าน");kids.push(em,pw);btn.textContent="สมัคร";
+      submit=async()=>{const e=okEmail();if(!e)return;const p=pw.querySelector("input").value;if(p.length<6){setMsg("รหัสผ่านต้องยาวอย่างน้อย 6 ตัว",true);return}busy(true,"กำลังสมัคร…");
+        const {data,error}=await sb.auth.signUp({email:e,password:p,options:{emailRedirectTo:BACK()}});busy(false,"สมัคร");if(error){setMsg(thErr(error),true);return}
+        if(data&&data.session)return;if(data&&data.user&&data.user.identities&&data.user.identities.length===0){setMsg(thErr("already registered"),true);return}
+        MODE="login";o._em=e;drawLogin(o,"");const mm=o.querySelector(".sbl-msg");mm.classList.remove("sbl-bad");mm.textContent="ส่งเมลยืนยันแล้ว ✉️ กดลิงก์ในเมล แล้วกลับมาเข้าใช้ด้วยรหัสผ่านนี้"};
+      kids.push(btn,H("button",{type:"button",class:"sbl-link",text:"‹ มีบัญชีแล้ว เข้าใช้",onclick:()=>go("","login")}))}
+    else if(MODE==="forgot"){title="ลืมรหัสผ่าน";sub="ระบบจะส่งลิงก์ตั้งรหัสใหม่ไปที่อีเมล";kids.push(em);btn.textContent="ส่งลิงก์ตั้งรหัสใหม่";
+      submit=async()=>{const e=okEmail();if(!e)return;busy(true,"กำลังส่ง…");const {error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:BACK()});busy(false,"ส่งอีกครั้ง");
+        if(error){setMsg(thErr(error),true);return}m.classList.remove("sbl-bad");m.textContent="ส่งแล้ว ✉️ กดลิงก์ในเมล (จะเปิดใน Safari) ตั้งรหัสใหม่ที่นั่น แล้วกลับมาเข้าใช้ที่แอปนี้ด้วยรหัสใหม่"};
+      kids.push(btn,H("button",{type:"button",class:"sbl-link",text:"‹ กลับไปหน้าเข้าใช้",onclick:()=>go("","login")}))}
+    else if(MODE==="otp"){title="เข้าด้วยรหัสจากอีเมล";sub=OTPSENT?"พิมพ์รหัสตัวเลขที่ได้ในอีเมล":"ระบบจะส่งรหัสตัวเลขไปที่อีเมล ใช้ได้ครั้งเดียว";
+      const code=H("input",{id:"sblCode",type:"text",inputmode:"numeric",autocomplete:"one-time-code",placeholder:"รหัสจากอีเมล",maxlength:"10"});
+      if(OTPSENT){em.readOnly=true;kids.push(em,code);btn.textContent="ยืนยันรหัส"}else{kids.push(em);btn.textContent="ส่งรหัสไปที่อีเมล"}
+      submit=async()=>{const e=okEmail();if(!e)return;
+        if(!OTPSENT){busy(true,"กำลังส่ง…");const {error}=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:false,emailRedirectTo:BACK()}});busy(false);
+          if(error){btn.textContent="ส่งรหัสไปที่อีเมล";setMsg(thErr(error),true);return}OTPSENT=true;o._em=e;drawLogin(o,"");const mm=o.querySelector(".sbl-msg");mm.classList.remove("sbl-bad");mm.textContent="ส่งแล้ว ✉️ (ถ้าไม่เห็น ลองดูในจดหมายขยะ)";setTimeout(()=>{const c=document.getElementById("sblCode");if(c)c.focus()},60);return}
+        const t=code.value.replace(/\D/g,"");if(t.length<6){setMsg("ใส่รหัสตัวเลขให้ครบ",true);return}busy(true,"กำลังตรวจ…");
+        const {error}=await sb.auth.verifyOtp({email:e,token:t,type:"email"});busy(false,"ยืนยันรหัส");if(error)setMsg(thErr(error),true)};
+      kids.push(btn);if(OTPSENT)kids.push(H("button",{type:"button",class:"sbl-link",text:"ส่งรหัสใหม่",onclick:()=>{OTPSENT=false;o._em=em.value.trim();drawLogin(o,"");}}));
+      kids.push(H("button",{type:"button",class:"sbl-link",text:"‹ กลับไปเข้าด้วยรหัสผ่าน",onclick:()=>go("","login")}))}
+    kids.push(m);kids.forEach(k=>form.appendChild(k));form.addEventListener("submit",ev=>{ev.preventDefault();submit()});
+    const box=H("div",{class:"sbl-box"},[H("img",{class:"sbl-ic",src:"icon-192.png",alt:""}),H("h1",{text:title}),H("p",{class:"sbl-sub",text:sub}),form]);
+    box.querySelector(".sbl-ic").addEventListener("error",e=>{e.target.replaceWith(H("div",{class:"sbl-emo",text:"🧭"}))});o.appendChild(box);
+    setTimeout(()=>{const f=MODE==="otp"&&OTPSENT?null:(em.value?form.querySelector("input[type=password]"):em);if(f&&!("ontouchstart" in window))f.focus()},50)}
+  /* --- ตั้ง / เปลี่ยนรหัสผ่าน (หลังกดลิงก์ลืมรหัส หรือจากหน้าตั้งค่า) --- */
+  function showPwSet(title,sub){let o=document.getElementById("sbPw");if(o)o.remove();o=H("div",{id:"sbPw"});
+    const p1=pwField("sbpNew","new-password","รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)"),p2=pwField("sbpNew2","new-password","พิมพ์รหัสใหม่อีกครั้ง");
+    const m=H("p",{class:"sbl-msg sbl-bad",role:"status"});const btn=H("button",{type:"submit",id:"sblGo",text:"บันทึกรหัสผ่าน"});
+    const hidden=H("input",{type:"email",autocomplete:"username",style:"display:none"});if(USER&&USER.email)hidden.value=USER.email;
+    const form=H("form",{class:"sbl-form",novalidate:""},[hidden,p1,p2,btn,H("button",{type:"button",class:"sbl-link",text:"ไว้ทีหลัง",onclick:()=>o.remove()}),m]);
+    form.addEventListener("submit",async ev=>{ev.preventDefault();const a=p1.querySelector("input").value,b=p2.querySelector("input").value;
+      if(a.length<6){m.textContent="รหัสผ่านต้องยาวอย่างน้อย 6 ตัว";return}if(a!==b){m.textContent="รหัสสองช่องไม่ตรงกัน";return}btn.disabled=true;btn.textContent="กำลังบันทึก…";
+      const {error}=await sb.auth.updateUser({password:a});btn.disabled=false;btn.textContent="บันทึกรหัสผ่าน";if(error){m.textContent=thErr(error);return}
+      o.textContent="";o.appendChild(H("div",{class:"sbl-box"},[H("div",{class:"sbl-emo",text:"✅"}),H("h1",{text:"ตั้งรหัสผ่านแล้ว"}),H("p",{class:"sbl-sub",text:"ครั้งหน้าเข้าใช้ด้วยอีเมล "+((USER&&USER.email)||"")+" กับรหัสนี้ได้เลย — รวมถึงแอปบนหน้าจอโฮม"}),H("button",{type:"button",id:"sblGo",text:"เข้าแอป",onclick:()=>o.remove()})]))});
+    o.appendChild(H("div",{class:"sbl-box"},[H("div",{class:"sbl-emo",text:"🔑"}),H("h1",{text:title||"ตั้งรหัสผ่าน"}),H("p",{class:"sbl-sub",text:sub||"ใช้คู่กับอีเมลเพื่อเข้าแอป"}),form]));document.body.appendChild(o)}
+  window.SB_pwSet=()=>showPwSet("ตั้ง / เปลี่ยนรหัสผ่าน","ใช้คู่กับอีเมลเพื่อเข้าแอป ทั้งในเว็บและแอปบนหน้าจอโฮม");
+  sb.auth.onAuthStateChange((ev,session)=>{if(session&&session.user)setUser(session.user);if(ev==="PASSWORD_RECOVERY")setTimeout(()=>showPwSet("ตั้งรหัสผ่านใหม่","พิมพ์รหัสใหม่ แล้วใช้รหัสนี้เข้าแอปบนหน้าจอโฮมได้เลย"),300)});
   (async()=>{try{const {data}=await sb.auth.getSession();if(data&&data.session)setUser(data.session.user);else setTimeout(()=>{if(!USER)showLogin()},400)}catch(e){showLogin("เชื่อมต่อไม่ได้ ลองรีเฟรชอีกครั้ง")}})();
   /* --- ฐานข้อมูล: เอกสารในตาราง docs --- */
   const idOf=p=>{const m=String(p).match(/^data\/users\/[^/]+\/(.+)$/);return m?m[1]:String(p)};
@@ -2144,7 +2220,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
     const {error}=await sb.storage.from("assets").upload(path,blob,{contentType:blob.type||"image/jpeg",upsert:false});if(error)throw error;const {data}=sb.storage.from("assets").getPublicUrl(path);return{id,url:data.publicUrl}}};
   const user={async id(){return (await userReady).id},async email(){return (await userReady).email}};
   window.claude={use:async cap=>{if(cap==="db"){await userReady;return db}if(cap==="user"){await userReady;return user}if(cap==="downloads")return downloads;if(cap==="assets")return assets;return null}};
-  window.SB_signOut=async()=>{await sb.auth.signOut();try{localStorage.clear();indexedDB.deleteDatabase&&0}catch(e){}location.reload()};
+  window.SB_signOut=async(all)=>{await sb.auth.signOut(all?{scope:"global"}:undefined);try{localStorage.clear();indexedDB.deleteDatabase&&0}catch(e){}location.reload()};
 })();
 </script>
 
@@ -5903,7 +5979,8 @@ function accountCard(){if(!window.SB)return null;const c=card("",[el("div",{clas
   const em=el("p",{class:"sm muted",text:"กำลังโหลด…"});c.appendChild(em);window.claude.use("user").then(u=>u.email()).then(e=>em.textContent="เข้าใช้ด้วย "+e).catch(()=>{});
   const msg=el("p",{class:"sm"});const fi=el("input",{type:"file",accept:".json,application/json",class:"hidden-file"});
   fi.addEventListener("change",async()=>{const f=fi.files&&fi.files[0];if(!f)return;msg.textContent="กำลังอ่านไฟล์…";const t=await f.text();msg.textContent=await importBackup(t,m=>msg.textContent=m);renderAll()});
-  c.appendChild(el("div",{class:"row"},[el("button",{onclick:()=>fi.click(),text:"📥 นำเข้าไฟล์สำรอง"}),el("button",{class:"ghost",onclick:()=>window.SB_signOut(),text:"ออกจากระบบ"})]));c.appendChild(fi);c.appendChild(msg);
+  c.appendChild(el("div",{class:"row"},[el("button",{onclick:()=>window.SB_pwSet&&window.SB_pwSet(),text:"🔑 ตั้ง / เปลี่ยนรหัสผ่าน"}),el("button",{onclick:()=>fi.click(),text:"📥 นำเข้าไฟล์สำรอง"})]));
+  c.appendChild(el("div",{class:"row"},[el("button",{class:"ghost",onclick:()=>window.SB_signOut(),text:"ออกจากระบบเครื่องนี้"}),el("button",{class:"ghost",onclick:()=>{if(typeof confirmBox==="function")confirmBox("ออกจากระบบทุกเครื่อง?","มือถือ คอม และแอปบนหน้าจอโฮม จะต้องเข้าใช้ใหม่ทั้งหมด",()=>window.SB_signOut(true),"ออกทุกเครื่อง");else if(confirm("ออกจากระบบทุกเครื่อง?"))window.SB_signOut(true)},text:"ออกจากระบบทุกเครื่อง"})]));c.appendChild(fi);c.appendChild(msg);
   c.appendChild(el("p",{class:"muted sm",text:"นำเข้าไฟล์ backup-da-map-….json จากเว็บเดิม ข้อมูลในบัญชีนี้จะถูกแทนด้วยข้อมูลในไฟล์"}));return c}
 
 /* ===== ตัวรัน Python (Pyodide ใน Web Worker) + โจทย์เขียนฟังก์ชัน ===== */
