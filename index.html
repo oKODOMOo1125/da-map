@@ -1050,7 +1050,7 @@ kbd{font-family:inherit;font-size:11px;border:1px solid var(--line);border-botto
 <nav class="phases" id="phaseNav" aria-label="ช่วงของแผน"></nav>
 <div class="tools" id="filters" role="group" aria-label="ค้นหาและกรอง"></div>
 <div class="layout">
-  <main><div id="today"></div><div id="map" hidden></div><div id="diagram" hidden></div><div id="library" hidden></div><div id="stats" hidden></div><div id="history" hidden></div><div id="reading" hidden></div><div id="calendar" hidden></div><div id="jobs" hidden></div><div id="brain" hidden></div><div id="notes" hidden></div></main>
+  <main><div id="today"></div><div id="map" hidden></div><div id="diagram" hidden></div><div id="library" hidden></div><div id="stats" hidden></div><div id="history" hidden></div><div id="reading" hidden></div><div id="calendar" hidden></div><div id="jobs" hidden></div><div id="brain" hidden></div><div id="notes" hidden></div><div id="links" hidden></div></main>
   <aside class="detail" id="detail" aria-live="polite"></aside>
 </div>
 <p class="foot" id="foot"></p>
@@ -1506,6 +1506,86 @@ body.nt-fsopen::after{content:"";position:fixed;inset:0;background:rgba(15,15,15
 .nb-imgsz{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:2px 8px;border-radius:6px;display:none}
 .nb-imgf.sizing .nb-imgsz{display:block}.nb-imgf.sizing{outline:2px solid var(--focus);outline-offset:2px;border-radius:8px}
 
+/* ===== โน้ตรอบ 2 ===== */
+.nb[data-t="text"]{padding:1px 0}
+.nb[data-k="h1"]{margin-top:1.1em}.nb[data-k="h2"]{margin-top:.85em}.nb[data-k="h3"]{margin-top:.55em}
+.nt-blocks>.nb[data-k^="h"]:first-child{margin-top:0}
+.nb[data-k="h1"] .nb-rich h1,.nb[data-k="h2"] .nb-rich h2,.nb[data-k="h3"] .nb-rich h3{margin:0}
+.nb[data-k="h1"] .nb-gut{top:12px}.nb[data-k="h2"] .nb-gut{top:8px}
+.nb[data-k="ul"] .nb-rich ul,.nb[data-k="ol"] .nb-rich ol{margin:0}
+.nb[data-k="h1"] .nb-rich.is-empty::before{font-size:1.65em;font-weight:700;line-height:1.3}
+.nb[data-k="h2"] .nb-rich.is-empty::before{font-size:1.35em;font-weight:650;line-height:1.35}
+.nb[data-k="h3"] .nb-rich.is-empty::before{font-size:1.12em;font-weight:650;line-height:1.4}
+.nb[data-k="ul"] .nb-rich.is-empty::before,.nb[data-k="ol"] .nb-rich.is-empty::before{left:1.75em}
+.nb[data-k="blockquote"] .nb-rich.is-empty::before{left:17px}
+.nb[data-k="h1"] .nb-rich.is-empty::before,.nb[data-k="h2"] .nb-rich.is-empty::before,.nb[data-k="h3"] .nb-rich.is-empty::before{content:attr(data-ph);color:var(--faint);position:absolute;left:0;top:0;pointer-events:none}
+.nb.toc-flash{animation:tocflash 1.4s ease}
+@keyframes tocflash{0%,40%{background:color-mix(in srgb,var(--focus) 14%,transparent);border-radius:6px}100%{background:transparent}}
+
+/* เมนูเปลี่ยนชนิด */
+.nt-bmenu{min-width:268px}
+.nt-turn{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px 4px 6px}
+.nt-ti{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid transparent;background:var(--surface2);border-radius:9px;padding:7px 2px 5px;cursor:pointer;color:var(--ink);font:inherit}
+.nt-ti b{font-size:14px;font-weight:650;line-height:1.2}
+.nt-ti span{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.nt-ti:hover,.nt-ti:focus-visible{background:var(--hover);border-color:var(--line);outline:none}
+.nt-ti.on{border-color:var(--focus);background:color-mix(in srgb,var(--focus) 10%,var(--surface))}
+.nt-msep{height:1px;background:var(--line);margin:2px 0 4px}
+
+/* ลิงก์โน้ต */
+.nlink{display:inline;padding:0 3px;border-radius:4px;color:var(--ink);font-weight:550;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--focus) 55%,transparent);text-underline-offset:3px;text-decoration-thickness:1.5px;cursor:pointer;user-select:none;white-space:normal}
+.nlink::before{content:"↗ ";color:var(--focus);font-weight:600;text-decoration:none;display:inline-block}
+.nlink:hover{background:var(--hover)}
+.nlink.gone{color:var(--faint);text-decoration:line-through}
+#ntTp.lk{width:320px}
+#ntTp.lk .nt-dditem{justify-content:flex-start}
+#ntTp.lk .lk-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk-ic{width:20px;text-align:center;flex:0 0 auto}
+#ntBub .bub-lk{width:auto!important;padding:0 8px!important;font-size:12.5px;white-space:nowrap}
+.nd-links{margin-top:34px;border-top:1px solid var(--line);padding-top:12px}
+.lk-head{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+.lk-add{border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
+.lk-add:hover{color:var(--ink);border-color:var(--muted)}
+.lk-list{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.lk-row{display:flex;align-items:center;gap:8px;border:0;background:transparent;border-radius:8px;padding:7px 8px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;font-size:14.5px}
+.lk-row:hover{background:var(--hover)}
+.lk-row .lk-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nd-links+.nd-meta{margin-top:14px}
+
+/* สารบัญ */
+.nn-tocbtn.on{color:var(--focus);background:color-mix(in srgb,var(--focus) 10%,transparent)}
+#ntToc{position:fixed;z-index:30;right:14px;top:96px}
+#ntToc[hidden]{display:none}
+#ntToc.tocmini{display:flex;flex-direction:row-reverse;align-items:flex-start}
+.toc-rail{display:flex;flex-direction:column;align-items:flex-end;gap:7px;padding:10px 6px;border:0;background:transparent;cursor:pointer;max-height:60vh;overflow:hidden}
+.toc-rail i{display:block;height:3px;border-radius:2px;background:var(--line);transition:background .15s,width .15s}
+.toc-rail i.r1{width:22px}.toc-rail i.r2{width:15px}.toc-rail i.r3{width:9px}
+.toc-rail i.on{background:var(--ink)}
+.toc-rail:hover i{background:var(--faint)}.toc-rail:hover i.on{background:var(--ink)}
+.toc-pop{display:none;width:250px;max-height:70vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.16);padding:6px;margin-right:2px}
+#ntToc.tocmini:hover .toc-pop,#ntToc.tocmini:focus-within .toc-pop{display:block}
+#ntToc.tocpin{width:236px;max-height:calc(100vh - 120px);overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:4px 4px 12px 10px}
+.toc-h{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);padding:6px 6px 4px;letter-spacing:.02em}
+.toc-n{font-weight:500;color:var(--faint)}
+.toc-list{display:flex;flex-direction:column}
+.toc-it{display:flex;align-items:center;border-radius:7px;font-size:13.5px;line-height:1.35}
+.toc-it .toc-a{flex:1;min-width:0;text-align:left;border:0;background:transparent;color:var(--muted);font:inherit;padding:5px 6px;border-radius:7px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toc-it .toc-a:hover{background:var(--hover);color:var(--ink)}
+.toc-it.l1 .toc-a{color:var(--ink);font-weight:600}
+.toc-it.l2{padding-left:12px}.toc-it.l3{padding-left:26px}
+.toc-it.on .toc-a{color:var(--focus);background:color-mix(in srgb,var(--focus) 9%,transparent)}
+.toc-fold,.toc-sp{flex:0 0 18px;width:18px;height:22px;border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:11px;padding:0;transition:transform .15s}
+.toc-fold.shut{transform:rotate(-90deg)}
+.toc-top{border:0;background:transparent;text-align:left;color:var(--faint);font:inherit;font-size:12.5px;padding:4px 8px 6px;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.toc-top:hover{color:var(--ink)}
+.toc-empty{font-size:12.5px;color:var(--faint);padding:4px 8px;margin:0;line-height:1.5}
+.nn-main.toc-pad{padding-right:262px}
+@media (max-width:1099px){#ntToc.tocpin{top:56px;right:8px;bottom:auto;max-height:70vh;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);z-index:45}}
+@media (max-width:700px){#ntToc{top:auto;bottom:calc(76px + env(safe-area-inset-bottom,0px))}#ntToc.tocmini .toc-rail{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}#ntToc.tocmini .toc-pop{display:none!important}#ntToc.tocpin{bottom:calc(76px + env(safe-area-inset-bottom,0px));top:auto;width:calc(100vw - 16px)}}
+#ntToc.tocpin{display:flex;flex-direction:column;align-items:stretch}
+#ntToc.tocpin>*{flex:0 0 auto}
+#ntTp.lk{display:flex;flex-direction:column;align-items:stretch}
+
 /* ===== รอบ UX ===== */
 /* ตัวเลือกหัวข้อ */
 .tpbox{position:relative}
@@ -1646,6 +1726,128 @@ body.nt-fsopen::after{content:"";position:fixed;inset:0;background:rgba(15,15,15
 #sndpanel .primary-btn{border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;background:var(--ink);color:var(--surface);border:1px solid var(--ink)}
 #sndpanel button:hover{filter:brightness(.97)}
 #mpstage.show{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.18);box-sizing:border-box}
+
+/* ===== ที่เก็บลิงก์ ===== */
+:root{--lc0:#0E7466;--lc1:#3346A8;--lc2:#7C3AED;--lc3:#B7791F;--lc4:#BE185D;--lc5:#3B7D23;--lc6:#C2410C;--lc7:#56666E}
+:root[data-theme="dark"]{--lc0:#5CCBB6;--lc1:#9DAAF2;--lc2:#C4A5FA;--lc3:#E2B455;--lc4:#F09ABF;--lc5:#8FCB6E;--lc6:#F59E6B;--lc7:#A2B1B7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--lc0:#5CCBB6;--lc1:#9DAAF2;--lc2:#C4A5FA;--lc3:#E2B455;--lc4:#F09ABF;--lc5:#8FCB6E;--lc6:#F59E6B;--lc7:#A2B1B7}}
+.lkc0{--lc:var(--lc0)}.lkc1{--lc:var(--lc1)}.lkc2{--lc:var(--lc2)}.lkc3{--lc:var(--lc3)}.lkc4{--lc:var(--lc4)}.lkc5{--lc:var(--lc5)}.lkc6{--lc:var(--lc6)}.lkc7{--lc:var(--lc7)}
+#links{max-width:860px;margin:0 auto}
+.lk-head{display:flex;align-items:center;gap:8px;margin:4px 0 14px}
+.lk-head h2{margin:0;font-size:26px;font-weight:650;letter-spacing:-.01em}
+.lk-head .lk-add{width:auto!important;border-radius:999px!important;padding:8px 16px;font-size:14.5px}
+.lk-head .lk-cats{font-size:13.5px;color:var(--muted);border:0;background:transparent;cursor:pointer;padding:6px 10px;border-radius:8px}
+.lk-head .lk-cats:hover{background:var(--hover);color:var(--ink)}
+.lk-qwrap{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 14px;margin-bottom:18px;transition:border-color .15s,box-shadow .15s}
+.lk-qwrap:focus-within{border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 14%,transparent)}
+.lk-qi{color:var(--faint);display:flex}
+.lk-quick{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:15.5px;padding:13px 0;color:var(--ink);outline:none}
+.lk-tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.lk-tabs button{border:0;background:transparent;font:inherit;font-size:15px;color:var(--muted);padding:8px 0 10px;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.lk-tabs button.on{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
+.lk-n{font-size:12px;font-weight:500;color:var(--faint);font-variant-numeric:tabular-nums}
+.lk-n.hot{background:var(--here);color:#fff;border-radius:999px;padding:0 7px;line-height:18px}
+.lk-filter{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.lkf{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 11px;font:inherit;font-size:13px;cursor:pointer}
+.lkf small{color:var(--faint);font-size:11.5px}
+.lkf i,.lkr-c i,.lks-chip.lkc0 i,.lks-chip[class*="lkc"] i,.lkcm-dot i{width:7px;height:7px;border-radius:50%;background:var(--lc,var(--faint));display:inline-block;flex:0 0 auto}
+.lkf.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}.lkf.on small{color:inherit;opacity:.7}
+.lk-kind,.lk-q{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 10px;font:inherit;font-size:13px}
+.lk-q{width:150px}
+.lk-list{display:flex;flex-direction:column}
+.lkr{display:flex;align-items:flex-start;gap:12px;padding:12px 10px;margin:0 -10px;border-radius:12px;cursor:pointer;position:relative;transition:background .12s}
+.lkr+.lkr::before{content:"";position:absolute;left:54px;right:10px;top:0;height:1px;background:var(--line)}
+.lkr:hover,.lkr:focus-visible{background:var(--hover);outline:none}
+.lkr:hover+.lkr::before,.lkr:hover::before{opacity:0}
+.lk-ico{width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;background:var(--surface2);color:var(--muted)}
+.lk-ico.k1{background:color-mix(in srgb,#E5484D 13%,var(--surface));color:#D93A3F}
+.lk-ico.k2{background:color-mix(in srgb,#7C3AED 13%,var(--surface));color:var(--lc2)}
+.lk-ico.k3{background:color-mix(in srgb,#3346A8 12%,var(--surface));color:var(--lc1)}
+.lk-ico.k4{background:color-mix(in srgb,#56666E 14%,var(--surface));color:var(--ink)}
+.lk-ico.k5{background:color-mix(in srgb,#0E7466 13%,var(--surface));color:var(--lc0)}
+.lk-ico.k6{background:color-mix(in srgb,#C2410C 13%,var(--surface));color:var(--lc6)}
+.lk-ico.k7{background:color-mix(in srgb,#B7791F 14%,var(--surface));color:var(--lc3)}
+.lk-ico.k8{background:color-mix(in srgb,#BE185D 12%,var(--surface));color:var(--lc4)}
+.lkr-b{flex:1;min-width:0}
+.lkr-t{font-size:15.5px;font-weight:550;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lkr-w{font-size:13.5px;color:var(--muted);line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.lkr-m{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:5px;font-size:12px;color:var(--faint);align-items:center}
+.lkr-c{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.lkr-d.due{color:var(--here);font-weight:600}
+.lkr.is-due .lkr-t::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--here);margin-left:7px;vertical-align:3px}
+.lkr-a{display:flex;gap:2px;opacity:0;transition:opacity .12s;align-self:center}
+.lkr:hover .lkr-a,.lkr:focus-within .lkr-a{opacity:1}
+.lkb{width:32px;height:32px;border:0;background:transparent;border-radius:8px;cursor:pointer;color:var(--muted);font-size:15px;display:inline-flex;align-items:center;justify-content:center;font-family:inherit}
+.lkb:hover{background:var(--press);color:var(--ink)}
+.lkb.ok:hover{color:var(--found);background:var(--found-bg)}
+@media (hover:none){.lkr-a{opacity:1}.lkr-a .lkb:not(.ok){display:none}}
+.lk-empty{text-align:center;padding:48px 16px;color:var(--muted)}
+.lk-empty b{display:block;color:var(--ink);font-size:16px;font-weight:600;margin-bottom:4px}.lk-empty p{margin:0;font-size:14px}
+.lk-menu{min-width:190px}.lk-menu .lk-mh{font-size:12px;color:var(--faint);padding:4px 10px 2px}
+.lk-dt{display:flex;flex-direction:column;gap:2px;padding:6px 10px;font-size:13px;color:var(--muted)}.lk-dt input{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:8px;padding:4px 6px;background:var(--surface);color:var(--ink)}
+/* กล่องเก็บ */
+#lkSheet{position:fixed;inset:0;z-index:120;background:rgba(10,16,20,.32);display:flex;align-items:flex-start;justify-content:center;padding:10vh 16px 16px;animation:alin .15s ease;overflow:auto}
+.lks{background:var(--surface);color:var(--ink);width:min(520px,100%);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.25);padding:16px 20px 18px;display:flex;flex-direction:column;gap:8px}
+.lks-h{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:600}
+.lks-open{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:4px 12px;font:inherit;font-size:13px;cursor:pointer}
+.lks-urlrow{display:flex;flex-direction:column;gap:6px}
+.lks-url{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:10px 12px;font:inherit;font-size:14.5px;color:var(--ink)}
+.lks-url:focus,.lks-why:focus{outline:2px solid var(--focus);outline-offset:-1px;background:var(--surface)}
+.lks-k{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}.lks-k:empty{display:none}.lks-k .lk-ico{width:24px;height:24px;border-radius:7px}
+.lks-dup{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--here)}.lks-dup:empty{display:none}
+.lks-title{border:0;border-bottom:1px solid var(--line);background:transparent;font:inherit;font-size:20px;font-weight:650;padding:8px 2px;color:var(--ink);outline:none}
+.lks-title:focus{border-bottom-color:var(--focus)}.lks-title.loading{color:var(--faint)}
+.lks-why{width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--line);background:transparent;font:inherit;font-size:15px;padding:8px 2px;color:var(--ink);outline:none}
+.lks-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px 12px;align-items:start;margin-top:8px}
+.lks-l{font-size:12.5px;color:var(--faint);padding-top:6px}
+.lks-more .lks-l{padding-top:10px;margin-bottom:4px}
+.lks-seg{display:inline-flex;background:var(--surface2);border-radius:999px;padding:3px;gap:2px;justify-self:start}
+.lks-seg button{border:0;background:transparent;border-radius:999px;padding:5px 14px;font:inherit;font-size:13.5px;color:var(--muted);cursor:pointer}
+.lks-seg button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.lks-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.lks-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 11px;font:inherit;font-size:13px;cursor:pointer;position:relative}
+.lks-chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.lks-chip.on i{box-shadow:0 0 0 1.5px var(--surface)}
+.lks-chip.ghostc{border-style:dashed;color:var(--muted)}
+.lks-pick input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.lks-newcat{border:1px dashed var(--line);background:transparent;border-radius:999px;padding:4px 11px;font:inherit;font-size:13px;width:110px;color:var(--ink)}
+.lks-newcat:focus{outline:none;border-color:var(--focus);border-style:solid}
+.lks-more{border-top:1px solid var(--line);margin-top:6px;padding-top:4px}
+.lks-more summary{cursor:pointer;font-size:13px;color:var(--muted);padding:6px 0;list-style:none}
+.lks-more summary::before{content:"▸ ";display:inline-block;transition:transform .15s}.lks-more[open] summary::before{transform:rotate(90deg)}
+.lks-foot{display:flex;align-items:center;gap:10px;margin-top:8px}
+.lks-foot .primary-btn{width:auto!important;border-radius:999px!important;padding:9px 26px;font-size:15px}
+.lk-np{display:flex;flex-direction:column;gap:6px}
+.lk-nchip{display:inline-flex;align-items:center;gap:4px;background:var(--surface2);border-radius:999px;padding:3px 4px 3px 10px;font-size:13px}
+.lk-nchip button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:15px;border-radius:999px;width:22px;height:22px}
+.lk-nres{display:flex;flex-direction:column}.lk-nres:empty{display:none}
+.lk-nres button{border:0;background:transparent;text-align:left;padding:6px 8px;border-radius:8px;font:inherit;font-size:14px;color:var(--ink);cursor:pointer}.lk-nres button:hover{background:var(--hover)}
+.lk-nres .lk-ncreate{color:var(--muted)}
+.lks-cm{gap:10px}.lkcm{display:flex;flex-direction:column;gap:2px;max-height:50vh;overflow:auto}
+.lkcm-r{display:flex;align-items:center;gap:8px;padding:2px 0}
+.lkcm-dot{width:28px;height:28px;border:0;background:transparent;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.lkcm-dot i{width:12px;height:12px}
+.lkcm-dot:hover{background:var(--hover)}
+.lkcm-n{flex:1;border:0;border-bottom:1px solid transparent;background:transparent;font:inherit;font-size:15px;color:var(--ink);padding:5px 2px}
+.lkcm-n:focus{outline:none;border-bottom-color:var(--focus)}
+/* หน้าวันนี้ */
+.lk-today{background:var(--surface);border-radius:16px;padding:10px 14px 8px;margin:14px 0;box-shadow:var(--shadow)}
+.lk-th{display:flex;align-items:center;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.lk-ti{display:flex;align-items:center;gap:10px;padding:4px 0}
+.lk-ti .lk-ico{width:28px;height:28px;border-radius:8px}
+.lk-tt{flex:1;min-width:0;border:0;background:transparent;text-align:left;font:inherit;font-size:14.5px;color:var(--ink);cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:4px 0}
+.lk-tt:hover{text-decoration:underline;text-underline-offset:3px}
+/* โน้ต */
+.nlink.is-lk::before{content:"🔗 ";color:var(--muted)}
+.lk-head2{font-size:13.5px;color:var(--muted);margin-top:14px}
+.lk-list2{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.lk-list2 .lk-ico{width:24px;height:24px;border-radius:7px}
+.cap-lk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted);background:var(--surface2);border-radius:10px;padding:6px 10px}
+.bk-card .primary-btn{width:auto!important;border-radius:999px!important;padding:8px 16px}
+@media (max-width:700px){#lkSheet{padding:0;align-items:flex-end}.lks{border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}.lks-grid{grid-template-columns:1fr;gap:4px}.lks-l{padding-top:8px}.lk-q{width:110px}.lk-head h2{font-size:22px}.lkr{padding:12px 6px;margin:0 -6px}.lkr+.lkr::before{left:50px}}
+
+.lk-head h2{color:var(--ink)}
+.lk-th .linkish{font-size:12.5px;font-weight:500;color:var(--muted);text-decoration:none;border:0;background:transparent;cursor:pointer}
+.lk-th .linkish:hover{color:var(--ink)}
 </style>
 
 <script>var supabase=(function(e){function t(e,t){var n={};for(var r in e)Object.prototype.hasOwnProperty.call(e,r)&&t.indexOf(r)<0&&(n[r]=e[r]);if(e!=null&&typeof Object.getOwnPropertySymbols==`function`)for(var i=0,r=Object.getOwnPropertySymbols(e);i<r.length;i++)t.indexOf(r[i])<0&&Object.prototype.propertyIsEnumerable.call(e,r[i])&&(n[r[i]]=e[r[i]]);return n}function n(e,t,n,r){function i(e){return e instanceof n?e:new n(function(t){t(e)})}return new(n||=Promise)(function(n,a){function o(e){try{c(r.next(e))}catch(e){a(e)}}function s(e){try{c(r.throw(e))}catch(e){a(e)}}function c(e){e.done?n(e.value):i(e.value).then(o,s)}c((r=r.apply(e,t||[])).next())})}let r=e=>e?(...t)=>e(...t):(...e)=>fetch(...e);var i=class extends Error{constructor(e,t=`FunctionsError`,n){super(e),this.name=t,this.context=n}toJSON(){return{name:this.name,message:this.message,context:this.context}}},a=class extends i{constructor(e){super(`Failed to send a request to the Edge Function`,`FunctionsFetchError`,e)}},o=class extends i{constructor(e){super(`Relay Error invoking the Edge Function`,`FunctionsRelayError`,e)}},s=class extends i{constructor(e){super(`Edge Function returned a non-2xx status code`,`FunctionsHttpError`,e)}},c;(function(e){e.Any=`any`,e.ApNortheast1=`ap-northeast-1`,e.ApNortheast2=`ap-northeast-2`,e.ApSouth1=`ap-south-1`,e.ApSoutheast1=`ap-southeast-1`,e.ApSoutheast2=`ap-southeast-2`,e.CaCentral1=`ca-central-1`,e.EuCentral1=`eu-central-1`,e.EuWest1=`eu-west-1`,e.EuWest2=`eu-west-2`,e.EuWest3=`eu-west-3`,e.SaEast1=`sa-east-1`,e.UsEast1=`us-east-1`,e.UsWest1=`us-west-1`,e.UsWest2=`us-west-2`})(c||={});var l=class{constructor(e,{headers:t={},customFetch:n,region:i=c.Any}={}){this.url=e,this.headers=t,this.region=i,this.fetch=r(n)}setAuth(e){this.headers.Authorization=`Bearer ${e}`}invoke(e){return n(this,arguments,void 0,function*(e,t={}){var n;let r,i,c;try{let{headers:n,method:l,body:u,signal:d,timeout:f}=t,p={},{region:m}=t;m||=this.region;let h=new URL(`${this.url}/${e}`);m&&m!==`any`&&(p[`x-region`]=m,h.searchParams.set(`forceFunctionRegion`,m));let g,ee=!!n&&Object.keys(n).some(e=>e.toLowerCase()===`content-type`);u&&!ee?typeof Blob<`u`&&u instanceof Blob||u instanceof ArrayBuffer?(p[`Content-Type`]=`application/octet-stream`,g=u):typeof u==`string`?(p[`Content-Type`]=`text/plain`,g=u):typeof FormData<`u`&&u instanceof FormData?g=u:(p[`Content-Type`]=`application/json`,g=JSON.stringify(u)):g=u&&typeof u!=`string`&&!(typeof Blob<`u`&&u instanceof Blob)&&!(u instanceof ArrayBuffer)&&!(typeof FormData<`u`&&u instanceof FormData)?JSON.stringify(u):u;let te=d;f&&(i=new AbortController,r=setTimeout(()=>i.abort(),f),d?(te=i.signal,c=()=>i.abort(),d.addEventListener(`abort`,c)):te=i.signal);let _=yield this.fetch(h.toString(),{method:l||`POST`,headers:Object.assign(Object.assign(Object.assign({},p),this.headers),n),body:g,signal:te}).catch(e=>{throw new a(e)}),ne=_.headers.get(`x-relay-error`);if(ne&&ne===`true`)throw new o(_);if(!_.ok)throw new s(_);let re=(_.headers.get(`Content-Type`)??`text/plain`).split(`;`)[0].trim().toLowerCase(),ie;return ie=re===`application/json`?yield _.json():re===`application/octet-stream`||re===`application/pdf`?yield _.blob():re===`text/event-stream`?_:re===`multipart/form-data`?yield _.formData():yield _.text(),{data:ie,error:null,response:_}}catch(e){return{data:null,error:e,response:e instanceof s||e instanceof o?e.context:void 0}}finally{r&&clearTimeout(r),c&&((n=t.signal)==null||n.removeEventListener(`abort`,c))}})}},u=class extends Error{constructor(e){super(e.message),this.name=`PostgrestError`,this.details=e.details,this.hint=e.hint,this.code=e.code}toJSON(){return{name:this.name,message:this.message,details:this.details,hint:this.hint,code:this.code}}};let d=e=>Math.min(1e3*2**e,3e4),f=[520,503],p=[`GET`,`HEAD`,`OPTIONS`];function m(e){"@babel/helpers - typeof";return m=typeof Symbol==`function`&&typeof Symbol.iterator==`symbol`?function(e){return typeof e}:function(e){return e&&typeof Symbol==`function`&&e.constructor===Symbol&&e!==Symbol.prototype?`symbol`:typeof e},m(e)}function h(e,t){if(m(e)!=`object`||!e)return e;var n=e[Symbol.toPrimitive];if(n!==void 0){var r=n.call(e,t||`default`);if(m(r)!=`object`)return r;throw TypeError(`@@toPrimitive must return a primitive value.`)}return(t===`string`?String:Number)(e)}function g(e){var t=h(e,`string`);return m(t)==`symbol`?t:t+``}function ee(e,t,n){return(t=g(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function te(e,t){var n=Object.keys(e);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(e);t&&(r=r.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),n.push.apply(n,r)}return n}function _(e){for(var t=1;t<arguments.length;t++){var n=arguments[t]==null?{}:arguments[t];t%2?te(Object(n),!0).forEach(function(t){ee(e,t,n[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(n)):te(Object(n)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(n,t))})}return e}function ne(e,t){return new Promise(n=>{if(t?.aborted){n();return}let r=setTimeout(()=>{t?.removeEventListener(`abort`,i),n()},e);function i(){clearTimeout(r),n()}t?.addEventListener(`abort`,i)})}function re(e,t,n,r){return!(!r||n>=3||!p.includes(e)||!f.includes(t))}async function ie(e,t,n,r){let i=0;for(;;){let a=_({},n.headers);i>0&&(a[`X-Retry-Count`]=String(i));let o;try{o=await e(t,{method:n.method,headers:a,body:n.body,signal:n.signal})}catch(e){if(e?.name===`AbortError`||e?.code===`ABORT_ERR`||!p.includes(n.method))throw e;if(r&&i<3){let e=d(i);i++,await ne(e,n.signal);continue}throw e}if(re(n.method,o.status,i,r)){let e=o.headers?.get(`Retry-After`)??null,t=e===null?d(i):Math.max(0,parseInt(e,10)||0)*1e3;await o.text(),i++,await ne(t,n.signal);continue}return o}}var ae=class{constructor(e){this.shouldThrowOnError=!1,this.retryEnabled=!0,this.method=e.method,this.url=e.url,this.headers=new Headers(e.headers),this.schema=e.schema,this.body=e.body,this.shouldThrowOnError=e.shouldThrowOnError??!1,this.signal=e.signal,this.isMaybeSingle=e.isMaybeSingle??!1,this.shouldStripNulls=e.shouldStripNulls??!1,this.urlLengthLimit=e.urlLengthLimit??8e3,this.retryEnabled=e.retry??!0,e.fetch?this.fetch=e.fetch:this.fetch=fetch}throwOnError(){return this.shouldThrowOnError=!0,this}stripNulls(){if(this.headers.get(`Accept`)===`text/csv`)throw Error(`stripNulls() cannot be used with csv()`);return this.shouldStripNulls=!0,this}setHeader(e,t){return this.headers=new Headers(this.headers),this.headers.set(e,t),this}retry(e){return this.retryEnabled=e,this}then(e,t){var n=this;if(this.schema===void 0||([`GET`,`HEAD`].includes(this.method)?this.headers.set(`Accept-Profile`,this.schema):this.headers.set(`Content-Profile`,this.schema)),this.method!==`GET`&&this.method!==`HEAD`&&this.headers.set(`Content-Type`,`application/json`),this.shouldStripNulls){let e=this.headers.get(`Accept`);e===`application/vnd.pgrst.object+json`?this.headers.set(`Accept`,`application/vnd.pgrst.object+json;nulls=stripped`):(!e||e===`application/json`)&&this.headers.set(`Accept`,`application/vnd.pgrst.array+json;nulls=stripped`)}let r=this.fetch,i=(async()=>{let e={};n.headers.forEach((t,n)=>{e[n]=t});let t=await ie(r,n.url.toString(),{method:n.method,headers:e,body:JSON.stringify(n.body,(e,t)=>typeof t==`bigint`?t.toString():t),signal:n.signal},n.retryEnabled);return await n.processResponse(t)})();return this.shouldThrowOnError||(i=i.catch(e=>{let t=``,n=``,r=``,i=e?.cause;if(i){let n=i?.message??``,r=i?.code??``;t=`${e?.name??`FetchError`}: ${e?.message}`,t+=`\n\nCaused by: ${i?.name??`Error`}: ${n}`,r&&(t+=` (${r})`),i?.stack&&(t+=`\n${i.stack}`)}else t=e?.stack??``;let a=this.url.toString().length;return e?.name===`AbortError`||e?.code===`ABORT_ERR`?(r=``,n=`Request was aborted (timeout or manual cancellation)`,a>this.urlLengthLimit&&(n+=`. Note: Your request URL is ${a} characters, which may exceed server limits. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [many IDs])), consider using an RPC function to pass values server-side.`)):(i?.name===`HeadersOverflowError`||i?.code===`UND_ERR_HEADERS_OVERFLOW`)&&(r=``,n=`HTTP headers exceeded server limits (typically 16KB)`,a>this.urlLengthLimit&&(n+=`. Your request URL is ${a} characters. If selecting many fields, consider using views. If filtering with large arrays (e.g., .in('id', [200+ IDs])), consider using an RPC function instead.`)),{success:!1,error:{message:`${e?.name??`FetchError`}: ${e?.message}`,details:t,hint:n,code:r},data:null,count:null,status:0,statusText:``}})),i.then(e,t)}async processResponse(e){var t=this;let n=null,r=null,i=null,a=e.status,o=e.statusText;if(e.ok){if(t.method!==`HEAD`){let i=await e.text();if(i!==``)if(t.headers.get(`Accept`)===`text/csv`)r=i;else if(t.headers.get(`Accept`)&&t.headers.get(`Accept`)?.includes(`application/vnd.pgrst.plan+text`))r=i;else try{r=JSON.parse(i)}catch{if(n={message:i},r=null,t.shouldThrowOnError)throw new u({message:i,details:``,hint:``,code:``})}}let s=t.headers.get(`Prefer`)?.match(/count=(exact|planned|estimated)/),c=e.headers.get(`content-range`)?.split(`/`);if(s&&c&&c.length>1&&(i=parseInt(c[1])),t.isMaybeSingle&&Array.isArray(r))if(r.length>1){if(n={code:`PGRST116`,details:`Results contain ${r.length} rows, application/vnd.pgrst.object+json requires 1 row`,hint:null,message:`JSON object requested, multiple (or no) rows returned`},r=null,i=null,a=406,o=`Not Acceptable`,t.shouldThrowOnError)throw new u(_(_({},n),{},{hint:n.hint??``}))}else r=r.length===1?r[0]:null}else{let i=await e.text();try{n=JSON.parse(i),Array.isArray(n)&&e.status===404&&(r=[],n=null,a=200,o=`OK`)}catch{e.status===404&&i===``?(a=204,o=`No Content`):n={message:i}}if(n&&t.shouldThrowOnError)throw new u(n)}return{success:n===null,error:n,data:r,count:i,status:a,statusText:o}}returns(){return this}overrideTypes(){return this}},oe=class extends ae{throwOnError(){return super.throwOnError()}select(e){let t=!1,n=(e??`*`).split(``).map(e=>/\s/.test(e)&&!t?``:(e===`"`&&(t=!t),e)).join(``);return this.url.searchParams.set(`select`,n),this.headers.append(`Prefer`,`return=representation`),this}order(e,{ascending:t=!0,nullsFirst:n,foreignTable:r,referencedTable:i=r}={}){let a=i?`${i}.order`:`order`,o=this.url.searchParams.get(a);return this.url.searchParams.set(a,`${o?`${o},`:``}${e}.${t?`asc`:`desc`}${n===void 0?``:n?`.nullsfirst`:`.nullslast`}`),this}limit(e,{foreignTable:t,referencedTable:n=t}={}){let r=n===void 0?`limit`:`${n}.limit`;return this.url.searchParams.set(r,`${e}`),this}range(e,t,{foreignTable:n,referencedTable:r=n}={}){let i=r===void 0?`offset`:`${r}.offset`,a=r===void 0?`limit`:`${r}.limit`;return this.url.searchParams.set(i,`${e}`),this.url.searchParams.set(a,`${t-e+1}`),this}abortSignal(e){return this.signal=e,this}single(){return this.headers.set(`Accept`,`application/vnd.pgrst.object+json`),this}maybeSingle(){return this.isMaybeSingle=!0,this}csv(){return this.headers.set(`Accept`,`text/csv`),this}geojson(){return this.headers.set(`Accept`,`application/geo+json`),this}explain({analyze:e=!1,verbose:t=!1,settings:n=!1,buffers:r=!1,wal:i=!1,format:a=`text`}={}){let o=[e?`analyze`:null,t?`verbose`:null,n?`settings`:null,r?`buffers`:null,i?`wal`:null].filter(Boolean).join(`|`),s=this.headers.get(`Accept`)??`application/json`;return this.headers.set(`Accept`,`application/vnd.pgrst.plan+${a}; for="${s}"; options=${o};`),this}rollback(){return this.headers.append(`Prefer`,`tx=rollback`),this}returns(){return this}maxAffected(e){return this.headers.append(`Prefer`,`handling=strict`),this.headers.append(`Prefer`,`max-affected=${e}`),this}};let se=RegExp(`[,()]`);var ce=class extends oe{throwOnError(){return super.throwOnError()}eq(e,t){return this.url.searchParams.append(e,`eq.${t}`),this}neq(e,t){return this.url.searchParams.append(e,`neq.${t}`),this}gt(e,t){return this.url.searchParams.append(e,`gt.${t}`),this}gte(e,t){return this.url.searchParams.append(e,`gte.${t}`),this}lt(e,t){return this.url.searchParams.append(e,`lt.${t}`),this}lte(e,t){return this.url.searchParams.append(e,`lte.${t}`),this}like(e,t){return this.url.searchParams.append(e,`like.${t}`),this}likeAllOf(e,t){return this.url.searchParams.append(e,`like(all).{${t.join(`,`)}}`),this}likeAnyOf(e,t){return this.url.searchParams.append(e,`like(any).{${t.join(`,`)}}`),this}ilike(e,t){return this.url.searchParams.append(e,`ilike.${t}`),this}ilikeAllOf(e,t){return this.url.searchParams.append(e,`ilike(all).{${t.join(`,`)}}`),this}ilikeAnyOf(e,t){return this.url.searchParams.append(e,`ilike(any).{${t.join(`,`)}}`),this}regexMatch(e,t){return this.url.searchParams.append(e,`match.${t}`),this}regexIMatch(e,t){return this.url.searchParams.append(e,`imatch.${t}`),this}is(e,t){return this.url.searchParams.append(e,`is.${t}`),this}isDistinct(e,t){return this.url.searchParams.append(e,`isdistinct.${t}`),this}in(e,t){let n=Array.from(new Set(t)).map(e=>typeof e==`string`&&se.test(e)?`"${e}"`:`${e}`).join(`,`);return this.url.searchParams.append(e,`in.(${n})`),this}notIn(e,t){let n=Array.from(new Set(t)).map(e=>typeof e==`string`&&se.test(e)?`"${e}"`:`${e}`).join(`,`);return this.url.searchParams.append(e,`not.in.(${n})`),this}contains(e,t){return typeof t==`string`?this.url.searchParams.append(e,`cs.${t}`):Array.isArray(t)?this.url.searchParams.append(e,`cs.{${t.join(`,`)}}`):this.url.searchParams.append(e,`cs.${JSON.stringify(t)}`),this}containedBy(e,t){return typeof t==`string`?this.url.searchParams.append(e,`cd.${t}`):Array.isArray(t)?this.url.searchParams.append(e,`cd.{${t.join(`,`)}}`):this.url.searchParams.append(e,`cd.${JSON.stringify(t)}`),this}rangeGt(e,t){return this.url.searchParams.append(e,`sr.${t}`),this}rangeGte(e,t){return this.url.searchParams.append(e,`nxl.${t}`),this}rangeLt(e,t){return this.url.searchParams.append(e,`sl.${t}`),this}rangeLte(e,t){return this.url.searchParams.append(e,`nxr.${t}`),this}rangeAdjacent(e,t){return this.url.searchParams.append(e,`adj.${t}`),this}overlaps(e,t){return typeof t==`string`?this.url.searchParams.append(e,`ov.${t}`):this.url.searchParams.append(e,`ov.{${t.join(`,`)}}`),this}textSearch(e,t,{config:n,type:r}={}){let i=``;r===`plain`?i=`pl`:r===`phrase`?i=`ph`:r===`websearch`&&(i=`w`);let a=n===void 0?``:`(${n})`;return this.url.searchParams.append(e,`${i}fts${a}.${t}`),this}match(e){return Object.entries(e).filter(([e,t])=>t!==void 0).forEach(([e,t])=>{this.url.searchParams.append(e,`eq.${t}`)}),this}not(e,t,n){return this.url.searchParams.append(e,`not.${t}.${n}`),this}or(e,{foreignTable:t,referencedTable:n=t}={}){let r=n?`${n}.or`:`or`;return this.url.searchParams.append(r,`(${e})`),this}filter(e,t,n){return this.url.searchParams.append(e,`${t}.${n}`),this}},le=class{constructor(e,{headers:t={},schema:n,fetch:r,urlLengthLimit:i=8e3,retry:a}){this.url=e,this.headers=new Headers(t),this.schema=n,this.fetch=r,this.urlLengthLimit=i,this.retry=a}cloneRequestState(){return{url:new URL(this.url.toString()),headers:new Headers(this.headers)}}select(e,t){let{head:n=!1,count:r}=t??{},i=n?`HEAD`:`GET`,a=!1,o=(e??`*`).split(``).map(e=>/\s/.test(e)&&!a?``:(e===`"`&&(a=!a),e)).join(``),{url:s,headers:c}=this.cloneRequestState();return s.searchParams.set(`select`,o),r&&c.append(`Prefer`,`count=${r}`),new ce({method:i,url:s,headers:c,schema:this.schema,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}insert(e,{count:t,defaultToNull:n=!0}={}){let{url:r,headers:i}=this.cloneRequestState();if(t&&i.append(`Prefer`,`count=${t}`),n||i.append(`Prefer`,`missing=default`),Array.isArray(e)){let t=e.reduce((e,t)=>e.concat(Object.keys(t)),[]);if(t.length>0){let e=[...new Set(t)].map(e=>`"${e}"`);r.searchParams.set(`columns`,e.join(`,`))}}return new ce({method:`POST`,url:r,headers:i,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}upsert(e,{onConflict:t,ignoreDuplicates:n=!1,count:r,defaultToNull:i=!0}={}){let{url:a,headers:o}=this.cloneRequestState();if(o.append(`Prefer`,`resolution=${n?`ignore`:`merge`}-duplicates`),t!==void 0&&a.searchParams.set(`on_conflict`,t),r&&o.append(`Prefer`,`count=${r}`),i||o.append(`Prefer`,`missing=default`),Array.isArray(e)){let t=e.reduce((e,t)=>e.concat(Object.keys(t)),[]);if(t.length>0){let e=[...new Set(t)].map(e=>`"${e}"`);a.searchParams.set(`columns`,e.join(`,`))}}return new ce({method:`POST`,url:a,headers:o,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}update(e,{count:t}={}){let{url:n,headers:r}=this.cloneRequestState();return t&&r.append(`Prefer`,`count=${t}`),new ce({method:`PATCH`,url:n,headers:r,schema:this.schema,body:e,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}delete({count:e}={}){let{url:t,headers:n}=this.cloneRequestState();return e&&n.append(`Prefer`,`count=${e}`),new ce({method:`DELETE`,url:t,headers:n,schema:this.schema,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}};function ue(e,t){try{let t=JSON.parse(e);if(t&&typeof t==`object`&&!Array.isArray(t))return new u({message:String(t.message??e),details:t.details??``,hint:t.hint??``,code:t.code??``})}catch{}return new u({message:e||t,details:``,hint:``,code:``})}function de(e,t,n){let r=e;return{success:!1,error:new u({message:`${r?.name??`FetchError`}: ${r?.message}`,details:``,hint:``,code:``}),data:null,count:null,status:t,statusText:n}}var fe=class e{constructor(e,{headers:t={},schema:n,fetch:r,timeout:i,urlLengthLimit:a=8e3,retry:o}={}){this.url=e,this.headers=new Headers(t),this.schemaName=n,this.urlLengthLimit=a;let s=r??globalThis.fetch;i!==void 0&&i>0?this.fetch=(e,t)=>{let n=new AbortController,r=setTimeout(()=>n.abort(),i),a=t?.signal;if(a){if(a.aborted)return clearTimeout(r),s(e,t);let i=()=>{clearTimeout(r),n.abort()};return a.addEventListener(`abort`,i,{once:!0}),s(e,_(_({},t),{},{signal:n.signal})).finally(()=>{clearTimeout(r),a.removeEventListener(`abort`,i)})}return s(e,_(_({},t),{},{signal:n.signal})).finally(()=>clearTimeout(r))}:this.fetch=s,this.retry=o}from(e){if(!e||typeof e!=`string`||e.trim()===``)throw Error(`Invalid relation name: relation must be a non-empty string.`);return new le(new URL(`${this.url}/${e}`),{headers:new Headers(this.headers),schema:this.schemaName,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}schema(t){return new e(this.url,{headers:this.headers,schema:t,fetch:this.fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}async getOpenApiSpec(){var e=this;let t=new Headers(e.headers);t.set(`Accept`,`application/openapi+json`),e.schemaName&&t.set(`Accept-Profile`,e.schemaName);let n={};t.forEach((e,t)=>{n[t]=e});let r=e.fetch??globalThis.fetch,i;try{i=await ie(r,`${e.url}/`,{method:`GET`,headers:n},e.retry??!0)}catch(e){return de(e,0,``)}let a;try{a=await i.text()}catch(e){return de(e,i.status,i.statusText)}if(i.ok)try{return{success:!0,error:null,data:JSON.parse(a),count:null,status:i.status,statusText:i.statusText}}catch{}return{success:!1,error:ue(a,i.statusText),data:null,count:null,status:i.status,statusText:i.statusText}}rpc(e,t={},{head:n=!1,get:r=!1,count:i}={}){let a,o=new URL(`${this.url}/rpc/${e}`),s,c=e=>typeof e==`object`&&!!e&&(!Array.isArray(e)||e.some(c)),l=n&&Object.values(t).some(c);l?(a=`POST`,s=t):n||r?(a=n?`HEAD`:`GET`,Object.entries(t).filter(([e,t])=>t!==void 0).map(([e,t])=>[e,Array.isArray(t)?`{${t.join(`,`)}}`:`${t}`]).forEach(([e,t])=>{o.searchParams.append(e,t)})):(a=`POST`,s=t);let u=new Headers(this.headers);return l?u.set(`Prefer`,i?`count=${i},return=minimal`:`return=minimal`):i&&u.set(`Prefer`,`count=${i}`),new ce({method:a,url:o,headers:u,schema:this.schemaName,body:s,fetch:this.fetch??fetch,urlLengthLimit:this.urlLengthLimit,retry:this.retry})}},pe=class{constructor(){}static detectEnvironment(){if(typeof WebSocket<`u`)return{type:`native`,wsConstructor:WebSocket};let e=globalThis;if(typeof globalThis<`u`&&e.WebSocket!==void 0)return{type:`native`,wsConstructor:e.WebSocket};let t=typeof global<`u`?global:void 0;if(t&&t.WebSocket!==void 0)return{type:`native`,wsConstructor:t.WebSocket};if(typeof globalThis<`u`&&e.WebSocketPair!==void 0&&globalThis.WebSocket===void 0)return{type:`cloudflare`,error:`Cloudflare Workers detected. WebSocket clients are not supported in Cloudflare Workers.`,workaround:`Use Cloudflare Workers WebSocket API for server-side WebSocket handling, or deploy to a different runtime.`};if(typeof globalThis<`u`&&e.EdgeRuntime||typeof navigator<`u`&&navigator.userAgent?.includes(`Vercel-Edge`))return{type:`unsupported`,error:`Edge runtime detected (Vercel Edge/Netlify Edge). WebSockets are not supported in edge functions.`,workaround:`Use serverless functions or a different deployment target for WebSocket functionality.`};let n=globalThis.process;if(n){let e=n.versions;if(e&&e.node)return{type:`unsupported`,error:`Node.js detected but native WebSocket not found.`,workaround:`Ensure you are running Node.js 22+ or provide a WebSocket implementation via the transport option.`}}return{type:`unsupported`,error:`Unknown JavaScript runtime without WebSocket support.`,workaround:`Ensure you're running in a supported environment (browser, Node.js, Deno) or provide a custom WebSocket implementation.`}}static getWebSocketConstructor(){let e=this.detectEnvironment();if(e.wsConstructor)return e.wsConstructor;let t=e.error||`WebSocket not supported in this environment.`;throw e.workaround&&(t+=`\n\nSuggested solution: ${e.workaround}`),Error(t)}static isWebSocketSupported(){try{return this.detectEnvironment().type===`native`}catch{return!1}}};let v={closed:`closed`,errored:`errored`,joined:`joined`,joining:`joining`,leaving:`leaving`},me={close:`phx_close`,error:`phx_error`,join:`phx_join`,reply:`phx_reply`,leave:`phx_leave`,access_token:`access_token`},he={connecting:`connecting`,open:`open`,closing:`closing`,closed:`closed`};var ge=class{constructor(e){this.HEADER_LENGTH=1,this.USER_BROADCAST_PUSH_META_LENGTH=6,this.KINDS={userBroadcastPush:3,userBroadcast:4},this.BINARY_ENCODING=0,this.JSON_ENCODING=1,this.BROADCAST_EVENT=`broadcast`,this.allowedMetadataKeys=[],this.allowedMetadataKeys=e??[]}encode(e,t){if(e.event===this.BROADCAST_EVENT&&!(e.payload instanceof ArrayBuffer)&&typeof e.payload.event==`string`)return t(this._binaryEncodeUserBroadcastPush(e));let n=[e.join_ref,e.ref,e.topic,e.event,e.payload];return t(JSON.stringify(n))}_binaryEncodeUserBroadcastPush(e){return this._isArrayBuffer(e.payload?.payload)?this._encodeBinaryUserBroadcastPush(e):this._encodeJsonUserBroadcastPush(e)}_encodeBinaryUserBroadcastPush(e){let t=e.payload?.payload??new ArrayBuffer(0);return this._encodeUserBroadcastPush(e,this.BINARY_ENCODING,t)}_encodeJsonUserBroadcastPush(e){let t=e.payload?.payload??{},n=new TextEncoder().encode(JSON.stringify(t)).buffer;return this._encodeUserBroadcastPush(e,this.JSON_ENCODING,n)}_encodeUserBroadcastPush(e,t,n){let r=new TextEncoder,i=r.encode(e.topic),a=r.encode(e.ref??``),o=r.encode(e.join_ref??``),s=r.encode(e.payload.event),c=this.allowedMetadataKeys?this._pick(e.payload,this.allowedMetadataKeys):{},l=r.encode(Object.keys(c).length===0?``:JSON.stringify(c));if(o.length>255)throw Error(`joinRef length ${o.length} exceeds maximum of 255`);if(a.length>255)throw Error(`ref length ${a.length} exceeds maximum of 255`);if(i.length>255)throw Error(`topic length ${i.length} exceeds maximum of 255`);if(s.length>255)throw Error(`userEvent length ${s.length} exceeds maximum of 255`);if(l.length>255)throw Error(`metadata length ${l.length} exceeds maximum of 255`);let u=this.USER_BROADCAST_PUSH_META_LENGTH+o.length+a.length+i.length+s.length+l.length,d=new ArrayBuffer(this.HEADER_LENGTH+u),f=new DataView(d),p=new Uint8Array(d),m=0;f.setUint8(m++,this.KINDS.userBroadcastPush),f.setUint8(m++,o.length),f.setUint8(m++,a.length),f.setUint8(m++,i.length),f.setUint8(m++,s.length),f.setUint8(m++,l.length),f.setUint8(m++,t),p.set(o,m),m+=o.length,p.set(a,m),m+=a.length,p.set(i,m),m+=i.length,p.set(s,m),m+=s.length,p.set(l,m),m+=l.length;var h=new Uint8Array(d.byteLength+n.byteLength);return h.set(new Uint8Array(d),0),h.set(new Uint8Array(n),d.byteLength),h.buffer}decode(e,t){if(this._isArrayBuffer(e))return t(this._binaryDecode(e));if(typeof e==`string`){let[n,r,i,a,o]=JSON.parse(e);return t({join_ref:n,ref:r,topic:i,event:a,payload:o})}return t({})}_binaryDecode(e){let t=new DataView(e),n=t.getUint8(0),r=new TextDecoder;switch(n){case this.KINDS.userBroadcast:return this._decodeUserBroadcast(e,t,r)}}_decodeUserBroadcast(e,t,n){let r=t.getUint8(1),i=t.getUint8(2),a=t.getUint8(3),o=t.getUint8(4),s=this.HEADER_LENGTH+4,c=n.decode(e.slice(s,s+r));s+=r;let l=n.decode(e.slice(s,s+i));s+=i;let u=n.decode(e.slice(s,s+a));s+=a;let d=e.slice(s,e.byteLength),f=o===this.JSON_ENCODING?JSON.parse(n.decode(d)):d,p={type:this.BROADCAST_EVENT,event:l,payload:f};return a>0&&(p.meta=JSON.parse(u)),{join_ref:null,ref:null,topic:c,event:this.BROADCAST_EVENT,payload:p}}_isArrayBuffer(e){return e instanceof ArrayBuffer||e?.constructor?.name===`ArrayBuffer`}_pick(e,t){return!e||typeof e!=`object`?{}:Object.fromEntries(Object.entries(e).filter(([e])=>t.includes(e)))}},y;(function(e){e.abstime=`abstime`,e.bool=`bool`,e.date=`date`,e.daterange=`daterange`,e.float4=`float4`,e.float8=`float8`,e.int2=`int2`,e.int4=`int4`,e.int4range=`int4range`,e.int8=`int8`,e.int8range=`int8range`,e.json=`json`,e.jsonb=`jsonb`,e.money=`money`,e.numeric=`numeric`,e.oid=`oid`,e.reltime=`reltime`,e.text=`text`,e.time=`time`,e.timestamp=`timestamp`,e.timestamptz=`timestamptz`,e.timetz=`timetz`,e.tsrange=`tsrange`,e.tstzrange=`tstzrange`})(y||={});let _e=(e,t,n={})=>{let r=n.skipTypes??[];return t?Object.keys(t).reduce((n,i)=>(n[i]=ve(i,e,t,r),n),{}):{}},ve=(e,t,n,r)=>{let i=t.find(t=>t.name===e)?.type,a=n[e];return i&&!r.includes(i)?ye(i,a):be(a)},ye=(e,t)=>{if(e.charAt(0)===`_`)return we(t,e.slice(1,e.length));switch(e){case y.bool:return xe(t);case y.float4:case y.float8:case y.int2:case y.int4:case y.int8:case y.numeric:case y.oid:return Se(t);case y.json:case y.jsonb:return Ce(t);case y.timestamp:return Te(t);case y.abstime:case y.date:case y.daterange:case y.int4range:case y.int8range:case y.money:case y.reltime:case y.text:case y.time:case y.timestamptz:case y.timetz:case y.tsrange:case y.tstzrange:return be(t);default:return be(t)}},be=e=>e,xe=e=>{switch(e){case`t`:return!0;case`f`:return!1;default:return e}},Se=e=>{if(typeof e==`string`){let t=parseFloat(e);if(!Number.isNaN(t))return t}return e},Ce=e=>{if(typeof e==`string`)try{return JSON.parse(e)}catch{return e}return e},we=(e,t)=>{if(typeof e!=`string`)return e;let n=e.length-1,r=e[n];if(e[0]===`{`&&r===`}`){let r,i=e.slice(1,n);try{r=JSON.parse(`[`+i+`]`)}catch{r=i?i.split(`,`):[]}return r.map(e=>ye(t,e))}return e},Te=e=>typeof e==`string`?e.replace(` `,`T`):e,Ee=e=>{let t=new URL(e);return t.protocol=t.protocol.replace(/^ws/i,`http`),t.pathname=t.pathname.replace(/\/+$/,``).replace(/\/socket\/websocket$/i,``).replace(/\/socket$/i,``).replace(/\/websocket$/i,``),t.pathname===``||t.pathname===`/`?t.pathname=`/api/broadcast`:t.pathname+=`/api/broadcast`,t.href};var b=e=>typeof e==`function`?e:function(){return e},De=typeof self<`u`?self:null,Oe=typeof window<`u`?window:null,x=De||Oe||globalThis,ke=`2.0.0`,Ae=1e4,je=1e3,Me=100,S={connecting:0,open:1,closing:2,closed:3},C={closed:`closed`,errored:`errored`,joined:`joined`,joining:`joining`,leaving:`leaving`},w={close:`phx_close`,error:`phx_error`,join:`phx_join`,reply:`phx_reply`,leave:`phx_leave`},Ne={longpoll:`longpoll`,websocket:`websocket`},Pe={complete:4},Fe=`base64url.bearer.phx.`,Ie=class{constructor(e,t,n,r){this.channel=e,this.event=t,this.payload=n||function(){return{}},this.receivedResp=null,this.timeout=r,this.timeoutTimer=null,this.recHooks=[],this.sent=!1,this.ref=void 0}resend(e){this.timeout=e,this.reset(),this.send()}send(){this.hasReceived(`timeout`)||(this.startTimeout(),this.sent=!0,this.channel.socket.push({topic:this.channel.topic,event:this.event,payload:this.payload(),ref:this.ref,join_ref:this.channel.joinRef()}))}receive(e,t){return this.hasReceived(e)&&t(this.receivedResp.response),this.recHooks.push({status:e,callback:t}),this}reset(){this.cancelRefEvent(),this.ref=null,this.refEvent=null,this.receivedResp=null,this.sent=!1}destroy(){this.cancelRefEvent(),this.cancelTimeout()}matchReceive({status:e,response:t,_ref:n}){this.recHooks.filter(t=>t.status===e).forEach(e=>e.callback(t))}cancelRefEvent(){this.refEvent&&this.channel.off(this.refEvent)}cancelTimeout(){clearTimeout(this.timeoutTimer),this.timeoutTimer=null}startTimeout(){this.timeoutTimer&&this.cancelTimeout(),this.ref=this.channel.socket.makeRef(),this.refEvent=this.channel.replyEventName(this.ref),this.channel.on(this.refEvent,e=>{this.cancelRefEvent(),this.cancelTimeout(),this.receivedResp=e,this.matchReceive(e)}),this.timeoutTimer=setTimeout(()=>{this.trigger(`timeout`,{})},this.timeout)}hasReceived(e){return this.receivedResp&&this.receivedResp.status===e}trigger(e,t){this.channel.trigger(this.refEvent,{status:e,response:t})}},Le=class{constructor(e,t){this.callback=e,this.timerCalc=t,this.timer=void 0,this.tries=0}reset(){this.tries=0,clearTimeout(this.timer)}scheduleTimeout(){clearTimeout(this.timer),this.timer=setTimeout(()=>{this.tries+=1,this.callback()},this.timerCalc(this.tries+1))}},Re=class{constructor(e,t,n){this.state=C.closed,this.topic=e,this.params=b(t||{}),this.socket=n,this.bindings=[],this.bindingRef=0,this.timeout=this.socket.timeout,this.joinedOnce=!1,this.joinPush=new Ie(this,w.join,this.params,this.timeout),this.pushBuffer=[],this.stateChangeRefs=[],this.rejoinTimer=new Le(()=>{this.socket.isConnected()&&this.rejoin()},this.socket.rejoinAfterMs),this.stateChangeRefs.push(this.socket.onError(()=>this.rejoinTimer.reset())),this.stateChangeRefs.push(this.socket.onOpen(()=>{this.rejoinTimer.reset(),this.isErrored()&&this.rejoin()})),this.joinPush.receive(`ok`,()=>{this.state=C.joined,this.rejoinTimer.reset(),this.pushBuffer.forEach(e=>e.send()),this.pushBuffer=[]}),this.joinPush.receive(`error`,e=>{this.state=C.errored,this.socket.hasLogger()&&this.socket.log(`channel`,`error ${this.topic}`,e),this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.onClose(()=>{this.rejoinTimer.reset(),this.socket.hasLogger()&&this.socket.log(`channel`,`close ${this.topic}`),this.state=C.closed,this.socket.remove(this)}),this.onError(e=>{this.socket.hasLogger()&&this.socket.log(`channel`,`error ${this.topic}`,e),this.isJoining()&&this.joinPush.reset(),this.state=C.errored,this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.joinPush.receive(`timeout`,()=>{this.socket.hasLogger()&&this.socket.log(`channel`,`timeout ${this.topic}`,this.joinPush.timeout),new Ie(this,w.leave,b({}),this.timeout).send(),this.state=C.errored,this.joinPush.reset(),this.socket.isConnected()&&this.rejoinTimer.scheduleTimeout()}),this.on(w.reply,(e,t)=>{this.trigger(this.replyEventName(t),e)})}join(e=this.timeout){if(this.joinedOnce)throw Error(`tried to join multiple times. 'join' can only be called a single time per channel instance`);return this.timeout=e,this.joinedOnce=!0,this.rejoin(),this.joinPush}teardown(){this.pushBuffer.forEach(e=>e.destroy()),this.pushBuffer=[],this.rejoinTimer.reset(),this.joinPush.destroy(),this.state=C.closed,this.bindings=[]}onClose(e){this.on(w.close,e)}onError(e){return this.on(w.error,t=>e(t))}on(e,t){let n=this.bindingRef++;return this.bindings.push({event:e,ref:n,callback:t}),n}off(e,t){this.bindings=this.bindings.filter(n=>!(n.event===e&&(t===void 0||t===n.ref)))}canPush(){return this.socket.isConnected()&&this.isJoined()}push(e,t,n=this.timeout){if(t||={},!this.joinedOnce)throw Error(`tried to push '${e}' to '${this.topic}' before joining. Use channel.join() before pushing events`);let r=new Ie(this,e,function(){return t},n);return this.canPush()?r.send():(r.startTimeout(),this.pushBuffer.push(r)),r}leave(e=this.timeout){this.rejoinTimer.reset(),this.joinPush.cancelTimeout(),this.state=C.leaving;let t=()=>{this.socket.hasLogger()&&this.socket.log(`channel`,`leave ${this.topic}`),this.trigger(w.close,`leave`)},n=new Ie(this,w.leave,b({}),e);return n.receive(`ok`,()=>t()).receive(`timeout`,()=>t()),n.send(),this.canPush()||n.trigger(`ok`,{}),n}onMessage(e,t,n){return t}filterBindings(e,t,n){return!0}isMember(e,t,n,r){return this.topic===e?r&&r!==this.joinRef()?(this.socket.hasLogger()&&this.socket.log(`channel`,`dropping outdated message`,{topic:e,event:t,payload:n,joinRef:r}),!1):!0:!1}joinRef(){return this.joinPush.ref}rejoin(e=this.timeout){this.isLeaving()||(this.socket.leaveOpenTopic(this.topic),this.state=C.joining,this.joinPush.resend(e))}trigger(e,t,n,r){let i=this.onMessage(e,t,n,r);if(t&&!i)throw Error(`channel onMessage callbacks must return the payload, modified or unmodified`);let a=this.bindings.filter(r=>r.event===e&&this.filterBindings(r,t,n));for(let e=0;e<a.length;e++)a[e].callback(i,n,r||this.joinRef())}replyEventName(e){return`chan_reply_${e}`}isClosed(){return this.state===C.closed}isErrored(){return this.state===C.errored}isJoined(){return this.state===C.joined}isJoining(){return this.state===C.joining}isLeaving(){return this.state===C.leaving}},ze=class{static request(e,t,n,r,i,a,o){if(x.XDomainRequest){let n=new x.XDomainRequest;return this.xdomainRequest(n,e,t,r,i,a,o)}else if(x.XMLHttpRequest){let s=new x.XMLHttpRequest;return this.xhrRequest(s,e,t,n,r,i,a,o)}else if(x.fetch&&x.AbortController)return this.fetchRequest(e,t,n,r,i,a,o);else throw Error(`No suitable XMLHttpRequest implementation found`)}static fetchRequest(e,t,n,r,i,a,o){let s={method:e,headers:n,body:r},c=null;return i&&(c=new AbortController,setTimeout(()=>c.abort(),i),s.signal=c.signal),x.fetch(t,s).then(e=>e.text()).then(e=>this.parseJSON(e)).then(e=>o&&o(e)).catch(e=>{e.name===`AbortError`&&a?a():o&&o(null)}),c}static xdomainRequest(e,t,n,r,i,a,o){return e.timeout=i,e.open(t,n),e.onload=()=>{let t=this.parseJSON(e.responseText);o&&o(t)},a&&(e.ontimeout=a),e.onprogress=()=>{},e.send(r),e}static xhrRequest(e,t,n,r,i,a,o,s){e.open(t,n,!0),e.timeout=a;for(let[t,n]of Object.entries(r))e.setRequestHeader(t,n);return e.onerror=()=>s&&s(null),e.onreadystatechange=()=>{e.readyState===Pe.complete&&s&&s(this.parseJSON(e.responseText))},o&&(e.ontimeout=o),e.send(i),e}static parseJSON(e){if(!e||e===``)return null;try{return JSON.parse(e)}catch{return console&&console.log(`failed to parse JSON response`,e),null}}static serialize(e,t){let n=[];for(var r in e){if(!Object.prototype.hasOwnProperty.call(e,r))continue;let i=t?`${t}[${r}]`:r,a=e[r];typeof a==`object`?n.push(this.serialize(a,i)):n.push(encodeURIComponent(i)+`=`+encodeURIComponent(a))}return n.join(`&`)}static appendParams(e,t){return Object.keys(t).length===0?e:`${e}${e.match(/\?/)?`&`:`?`}${this.serialize(t)}`}},Be=e=>{let t=``,n=new Uint8Array(e),r=n.byteLength;for(let e=0;e<r;e++)t+=String.fromCharCode(n[e]);return btoa(t)},Ve=class{constructor(e,t){t&&t.length===2&&t[1].startsWith(Fe)&&(this.authToken=atob(t[1].slice(Fe.length))),this.endPoint=null,this.token=null,this.skipHeartbeat=!0,this.reqs=new Set,this.awaitingBatchAck=!1,this.currentBatch=null,this.currentBatchTimer=null,this.batchBuffer=[],this.onopen=function(){},this.onerror=function(){},this.onmessage=function(){},this.onclose=function(){},this.pollEndpoint=this.normalizeEndpoint(e),this.readyState=S.connecting,setTimeout(()=>this.poll(),0)}normalizeEndpoint(e){return e.replace(`ws://`,`http://`).replace(`wss://`,`https://`).replace(RegExp(`(.*)/`+Ne.websocket),`$1/`+Ne.longpoll)}endpointURL(){return ze.appendParams(this.pollEndpoint,{token:this.token})}closeAndRetry(e,t,n){this.close(e,t,n),this.readyState=S.connecting}ontimeout(){this.onerror(`timeout`),this.closeAndRetry(1005,`timeout`,!1)}isActive(){return this.readyState===S.open||this.readyState===S.connecting}poll(){let e={Accept:`application/json`};this.authToken&&(e[`X-Phoenix-AuthToken`]=this.authToken),this.ajax(`GET`,e,null,()=>this.ontimeout(),e=>{if(e){var{status:t,token:n,messages:r}=e;if(t===410&&this.token!==null){this.onerror(410),this.closeAndRetry(3410,`session_gone`,!1);return}this.token=n}else t=0;switch(t){case 200:r.forEach(e=>{setTimeout(()=>this.onmessage({data:e}),0)}),this.poll();break;case 204:this.poll();break;case 410:this.readyState=S.open,this.onopen({}),this.poll();break;case 403:this.onerror(403),this.close(1008,`forbidden`,!1);break;case 0:case 500:this.onerror(500),this.closeAndRetry(1011,`internal server error`,500);break;default:throw Error(`unhandled poll status ${t}`)}})}send(e){typeof e!=`string`&&(e=Be(e)),this.currentBatch?this.currentBatch.push(e):this.awaitingBatchAck?this.batchBuffer.push(e):(this.currentBatch=[e],this.currentBatchTimer=setTimeout(()=>{this.batchSend(this.currentBatch),this.currentBatch=null},0))}batchSend(e,t=0){this.awaitingBatchAck=!0;let n=t+Me,r=e.slice(t,n);this.ajax(`POST`,{"Content-Type":`application/x-ndjson`},r.join(`
@@ -2039,9 +2241,9 @@ function setStatus(id,k){
   renderAll();queueSave(null);
 }
 function renderAll(){renderBoard();renderNav();
-  $("#map").hidden=VIEW!=="list";$("#diagram").hidden=VIEW!=="diagram";$("#library").hidden=VIEW!=="library";$("#today").hidden=VIEW!=="today";$("#stats").hidden=VIEW!=="stats";$("#history").hidden=VIEW!=="history";$("#reading").hidden=VIEW!=="reading";$("#calendar").hidden=VIEW!=="calendar";$("#jobs").hidden=VIEW!=="jobs";$("#brain").hidden=VIEW!=="brain";$("#notes").hidden=VIEW!=="notes";
+  $("#map").hidden=VIEW!=="list";$("#diagram").hidden=VIEW!=="diagram";$("#library").hidden=VIEW!=="library";$("#today").hidden=VIEW!=="today";$("#stats").hidden=VIEW!=="stats";$("#history").hidden=VIEW!=="history";$("#reading").hidden=VIEW!=="reading";$("#calendar").hidden=VIEW!=="calendar";$("#jobs").hidden=VIEW!=="jobs";$("#brain").hidden=VIEW!=="brain";$("#notes").hidden=VIEW!=="notes";$("#links").hidden=VIEW!=="links";
   $(".layout").classList.toggle("wide",VIEW!=="list");
-  if(VIEW==="list")renderCourse();else if(VIEW==="diagram")renderDiagram();else if(VIEW==="library")renderLibrary();else if(VIEW==="today")renderToday();else if(VIEW==="history")renderHistory();else if(VIEW==="reading")renderReading();else if(VIEW==="calendar")renderCalendar();else if(VIEW==="jobs")renderJobs();else if(VIEW==="brain")renderVault();else if(VIEW==="notes")renderNotes();else renderStats();
+  if(VIEW==="list")renderCourse();else if(VIEW==="diagram")renderDiagram();else if(VIEW==="library")renderLibrary();else if(VIEW==="today")renderToday();else if(VIEW==="history")renderHistory();else if(VIEW==="reading")renderReading();else if(VIEW==="calendar")renderCalendar();else if(VIEW==="jobs")renderJobs();else if(VIEW==="brain")renderVault();else if(VIEW==="notes")renderNotes();else if(VIEW==="links")renderLinks();else renderStats();
   renderDetail();updateFoot();if(typeof refreshPeek==="function")refreshPeek();if(typeof renderRail==="function"&&document.getElementById("rail")){const mt=document.getElementById("miniT");renderRail();if(mt)document.getElementById("rail").prepend(mt);wrapDb()}}
 const NW=184,NH=56,GX=46,GY=12,LTOP=30,LPAD=14,X0=16;
 let DV={z:1,x:0,y:0,full:false,sec:""};
@@ -7275,7 +7477,7 @@ function ntPalette(){closePalette();if(VIEW!=="notes")go("notes");const ov=el("d
   inp.addEventListener("keydown",e=>{if(e.key==="ArrowDown"){ix=Math.min(items.length-1,ix+1);mark();e.preventDefault()}else if(e.key==="ArrowUp"){ix=Math.max(0,ix-1);mark();e.preventDefault()}else if(e.key==="Enter"&&!e.isComposing){e.preventDefault();if(items[ix])run(items[ix])}else if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closePalette()}});
   draw();inp.focus();setTimeout(()=>inp.focus(),0)}
 function ntHelp(){const rows=[["N","จดใหม่"],["⌘K","ค้นหาโน้ต แท็ก แหล่ง หรือคำสั่ง"],["/","เมนูบล็อก: หัวข้อ เช็กลิสต์ พับได้ ตาราง โค้ด …"],["Esc","กลับหน้าหลักโน้ต"],["⌘\\","ซ่อน/แสดงแถบข้าง"],["↑ ↓ Enter","เลือกและเปิดโน้ตในหน้าหลัก"],
-    ["# · ## · ###","หัวข้อ (พิมพ์แล้วเว้นวรรค)"],["- · 1. · >","รายการ · รายการเลข · อ้างอิง"],["[] · ---","เช็กลิสต์ · เส้นคั่น"],["``` แล้ว Enter","บล็อกโค้ด"],["Shift+Enter","รันโค้ด SQL / Python"],["⌘Enter","ออกจากบล็อกโค้ด"],["**ข้อความ** · `โค้ด`","ตัวหนา · โค้ดในบรรทัด"],["#ชื่อ","ใส่แท็ก"],
+    ["Enter","บรรทัดใหม่ = กล่องใหม่"],["Shift+Enter","ขึ้นบรรทัดในกล่องเดิม"],["⌘/","เปลี่ยนชนิดกล่อง (หรือกดที่จับ ⋮⋮)"],["[[","โยงไปโน้ตอื่น"],["# · ## · ###","หัวข้อ (พิมพ์แล้วเว้นวรรค)"],["- · 1. · >","รายการ · รายการเลข · อ้างอิง"],["[] · ---","เช็กลิสต์ · เส้นคั่น"],["``` แล้ว Enter","บล็อกโค้ด"],["Shift+Enter","รันโค้ด SQL / Python"],["⌘Enter","ออกจากบล็อกโค้ด"],["**ข้อความ** · `โค้ด`","ตัวหนา · โค้ดในบรรทัด"],["#ชื่อ","ใส่แท็ก"],
     ...NT_COLORS.map(([c,,k])=>["⌘⌥"+k,"ไฮไลท์ "+ntHlName(c)]),["⌘⌥0","ล้างสี"],["⌘J","ไปช่องแท็ก"],["วางข้อมูลจาก Excel","กลายเป็นตาราง"]];
   openPop(el("div",{class:"nt-help"},[el("div",{class:"cap",text:"ปุ่มลัดหน้าโน้ต"}),...rows.map(([k,l])=>el("div",{class:"nt-hrow"},[el("kbd",{text:k}),el("span",{text:l})]))]),innerWidth/2-220,Math.max(20,innerHeight/2-300))}
 
@@ -7364,6 +7566,181 @@ function ntTodayCard(){const box=document.getElementById("today");if(!box||box.h
   const c=card("ntrev-card",[el("div",{class:"row sp tight"},[el("div",{},[el("b",{text:"🧠 ทบทวนจากโน้ต"}),el("div",{class:"muted sm",text:n+" คำถามถึงกำหนดวันนี้"})]),el("button",{class:"primary-btn",text:"เริ่มทบทวน",onclick:()=>{NT.rv=null;NT.page="review";go("notes")}})])]);
   const anchor=box.querySelector(".calstat")||box.querySelector(".thead");if(anchor)anchor.after(c);else box.prepend(c)}
 {const _rt=renderToday;renderToday=function(){const r=_rt.apply(this,arguments);try{ntTodayCard()}catch(e){}return r}}
+
+/* ===== โน้ตรอบ 2: 1 บรรทัด = 1 กล่อง · เปลี่ยนชนิดกล่อง · สารบัญ · โยงโน้ต ===== */
+
+/* ---------- 1 บรรทัด = 1 กล่อง ---------- */
+/* แยก html หลายบรรทัดออกเป็นทีละบรรทัด (รายการแยกทีละข้อ) */
+function ntLineEls(html){const s=ntSanitize(html);if(!s)return[""];const d=document.createElement("div");d.innerHTML=s;const out=[];
+  [...d.children].forEach(c=>{if(c.tagName==="UL"||c.tagName==="OL")[...c.children].forEach(li=>{const L=document.createElement(c.tagName);L.appendChild(li.cloneNode(true));out.push(L.outerHTML)});else out.push(c.outerHTML)});
+  return out.length?out:[""]}
+const NT_KIND_PH={p:"พิมพ์ได้เลย · / เลือกกล่อง",h1:"หัวข้อใหญ่",h2:"หัวข้อรอง",h3:"หัวข้อย่อย",ul:"รายการ",ol:"รายการ",blockquote:"ข้อความอ้างอิง"};
+function ntKindOf(d){const f=d.firstElementChild;return f?f.tagName.toLowerCase():"p"}
+function ntKind(w){if(!w||!w._rich)return;const k=ntKindOf(w._rich);if(w.dataset.k!==k){w.dataset.k=k;w._rich.setAttribute("data-ph",NT_KIND_PH[k]||NT_KIND_PH.p)}}
+/* ถ้ากล่องมีหลายบรรทัด (เช่น วางข้อความหลายบรรทัด) แยกออกเป็นกล่องละบรรทัด */
+function ntNormLines(w){const d=w._rich;if(!d)return;const kids=[...d.children];const extra=[];
+  kids.forEach((c,i)=>{if(c.tagName==="UL"||c.tagName==="OL"){[...c.children].forEach((li,j)=>{if(i===0&&j===0)return;extra.push([c.tagName,li])})}else if(i>0)extra.push([null,c])});
+  if(!extra.length)return;const s=getSelection();const an=s.rangeCount?s.anchorNode:null,ao=s.anchorOffset;let caretW=null;let at=w;
+  extra.forEach(([lt,node])=>{const nb=ntTextW("");const r=nb._rich;r.textContent="";if(lt){const L=document.createElement(lt);L.appendChild(node);r.appendChild(L)}else r.appendChild(node);
+    at.after(nb);at=nb;ntEmptyCls(r);ntKind(nb);if(an&&r.contains(an))caretW=nb});
+  [...d.children].forEach(c=>{if((c.tagName==="UL"||c.tagName==="OL")&&!c.children.length)c.remove()});if(!d.firstChild)d.innerHTML="<p><br></p>";ntEmptyCls(d);ntKind(w);
+  if(caretW){caretW._rich.focus();try{ntCaretAt(an,ao)}catch(e){ntFocusRich(caretW._rich,"end")}}ntChanged()}
+{const _tw=ntTextW;ntTextW=function(html){const w=_tw(html);ntKind(w);w._rich.addEventListener("input",()=>{ntNormLines(w);ntKind(w)});return w}}
+{const _mk=ntMakeBlock;ntMakeBlock=function(b){if(!b||b.t!=="text")return _mk(b);const L=ntLineEls(b.html||"");if(L.length===1)return ntTextW(L[0]);const f=document.createDocumentFragment();L.forEach(h=>f.appendChild(ntTextW(h)));return f}}
+/* ไม่รวมกล่องข้อความที่อยู่ติดกันอีกแล้ว */
+ntMergeAdj=function(){if(!NT.ed)return;const B=NT.ed.blocks;if(!B.firstElementChild)B.appendChild(ntTextW(""))};
+const ntLineHost=d=>{const f=d.firstElementChild;if(!f)return null;return /^(UL|OL)$/.test(f.tagName)?f.querySelector("li"):f};
+function ntTextK(k,h){const w=ntTextW("");w._rich.innerHTML=ntWrapLine(k,h);ntEmptyCls(w._rich);ntKind(w);return w}
+function ntWrapLine(k,h){h=h||"<br>";return k==="ul"||k==="ol"?"<"+k+"><li>"+h+"</li></"+k+">":"<"+(k==="text"?"p":k)+">"+h+"</"+(k==="text"?"p":k)+">"}
+/* Enter: ตัดบรรทัดที่เคอร์เซอร์ไปเป็นกล่องใหม่ */
+function ntSplitBlock(W){const d=W._rich;const line=d.firstElementChild;if(!line){d.innerHTML="<p><br></p>";return}
+  const isL=/^(UL|OL)$/.test(line.tagName);const host=ntLineHost(d);
+  if(isL&&ntIsEmptyText(host)&&!host.querySelector("ul,ol")){ntSetLine(d,line.tagName.toLowerCase(),line,host);ntKind(W);ntFocusRich(d,"start");return}
+  if(line.tagName==="BLOCKQUOTE"&&ntIsEmptyText(host)){ntSetLine(d,"text",line,line);ntKind(W);ntFocusRich(d,"start");return}
+  const s=getSelection();if(!s.rangeCount)return;const r=s.getRangeAt(0);if(!r.collapsed)r.deleteContents();
+  const nk=isL?line.tagName.toLowerCase():"p";
+  if(ntAtEdge(d,false)&&!ntIsEmptyText(host)){const nb=ntTextK(nk,"");W.before(nb);ntEmptyCls(nb._rich);ntChanged();return}
+  const r2=document.createRange();r2.setStart(r.startContainer,r.startOffset);r2.setEnd(host,host.childNodes.length);const frag=r2.extractContents();
+  const nb=ntTextK(nk,"");const nh=ntLineHost(nb._rich);nh.textContent="";nh.appendChild(frag);
+  [host,nh].forEach(h=>{h.querySelectorAll("b,i,code,mark,a").forEach(x=>{if(!x.textContent)x.remove()});if(!h.textContent.replace(/[​]/g,"")&&!h.querySelector(".ntag,.nlink"))h.innerHTML="<br>"});
+  W.after(nb);ntEmptyCls(d);ntEmptyCls(nb._rich);ntKind(nb);ntFocusRich(nb._rich,"start");ntChanged()}
+/* Backspace ต้นกล่อง: หัวข้อ/รายการ → ข้อความธรรมดาก่อน แล้วค่อยรวมกับกล่องบน */
+function ntBackAtStart(W){const d=W._rich;const line=d.firstElementChild;if(!line)return false;
+  if(line.tagName!=="P"){ntSetLine(d,"text",line,ntLineHost(d));ntKind(W);ntFocusRich(d,"start");return true}
+  const prev=W.previousElementSibling;if(!prev||prev.dataset.t!=="text"||!prev._rich)return false;
+  const pd=prev._rich;const ph=ntLineHost(pd)||pd;const empty=ntIsEmptyText(ph)&&!ph.querySelector("ul,ol");if(empty)ph.innerHTML="";
+  [...ph.querySelectorAll(":scope > br")].slice(-1).forEach(b=>{if(b===ph.lastChild)b.remove()});
+  const mk=document.createTextNode("");ph.appendChild(mk);const src=ntLineHost(d);if(!ntIsEmptyText(src))while(src.firstChild)ph.appendChild(src.firstChild);
+  if(!ph.firstChild||(!ph.textContent&&!ph.querySelector(".ntag,.nlink")))ph.innerHTML="<br>";
+  W.remove();pd.focus();try{if(mk.parentNode)ntCaretAt(mk,0);else ntFocusRich(pd,"end")}catch(e){ntFocusRich(pd,"end")}ntEmptyCls(pd);ntKind(prev);ntChanged();return true}
+/* Delete ท้ายกล่อง: ดึงกล่องข้อความถัดไปขึ้นมาต่อ */
+function ntDelAtEnd(W){const nx=W.nextElementSibling;if(!nx||nx.dataset.t!=="text"||!nx._rich)return false;const d=W._rich;const h=ntLineHost(d)||d;
+  const s=getSelection();const r=s.rangeCount?s.getRangeAt(0).cloneRange():null;
+  const src=ntLineHost(nx._rich);if(ntIsEmptyText(h))h.innerHTML="";const mk=document.createTextNode("");h.appendChild(mk);
+  if(!ntIsEmptyText(src))while(src.firstChild)h.appendChild(src.firstChild);if(!h.firstChild||!h.textContent&&!h.querySelector(".ntag,.nlink"))h.innerHTML="<br>";
+  nx.remove();try{if(mk.parentNode)ntCaretAt(mk,0);else if(r){s.removeAllRanges();s.addRange(r)}}catch(e){}ntEmptyCls(d);ntChanged();return true}
+{const _rk=ntRichKey;ntRichKey=function(d,e){if(e.isComposing)return;const W=ntBlockOf(d);const top=!!W&&W.dataset.t==="text"&&W._rich===d;
+  if(top&&!NT.tp&&!NT.sl){
+    if(e.key==="Enter"&&!e.shiftKey&&!e.metaKey&&!e.ctrlKey&&!e.altKey){const ln=d.firstElementChild;const tx=(ln?ln.textContent:"").replace(/[ ​]/g," ").trim();if(/^```\s*[\w+-]*$/.test(tx))return _rk(d,e);e.preventDefault();ntSplitBlock(W);return}
+    if(e.key==="Backspace"&&!e.metaKey&&!e.altKey&&getSelection().isCollapsed&&ntAtEdge(d,false)&&ntBackAtStart(W)){e.preventDefault();return}
+    if(e.key==="Delete"&&getSelection().isCollapsed&&ntAtEdge(d,true)&&ntDelAtEnd(W)){e.preventDefault();return}}
+  /* ในกล่องเน้น/พับได้: Enter บนบรรทัดว่างสุดท้าย = ออกจากกล่อง */
+  if(!top&&W&&!d._o.single&&e.key==="Enter"&&!e.shiftKey&&!e.metaKey&&!e.ctrlKey&&!NT.tp&&!NT.sl&&(W.dataset.t==="callout"||W.dataset.t==="toggle")){
+    const {top:tp,line}=ntLine(d);if(tp&&tp===d.lastElementChild&&tp.tagName==="P"&&ntIsEmptyText(tp)&&d.children.length>1){e.preventDefault();tp.remove();ntEmptyCls(d);const t=ntTextW("");W.after(t);ntFocusBlock(t,"start");ntChanged();return}}
+  return _rk(d,e)}}
+/* เลขรายการต่อกันข้ามกล่อง */
+function ntRenum(){if(!NT.ed)return;let n=0;[...NT.ed.blocks.children].forEach(w=>{const f=w.dataset.t==="text"&&w._rich?w._rich.firstElementChild:null;if(f&&f.tagName==="OL"){n++;f.setAttribute("start",n)}else n=0})}
+{const _ch=ntChanged;ntChanged=function(){_ch();cancelAnimationFrame(ntChanged._r);ntChanged._r=requestAnimationFrame(ntRenum);clearTimeout(ntChanged._t);ntChanged._t=setTimeout(ntTocDraw,250)}}
+
+/* ---------- เปลี่ยนชนิดกล่อง ---------- */
+const NT_TURN=[["p","Aa","ข้อความ"],["h1","H1","หัวข้อใหญ่"],["h2","H2","หัวข้อรอง"],["h3","H3","หัวข้อย่อย"],["ul","•","รายการ"],["ol","1.","รายการเลข"],["blockquote","❝","อ้างอิง"],["todo","☑","เช็กลิสต์"],["toggle","▸","พับได้"],["callout","💡","กล่องเน้น"],["code","</>","โค้ด"]];
+const NT_TEXTK=["p","h1","h2","h3","ul","ol","blockquote"];
+function ntInlineLines(html){const s=ntSanitize(html||"");if(!s)return[];const d=document.createElement("div");d.innerHTML=s;const out=[];[...d.children].forEach(c=>{if(c.tagName==="UL"||c.tagName==="OL")[...c.children].forEach(li=>out.push(li.innerHTML));else out.push(c.innerHTML)});return out.map(h=>h.replace(/^<br>$/,""))}
+function ntBlockLines(w){const t=w.dataset.t;let L=[];
+  if(t==="text"){const h=ntLineHost(w._rich);L=[h?h.innerHTML.replace(/^<br>$/,""):""]}
+  else{const g=w._get();if(t==="todo")L=(g.items||[]).map(i=>i.html||"");else if(t==="toggle")L=[g.title||""].concat(ntInlineLines(g.html));else if(t==="callout")L=ntInlineLines(g.html);else if(t==="code")L=(g.code||"").split("\n").map(ntEsc)}
+  while(L.length>1&&!L[L.length-1].replace(/<br>|&nbsp;|\s/g,""))L.pop();return L.length?L:[""]}
+function ntTurnInto(w,k){const t=w.dataset.t;const cur=t==="text"?(w.dataset.k||"p"):t;if(cur===k)return;
+  if(t==="text"&&NT_TEXTK.includes(k)){const d=w._rich;ntSetLine(d,k==="p"?"text":k,d.firstElementChild,ntLineHost(d));ntKind(w);ntFocusRich(d,"end");ntChanged();return}
+  const L=ntBlockLines(w);let rep;
+  if(NT_TEXTK.includes(k))rep=L.map(h=>ntTextK(k,h));
+  else if(k==="todo")rep=[ntTodoW({items:L.map(h=>({x:false,html:h}))})];
+  else if(k==="toggle")rep=[ntToggleW({title:L[0]||"",html:L.slice(1).map(h=>"<p>"+(h||"<br>")+"</p>").join(""),open:true})];
+  else if(k==="callout")rep=[ntCalloutW({html:L.map(h=>"<p>"+(h||"<br>")+"</p>").join("")})];
+  else if(k==="code")rep=[ntCodeW({lang:A.ntLastLang||"sql",code:L.map(h=>{const x=document.createElement("div");x.innerHTML=h.replace(/<br\s*\/?>/g,"\n");return x.textContent}).join("\n")})];
+  if(!rep)return;w.replaceWith(...rep);ntFocusBlock(rep[0],"end");ntChanged()}
+ntBlockMenu=function(w,anchor){const t=w.dataset.t;const cur=t==="text"?(w.dataset.k||"p"):t;const can=["text","todo","toggle","callout","code"].includes(t);
+  const it=(ic,l,f,cls)=>{const b=el("button",{type:"button",class:"nt-mi"+(cls?" "+cls:""),onclick:()=>{ntPopClose();f()}});b.innerHTML=ntI(ic,16);b.appendChild(el("span",{text:l}));return b};
+  const kids=[];
+  if(can){kids.push(el("div",{class:"nt-ddsec",text:"เปลี่ยนเป็น"}),el("div",{class:"nt-turn"},NT_TURN.map(([k,ic,l])=>el("button",{type:"button",class:"nt-ti"+(cur===k?" on":""),title:l,"aria-label":"เปลี่ยนเป็น"+l,onclick:()=>{ntPopClose();ntTurnInto(w,k)}},[el("b",{text:ic}),el("span",{text:l})]))),el("div",{class:"nt-msep"}))}
+  kids.push(it("up","ย้ายขึ้น",()=>{const p=w.previousElementSibling;if(p){p.before(w);ntChanged()}}),it("down","ย้ายลง",()=>{const n=w.nextElementSibling;if(n){n.after(w);ntChanged()}}),
+    it("dup","ทำซ้ำ",()=>{const c=ntMakeBlock(JSON.parse(JSON.stringify(w._get())));w.after(c);ntChanged()}),it("trash","ลบกล่อง",()=>ntRemoveBlock(w),"danger"));
+  ntPop(anchor,el("div",{class:"nt-menu nt-bmenu"},kids));setTimeout(()=>{const b=document.querySelector(".nt-bmenu .nt-ti.on")||document.querySelector(".nt-bmenu .nt-ti,.nt-bmenu .nt-mi");if(b)b.focus()},0)};
+/* ⌘/ = เปิดเมนูเปลี่ยนชนิดของกล่องที่เคอร์เซอร์อยู่ */
+addEventListener("keydown",e=>{if(VIEW!=="notes"||!NT.ed||!(e.metaKey||e.ctrlKey)||e.altKey||e.code!=="Slash")return;const a=document.activeElement;const w=a&&a.closest&&a.closest(".nb");if(!w||!NT.ed.blocks.contains(w))return;
+  e.preventDefault();e.stopImmediatePropagation();ntBlockMenu(w,w.querySelector(".nb-grip"))},true);
+/* ลูกศรในกริดเปลี่ยนชนิด */
+document.addEventListener("keydown",e=>{const b=e.target.closest&&e.target.closest(".nt-turn .nt-ti");if(!b)return;const bs=[...b.parentNode.children];const i=bs.indexOf(b);const d={ArrowRight:1,ArrowLeft:-1,ArrowDown:4,ArrowUp:-4}[e.key];if(d){e.preventDefault();const t=bs[Math.max(0,Math.min(bs.length-1,i+d))];t.focus()}});
+
+/* ---------- สารบัญ ---------- */
+function ntTocHeads(){if(!NT.ed)return[];return [...NT.ed.blocks.children].filter(w=>w.dataset.t==="text"&&/^h[123]$/.test(w.dataset.k||"")).map(w=>({w,lv:+w.dataset.k[1],t:w._rich.textContent.replace(/​/g,"").trim()})).filter(h=>h.t)}
+NT.tocFold=NT.tocFold||{};
+function ntTocGo(h){const y=h.w.getBoundingClientRect().top+scrollY-64;scrollTo({top:Math.max(0,y),behavior:RM()});h.w.classList.remove("toc-flash");void h.w.offsetWidth;h.w.classList.add("toc-flash");setTimeout(()=>h.w.classList.remove("toc-flash"),1400);
+  if(A.ntToc==="pin"&&innerWidth<1100){A.ntToc="mini";ntTocDraw()}}
+function ntTocList(H,pinned){const box=el("div",{class:"toc-list"});if(!H.length){box.appendChild(el("p",{class:"toc-empty",text:"ยังไม่มีหัวข้อ · พิมพ์ # แล้วเว้นวรรค = หัวข้อใหญ่ · ## = รอง · ### = ย่อย"}));return box}
+  const min=Math.min(...H.map(h=>h.lv));const key=NT.open;const fold=NT.tocFold[key]=NT.tocFold[key]||{};let hideUnder=99;
+  H.forEach((h,i)=>{const hasKid=H[i+1]&&H[i+1].lv>h.lv;const fk=i+":"+h.t;
+    if(h.lv>hideUnder)return;hideUnder=99;const folded=pinned&&hasKid&&fold[fk];if(folded)hideUnder=h.lv;
+    const row=el("div",{class:"toc-it l"+(h.lv-min+1)+(i===NT.tocAct?" on":""),"data-i":String(i)});
+    if(pinned&&hasKid)row.appendChild(el("button",{type:"button",class:"toc-fold"+(folded?" shut":""),"aria-label":folded?"แสดงหัวข้อย่อย":"ซ่อนหัวข้อย่อย",onclick:()=>{fold[fk]=!fold[fk];ntTocDraw()}},["▾"]));
+    else if(pinned)row.appendChild(el("span",{class:"toc-sp"}));
+    row.appendChild(el("button",{type:"button",class:"toc-a",title:h.t,onclick:()=>ntTocGo(h)},[h.t]));box.appendChild(row)});return box}
+function ntTocPin(on){A.ntToc=on?"pin":"mini";persistA();ntTocDraw()}
+function ntTocDraw(){const t=document.getElementById("ntToc");if(!t)return;if(!NT.ed||NT.page!=="note"){t.remove();return}const H=ntTocHeads();NT.tocH=H;const pin=A.ntToc==="pin";
+  const main=ntQS(".nn-main");if(main)main.classList.toggle("toc-pad",pin&&innerWidth>=1100);
+  t.className=pin?"tocpin":"tocmini";t.textContent="";const tb=ntQS(".nn-tocbtn");if(tb)tb.classList.toggle("on",pin);
+  if(!pin){if(!H.length){t.hidden=true;return}t.hidden=false;
+    const rail=el("button",{type:"button",class:"toc-rail","aria-label":"เปิดสารบัญ"},H.map((h,i)=>el("i",{class:"r"+h.lv+(i===NT.tocAct?" on":"")})));rail.addEventListener("click",()=>ntTocPin(true));
+    t.append(rail,el("div",{class:"toc-pop"},[el("div",{class:"toc-h"},[el("span",{text:"สารบัญ"}),ntIB("pin","ปักไว้ข้างจอ",()=>ntTocPin(true),"",15)]),ntTocList(H,false)]));return}
+  t.hidden=false;t.append(el("div",{class:"toc-h"},[el("span",{text:"สารบัญ"}),el("span",{class:"toc-n",text:H.length?String(H.length):""}),el("span",{class:"nh-sp"}),ntIB("x","ปิด",()=>ntTocPin(false),"",15)]),
+    el("button",{type:"button",class:"toc-it l1 toc-top",onclick:()=>scrollTo({top:0,behavior:RM()})},["↑ "+(NT.ed.title.value.trim()||"บนสุด")]),ntTocList(H,true))}
+function ntTocActive(){const H=NT.tocH||[];if(!H.length)return;let a=-1;H.forEach((h,i)=>{if(h.w.isConnected&&h.w.getBoundingClientRect().top<=120)a=i});if(a===NT.tocAct)return;NT.tocAct=a;
+  document.querySelectorAll("#ntToc .toc-it[data-i]").forEach(x=>x.classList.toggle("on",+x.dataset.i===a));document.querySelectorAll("#ntToc .toc-rail i").forEach((x,i)=>x.classList.toggle("on",i===a));
+  const on=document.querySelector("#ntToc.tocpin .toc-it.on");if(on){const L=on.closest("#ntToc");const r=on.getBoundingClientRect(),R=L.getBoundingClientRect();if(r.top<R.top+40||r.bottom>R.bottom)on.scrollIntoView({block:"nearest"})}}
+addEventListener("scroll",()=>{if(VIEW!=="notes"||NT.page!=="note")return;cancelAnimationFrame(ntTocActive._r);ntTocActive._r=requestAnimationFrame(ntTocActive)},{passive:true});
+addEventListener("resize",()=>{if(VIEW==="notes"&&NT.page==="note")ntTocDraw()});
+{const _np=ntNotePage;ntNotePage=function(){const lay=_np();if(NT.page!=="note"||!lay.classList||!lay.classList.contains("nn"))return lay;
+  const top=lay.querySelector(".nn-top");const pin=top&&top.querySelector(".nn-pin");if(top){const b=ntIB("list","สารบัญ",()=>ntTocPin(A.ntToc!=="pin"),"nn-tocbtn"+(A.ntToc==="pin"?" on":""));if(pin)pin.before(b);else top.appendChild(b)}
+  lay.appendChild(el("div",{id:"ntToc",hidden:""}));NT.tocAct=-1;setTimeout(()=>{ntRenum();ntTocDraw();ntTocActive()},0);return lay}}
+
+/* ---------- โยงโน้ต: พิมพ์ [[ หรือกดปุ่ม ---------- */
+{const _cl=ntClean;ntClean=function(src,dst){if(src&&src.nodeType===1&&src.tagName==="SPAN"&&src.classList.contains("nlink")&&src.getAttribute("data-nid")){const c=document.createElement("span");c.className="nlink";c.setAttribute("data-nid",src.getAttribute("data-nid"));c.setAttribute("contenteditable","false");c.textContent=src.textContent.trim()||"โน้ต";dst.appendChild(c);return}return _cl(src,dst)}}
+const ntNoteBy=id=>NT.notes.find(n=>n.id===id)||(NT.draft&&NT.draft.id===id?NT.draft:null);
+function ntLinkLabel(n){return (n.icon?n.icon+" ":"")+ntTitleOf(n)}
+function ntLinkEl(n){return el("span",{class:"nlink","data-nid":n.id,contenteditable:"false",text:ntLinkLabel(n)})}
+function ntRefreshLinks(root){(root||document).querySelectorAll(".nlink[data-nid]").forEach(c=>{const n=ntNoteBy(c.dataset.nid);const gone=!n||!!n.deleted_at;c.classList.toggle("gone",gone);c.textContent=gone?"โน้ตที่ถูกลบ":ntLinkLabel(n);c.setAttribute("contenteditable","false");c.title=gone?"โน้ตนี้อยู่ในถังขยะหรือถูกลบแล้ว":"เปิดโน้ต"})}
+function ntLinkItems(q){const qq=ntNorm(q);const xs=NT.notes.filter(n=>!n.deleted_at&&n.id!==NT.open&&(!qq||ntNorm(ntTitleOf(n)).includes(qq)||ntNorm(n.content_text||"").includes(qq)));
+  xs.sort((a,b)=>(qq?(ntNorm(ntTitleOf(b)).startsWith(qq)-ntNorm(ntTitleOf(a)).startsWith(qq))||(ntNorm(ntTitleOf(b)).includes(qq)-ntNorm(ntTitleOf(a)).includes(qq)):0)||String(b.updated_at||"").localeCompare(String(a.updated_at||"")));
+  const items=xs.slice(0,8).map(n=>({note:n}));if(qq&&!NT.notes.some(n=>!n.deleted_at&&ntNorm(ntTitleOf(n))===qq))items.push({create:String(q).trim()});return items}
+function ntLinkWatch(d){const s=getSelection();if(!s.rangeCount||!s.isCollapsed)return false;const nd=s.anchorNode;if(!nd||nd.nodeType!==3||!d.contains(nd))return false;
+  const before=nd.nodeValue.slice(0,s.anchorOffset);const m=before.match(/\[\[([^\[\]\n]{0,40})$/);if(!m)return false;
+  NT.tp={link:true,d,node:nd,start:s.anchorOffset-m[0].length,end:s.anchorOffset,q:m[1],ix:NT.tp&&NT.tp.link&&NT.tp.q===m[1]?NT.tp.ix:0};ntTpRender();return true}
+{const _tg=ntTagWatch;ntTagWatch=function(d){if(ntLinkWatch(d))return;if(NT.tp&&NT.tp.link)ntTpClose();_tg(d)}}
+{const _tr=ntTpRender;ntTpRender=function(){const P=NT.tp;if(!P||!P.link)return _tr();let box=document.getElementById("ntTp");if(!box){box=el("div",{id:"ntTp",role:"listbox","aria-label":"เลือกโน้ตที่จะโยง"});document.body.appendChild(box)}box.textContent="";box.classList.add("lk");
+  P.items=ntLinkItems(P.q);P.ix=Math.max(0,Math.min(P.ix,P.items.length-1));
+  box.appendChild(el("div",{class:"nt-ddsec",text:P.q?"โยงไปโน้ต":"โยงไปโน้ต · พิมพ์ชื่อเพื่อค้น"}));
+  if(!P.items.length)box.appendChild(el("div",{class:"nt-ddsec",text:"ยังไม่มีโน้ตอื่น พิมพ์ชื่อเพื่อสร้างใหม่"}));
+  P.items.forEach((it,i)=>box.appendChild(el("button",{type:"button",class:"nt-dditem"+(i===P.ix?" on":""),onmousedown:e=>e.preventDefault(),onmousemove:()=>{if(P.ix!==i){P.ix=i;box.querySelectorAll(".nt-dditem").forEach((b,j)=>b.classList.toggle("on",j===i))}},onclick:()=>{P.ix=i;ntTpChoose()}},
+    it.note?[el("span",{class:"lk-ic",text:it.note.icon||"↗"}),el("span",{class:"lk-t",text:ntTitleOf(it.note)}),el("span",{class:"muted sm",text:ntWhen(it.note.updated_at)})]:[el("span",{class:"lk-ic",text:"＋"}),el("span",{text:"สร้างโน้ตใหม่ \""+it.create+"\""})])));
+  try{const r=document.createRange();r.setStart(P.node,P.start);r.setEnd(P.node,Math.min(P.end,P.node.nodeValue.length));const b=r.getBoundingClientRect();box.style.left=Math.max(8,Math.min(innerWidth-330,b.left))+"px";const h=box.offsetHeight||300;box.style.top=(b.bottom+6+h>innerHeight-8?Math.max(8,b.top-h-6):b.bottom+6)+"px"}catch(e){}}}
+{const _tc=ntTpClose;ntTpClose=function(){const b=document.getElementById("ntTp");if(b)b.classList.remove("lk");_tc()}}
+function ntQuickNote(title){const now=ntNow();const n={id:ntUuid(),title:String(title||"").trim(),content:[{t:"text",html:""}],content_text:"",highlight_colors:[],source_id:null,source_locator:"",created_at:now,updated_at:now,deleted_at:null,tagIds:[],pinned:false,icon:null};
+  ntDerive(n);NT.notes.push(n);ntCacheSave();ntSaveNoteOp(n);return n}
+{const _tch=ntTpChoose;ntTpChoose=function(){const P=NT.tp;if(!P||!P.link)return _tch();const it=P.items[P.ix];if(!it){ntTpClose();return}
+  const n=it.note||ntQuickNote(it.create);const r=document.createRange();r.setStart(P.node,P.start);r.setEnd(P.node,Math.min(P.end,P.node.nodeValue.length));r.deleteContents();
+  const chip=ntLinkEl(n);r.insertNode(chip);const sp=document.createTextNode(" ");chip.after(sp);ntCaretAt(sp,1);ntTpClose();P.d.classList.remove("is-empty");ntChanged();
+  if(it.create)toast("สร้างโน้ต \""+n.title+"\" แล้ว","กดที่ลิงก์เพื่อเปิดไปเขียนต่อ",[])}}
+/* เริ่มโยงจากปุ่ม: ใส่ [[ ที่เคอร์เซอร์ (หรือข้อความที่เลือกไว้) แล้วเปิดตัวเลือก */
+function ntStartLink(d,q){if(!d)return;d.focus();const s=getSelection();let r=s.rangeCount?s.getRangeAt(0):null;if(!r||!d.contains(r.startContainer)){ntFocusRich(d,"end");r=s.getRangeAt(0)}
+  r.deleteContents();const tn=document.createTextNode("[["+(q||""));r.insertNode(tn);ntCaretAt(tn,tn.nodeValue.length);d.classList.remove("is-empty");ntLinkWatch(d)}
+NT_SLASH.push(["nlink","โยงไปโน้ตอื่น","↗","link note โยง ลิงก์ โน้ต [["]);
+{const _sc=ntSlChoose;ntSlChoose=function(){const P=NT.sl;if(!P)return;const it=P.items[P.ix];if(!it||it[0]!=="nlink")return _sc();ntSlClose();
+  if(P.w){const t=ntTextW("");P.w.after(t);ntStartLink(t._rich);ntChanged();return}
+  const r=document.createRange();r.setStart(P.node,P.start);r.setEnd(P.node,Math.min(P.end,P.node.nodeValue.length));r.deleteContents();P.d.focus();ntCaretAt(P.node,P.start);ntStartLink(P.d)}}
+/* ปุ่มโยงในแถบจัดรูปแบบ: ข้อความที่เลือก = คำค้น */
+{const _bb=ntBubble;ntBubble=function(){_bb();const b=document.getElementById("ntBub");if(!b||b.querySelector(".bub-lk")||b.querySelector(".nt-linkin"))return;
+  const x=el("button",{type:"button",class:"bub-lk",title:"โยงไปโน้ต (ข้อความที่เลือกใช้ค้นหา)","aria-label":"โยงไปโน้ต",onmousedown:e=>e.preventDefault(),onclick:()=>{const s=getSelection();const q=s.toString().trim().slice(0,40);const d=ntActiveRich();b.remove();ntStartLink(d,q)}},["↗ โยงโน้ต"]);
+  const sep=b.querySelector(".sep");if(sep)sep.before(x);else b.appendChild(x)}}
+/* กดลิงก์ = เปิดโน้ตนั้น */
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest(".nlink[data-nid]");if(!c||VIEW!=="notes")return;e.preventDefault();e.stopPropagation();const n=ntNoteBy(c.dataset.nid);if(!n||n.deleted_at){toast("โน้ตนี้ถูกลบแล้ว","ดูได้ในถังขยะ",[]);return}if(n.id!==NT.open)ntOpen(n.id)},true);
+/* ส่วนท้ายโน้ต: โน้ตที่โยงมาที่นี่ */
+function ntBacklinks(id){const k='data-nid="'+id+'"';return NT.notes.filter(n=>!n.deleted_at&&n.id!==id&&(n.content||[]).some(b=>ntHtmlRefs(b).some(([o,f])=>String(o[f]||"").includes(k))))}
+function ntLinksBox(n){const box=el("div",{class:"nd-links"});const bl=ntBacklinks(n.id);
+  const add=el("button",{type:"button",class:"lk-add",onclick:()=>{if(!NT.ed)return;let last=NT.ed.blocks.lastElementChild;if(!last||last.dataset.t!=="text"||!ntIsEmptyText(last._rich)){last=ntTextW("");NT.ed.blocks.appendChild(last)}ntStartLink(last._rich);ntChanged()}},["↗ โยงไปโน้ตอื่น"]);
+  box.appendChild(el("div",{class:"lk-head"},[el("span",{text:bl.length?"🔗 โน้ตที่โยงมาที่นี่ ("+bl.length+")":"🔗 ยังไม่มีโน้ตไหนโยงมาที่นี่"}),el("span",{class:"nh-sp"}),add]));
+  if(bl.length)box.appendChild(el("div",{class:"lk-list"},bl.slice(0,20).map(x=>el("button",{type:"button",class:"lk-row",onclick:()=>ntOpen(x.id)},[el("span",{class:"lk-ic",text:x.icon||"📄"}),el("span",{class:"lk-t",text:ntTitleOf(x)}),el("span",{class:"muted sm",text:ntWhen(x.updated_at)})]))));
+  return box}
+{const _ed=ntEditor;ntEditor=function(n){const doc=_ed(n);ntRefreshLinks(doc);const meta=doc.querySelector(".nd-meta");const lb=ntLinksBox(n);if(meta)meta.before(lb);else doc.appendChild(lb);return doc}}
 /* ===== รอบ UX: ตัวเลือกหัวข้อ · จับเวลาแบบเข้าใจง่าย · เสียงเตือนดัง · เพลง · จดเร็ว ===== */
 A.settings.snd=Object.assign({vol:.9,style:"alarm",warn:2,voice:true,notify:false,pauseOnBreak:false,list:[]},A.settings.snd||{});
 const SND=()=>A.settings.snd;
@@ -7660,6 +8037,251 @@ addEventListener("keydown",e=>{if(e.key!=="Escape"||!UI.cap)return;const a=docum
 addEventListener("pointerdown",e=>{if(!UI.cap)return;const t=e.target;if(!t.closest||t.closest("#capsheet")||t.closest("#popcard")||t.closest("#rail")||t.closest(".capq")||t.closest("#palette"))return;capClose()},true);
 
 {const _pr=pulseRow;pulseRow=function(){const r=_pr();if(r&&UI.pulse){const sp=r.querySelector("span");if(sp)sp.textContent="ช่วงที่ "+UI.pulse.round+" โฟกัสแค่ไหน"}return r}}
+
+/* ===== ที่เก็บลิงก์: อยากดู · ทบทวน · เตือนกลับมาดู · หมวด · โยงโน้ต ===== */
+ICONS.link='<path d="M10 13a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1l-1 1"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1-1"/>';
+NAV.push(["links","link","ลิงก์","7"]);
+A.links=A.links||[];
+const LK_CATS0=["SQL","Python","สถิติ","Excel/BI","Visualization","Machine Learning","อาชีพ·สัมภาษณ์","พอร์ต·โปรเจกต์","การเงิน","การลงทุน","เทรด","ภาษาอังกฤษ","สุขภาพ·ออกกำลังกาย","พัฒนาตัวเอง","งานอดิเรก","ทั่วไป"];
+if(!A.settings.lcats)A.settings.lcats=LK_CATS0.map((n,i)=>({id:"c"+i,name:n,c:i%8}));
+const LKC=()=>A.settings.lcats;const lkCat=id=>LKC().find(c=>c.id===id)||LKC().find(c=>c.name==="ทั่วไป")||LKC()[0];
+const LK_ICON={play:'<path d="M8 5.5v13l10-6.5z"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',code:'<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>',db:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',pdf:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 15h1.5a1.5 1.5 0 0 0 0-3H9v5"/>',cap:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5M22 9v5"/>',chat:'<path d="M4 5h16v11H9l-5 4z"/>',note:'<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',web:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/>'};
+const LK_KIND={video:["คลิป","play","k1"],podcast:["พอดแคสต์","mic","k2"],article:["บทความ","doc","k3"],repo:["โค้ด","code","k4"],data:["ข้อมูล","db","k5"],pdf:["PDF","pdf","k6"],course:["คอร์ส","cap","k7"],post:["โพสต์","chat","k8"],music:["เพลง","note","k2"],other:["เว็บ","web","k0"]};
+const lkSvg=(k,s)=>'<svg viewBox="0 0 24 24" width="'+(s||18)+'" height="'+(s||18)+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(LK_ICON[k]||LK_ICON.web)+'</svg>';
+function lkIco(kind,s){const K=LK_KIND[kind]||LK_KIND.other;const e=el("span",{class:"lk-ico "+K[2],title:K[0]});e.innerHTML=lkSvg(K[1],s);return e}
+function lkHost(u){try{return new URL(u).hostname.replace(/^www\.|^m\./,"")}catch(e){return""}}
+function lkKind(u){let x;try{x=new URL(u)}catch(e){return"other"}const h=x.hostname.replace(/^www\.|^m\./,""),p=x.pathname.toLowerCase();
+  if(/\.pdf$/.test(p))return"pdf";
+  if(h==="open.spotify.com")return /\/(episode|show)\//.test(p)?"podcast":"music";
+  if(/podcasts\.apple\.com|podcasts\.google\.com|anchor\.fm|podbean\.com|castbox\.fm|soundon\.fm|blockdit\.com\/podcasts/.test(h+p))return"podcast";
+  if(h==="music.youtube.com"||h==="soundcloud.com")return"music";
+  if(/youtube\.com|youtu\.be|vimeo\.com|tiktok\.com|bilibili\.com/.test(h))return"video";
+  if(/github\.com|gitlab\.com|colab\.research\.google\.com|huggingface\.co/.test(h))return"repo";
+  if(/kaggle\.com|data\.go\.th|datacatalog|archive\.ics\.uci\.edu|ourworldindata\.org/.test(h))return"data";
+  if(/coursera\.org|udemy\.com|datacamp\.com|edx\.org|skooldio\.com|futureskill\.co|khanacademy\.org|cs50|mooc/.test(h))return"course";
+  if(/facebook\.com|x\.com|twitter\.com|linkedin\.com|threads\.net|reddit\.com|instagram\.com|pantip\.com/.test(h))return"post";
+  if(/medium\.com|substack\.com|blog|towardsdatascience|wikipedia\.org|news|blockdit\.com|dev\.to|bbc|thestandard|brandinside|marketthink/.test(h+p))return"article";
+  return"article"}
+/* ชื่อจากลิงก์ (ใช้ตอนดึงชื่อจากเว็บไม่ได้) */
+function lkGuessTitle(u){let x;try{x=new URL(u)}catch(e){return""}const h=x.hostname.replace(/^www\./,"");const segs=x.pathname.split("/").filter(Boolean).map(s=>{try{return decodeURIComponent(s)}catch(e){return s}});
+  if(/github\.com/.test(h)&&segs.length>=2)return segs[0]+"/"+segs[1];
+  const last=(segs.filter(s=>!/^\d+$/.test(s)&&s.length>2).pop()||"").replace(/\.(html?|php|aspx?|pdf)$/i,"").replace(/-[0-9a-f]{8,}$/i,"").replace(/[-_+]+/g," ").trim();
+  return last&&last.length>3?last.charAt(0).toUpperCase()+last.slice(1):h}
+async function lkFetchTitle(u){const tries=["https://noembed.com/embed?url="+encodeURIComponent(u)];const h=lkHost(u);
+  if(/youtube\.com|youtu\.be/.test(h))tries.push("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent(u));
+  if(h==="open.spotify.com")tries.push("https://open.spotify.com/oembed?url="+encodeURIComponent(u));
+  for(const t of tries){try{const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),4000);const r=await fetch(t,{signal:ctl.signal});clearTimeout(tm);if(!r.ok)continue;const j=await r.json();if(j&&j.title)return String(j.title).trim()}catch(e){}}return""}
+/* เดาหมวดจากคำในชื่อ */
+const LK_GUESS=[["SQL",/\bsql\b|query|join|window function|postgres|mysql|bigquery/i],["Python",/python|pandas|numpy|polars|jupyter/i],["สถิติ",/สถิติ|statistic|regression|hypothesis|a\/b|ab test|probability|ความน่าจะเป็น/i],["Excel/BI",/excel|power ?bi|tableau|looker|pivot|dax/i],["Visualization",/visuali|chart|กราฟ|dashboard|storytelling/i],["Machine Learning",/machine learning|\bml\b|deep learning|model|scikit|xgboost|\bai\b/i],["อาชีพ·สัมภาษณ์",/interview|สัมภาษณ์|resume|เรซูเม่|career|อาชีพ|สมัครงาน|portfolio review/i],["พอร์ต·โปรเจกต์",/portfolio|พอร์ต|project|โปรเจกต์/i],["การลงทุน",/ลงทุน|invest|หุ้น|stock|กองทุน|etf|ปันผล/i],["เทรด",/trade|เทรด|forex|xauusd|ทองคำ|crypto|คริปโต/i],["การเงิน",/การเงิน|finance|ภาษี|เงินเดือน|ออมเงิน|budget/i],["ภาษาอังกฤษ",/english|ภาษาอังกฤษ|ielts|toeic|vocab/i],["สุขภาพ·ออกกำลังกาย",/workout|ออกกำลัง|สุขภาพ|diet|ลดน้ำหนัก|โปรตีน|fitness|วิ่ง/i]];
+function lkGuessCat(t){for(const [n,re] of LK_GUESS)if(re.test(t||"")){const c=LKC().find(x=>x.name===n);if(c)return c.id}return null}
+
+/* ---------- เก็บ + sync ---------- */
+function lkPut(x){x.updatedAt=Date.now();persistA();if(dbBase)try{db.doc(dbBase+"/lk_"+x.id).set(JSON.parse(JSON.stringify(x))).catch(()=>{})}catch(e){}}
+async function syncLinks(base){try{const all=await db.collection(base).get();const rl=all.docs.filter(d=>d.id.startsWith("lk_")).map(d=>d.data());const m=new Map(A.links.map(x=>[x.id,x]));
+  rl.forEach(r=>{const l=m.get(r.id);if(!l||(r.updatedAt||0)>(l.updatedAt||0))m.set(r.id,r)});const ir=new Set(rl.map(x=>x.id));const up=A.links.filter(x=>!ir.has(x.id)||(m.get(x.id)===x&&(x.updatedAt||0)>((rl.find(r=>r.id===x.id)||{}).updatedAt||0)));
+  A.links=[...m.values()];persistA();for(const x of up)await db.doc(base+"/lk_"+x.id).set(x);if(VIEW==="links")renderLinks()}catch(e){}}
+{const _sr=syncR;syncR=async function(base){await _sr(base);await syncLinks(base)}}
+const lkLive=()=>A.links.filter(x=>!x.deleted);
+const lkDue=(x,now=Date.now())=>!x.deleted&&x.status!=="done"&&x.remindAt&&x.remindAt<=now;
+
+/* ---------- เวลาเตือน ---------- */
+function lkAt(d,h,m){const t=new Date(d);t.setHours(h,m||0,0,0);return t.getTime()}
+function lkWhen(k){const now=new Date();if(k==="tonight"){const t=lkAt(now,20);return t-Date.now()>15*60000?t:Date.now()+3600000}
+  if(k==="tomorrow"){const d=new Date(now);d.setDate(d.getDate()+1);return lkAt(d,9)}
+  if(k==="sat"){const d=new Date(now);let add=(6-d.getDay()+7)%7;if(add===0&&d.getHours()>=10)add=7;d.setDate(d.getDate()+add);return lkAt(d,10)}
+  if(k==="week"){const d=new Date(now);d.setDate(d.getDate()+7);return lkAt(d,9)}return null}
+const LK_WHEN=[["tonight","คืนนี้"],["tomorrow","พรุ่งนี้"],["sat","เสาร์นี้"],["week","อีก 1 สัปดาห์"]];
+function lkDueLabel(t){if(!t)return"";const now=Date.now(),d=new Date(t),td=today(),ds=dstr(t);const hhmm=pad2(d.getHours())+":"+pad2(d.getMinutes());
+  if(t<=now){const days=Math.floor((new Date(td+"T12:00:00")-new Date(ds+"T12:00:00"))/864e5);return days<=0?"ถึงเวลาแล้ว":days===1?"เลยมา 1 วัน":"เลยมา "+days+" วัน"}
+  if(ds===td)return"วันนี้ "+hhmm;if(ds===addDays(td,1))return"พรุ่งนี้ "+hhmm;const dd=Math.round((new Date(ds+"T12:00:00")-new Date(td+"T12:00:00"))/864e5);
+  return dd<7?TH_DAY[d.getDay()]+" "+hhmm:d.getDate()+" "+TH_MON[d.getMonth()]}
+const LK_REV=[1,3,7,14,30,60];
+
+/* ---------- การทำงานกับรายการ ---------- */
+function lkSeen(x){const prev=JSON.stringify(x);if(x.status==="review"){x.step=Math.min((x.step||0)+1,LK_REV.length-1);const d=new Date();d.setDate(d.getDate()+LK_REV[x.step]);x.remindAt=lkAt(d,9);x.reviewed=(x.reviewed||0)+1;x.notified=0;lkPut(x);renderLinks();
+    toast("ทวนแล้ว","รอบหน้า "+lkDueLabel(x.remindAt),[["เลิกทวน",()=>{x.status="done";x.remindAt=null;lkPut(x);renderLinks()}]]);return}
+  x.status="done";x.seenAt=Date.now();x.remindAt=null;lkPut(x);renderLinks();
+  toast("ดูแล้ว ✓",x.title,[["เก็บไว้ทบทวน",()=>{x.status="review";x.step=0;x.remindAt=lkWhen("tomorrow");x.notified=0;lkPut(x);renderLinks()}],["จดโน้ต",()=>lkToNote(x)],["เลิกทำ",()=>{Object.assign(x,JSON.parse(prev));lkPut(x);renderLinks()}]])}
+function lkSnooze(x,t){x.remindAt=t;x.notified=0;lkPut(x);renderLinks()}
+function lkDelete(x){x.deleted=true;lkPut(x);renderLinks();toast("ลบลิงก์แล้ว",x.title,[["เลิกทำ",()=>{x.deleted=false;lkPut(x);renderLinks()}]])}
+function lkOpen(x){window.open(x.url,"_blank","noopener");x.opened=(x.opened||0)+1;x.lastOpen=Date.now();lkPut(x)}
+function lkPlayable(x){const s=typeof parseMusic==="function"?parseMusic(x.url):null;return s&&["yt","sp","sc","audio"].includes(s.kind)?s:null}
+function lkWhenMenu(x,ev){const m=el("div",{class:"menu lk-menu"},[el("div",{class:"lk-mh",text:"เตือนอีกครั้ง"}),...LK_WHEN.map(([k,l])=>el("button",{onclick:()=>{closePop();lkSnooze(x,lkWhen(k))},text:l})),
+  (()=>{const i=el("input",{type:"datetime-local","aria-label":"เลือกวันเวลา"});i.addEventListener("change",()=>{if(i.value){closePop();lkSnooze(x,new Date(i.value).getTime())}});return el("label",{class:"lk-dt"},[el("span",{text:"เลือกวัน"}),i])})(),
+  x.remindAt?el("button",{class:"ghost",onclick:()=>{closePop();lkSnooze(x,null)},text:"ไม่ต้องเตือน"}):null]);openPop(m,ev.clientX-150,ev.clientY)}
+function lkMoreMenu(x,ev){const b=(t,f,c)=>el("button",{class:c||"",onclick:()=>{closePop();f()},text:t});const pl=lkPlayable(x);
+  const m=el("div",{class:"menu lk-menu"},[b("แก้ไข",()=>lkSheet(x)),pl?b("▶ เล่นในเว็บ",()=>mpPlay(pl,x.title)):null,b("สร้างโน้ตจากลิงก์นี้",()=>lkToNote(x)),b("คัดลอกลิงก์",()=>{try{navigator.clipboard.writeText(x.url);toast("คัดลอกแล้ว","",[])}catch(e){}}),
+    x.status!=="want"?b("ย้ายไป อยากดู",()=>{x.status="want";lkPut(x);renderLinks()}):null,x.status!=="review"?b("ย้ายไป ทบทวน",()=>{x.status="review";x.step=x.step||0;if(!x.remindAt)x.remindAt=lkWhen("tomorrow");lkPut(x);renderLinks()}):null,
+    el("div",{class:"msep"}),b("ลบ",()=>lkDelete(x),"danger")]);openPop(m,ev.clientX-170,ev.clientY)}
+/* โน้ต */
+function lkNotesOf(x){const k='data-lid="'+x.id+'"';const set=new Set(x.notes||[]);(NT.notes||[]).forEach(n=>{if(!n.deleted_at&&(n.content||[]).some(b=>ntHtmlRefs(b).some(([o,f])=>String(o[f]||"").includes(k))))set.add(n.id)});return [...set].map(id=>(NT.notes||[]).find(n=>n.id===id)).filter(n=>n&&!n.deleted_at)}
+function lkChipHtml(x){return '<span class="nlink" data-lid="'+ntEsc(x.id)+'" contenteditable="false">'+ntEsc(x.title||lkHost(x.url))+'</span>'}
+function lkToNote(x){if(!NT.ready&&!NT.loading)ntLoad();const n=ntQuickNote(x.title||lkHost(x.url));
+  n.content=[{t:"text",html:"<p>"+lkChipHtml(x)+"</p>"}].concat(x.why?[{t:"callout",emoji:"💡",html:"<p>"+ntEsc(x.why)+"</p>"}]:[]).concat([{t:"text",html:"<h2>ได้อะไร</h2>"},{t:"text",html:x.got?"<p>"+ntEsc(x.got)+"</p>":""}]);
+  ntDerive(n);ntCacheSave();ntSaveNoteOp(n);x.notes=[...new Set([...(x.notes||[]),n.id])];lkPut(x);closeLkSheet();go("notes");setTimeout(()=>ntOpen(n.id),60)}
+
+/* ---------- กล่องเก็บ / แก้ไข ---------- */
+function closeLkSheet(){const o=document.getElementById("lkSheet");if(o)o.remove();UI.lkf=null}
+function lkSheet(item,preUrl){if(!NT.ready&&!NT.loading&&typeof ntLoad==="function")ntLoad();
+  const isNew=!item;const f=UI.lkf=isNew?{url:preUrl||"",title:"",why:"",status:"want",when:"tomorrow",remindAt:lkWhen("tomorrow"),cat:null,catAuto:true,dur:null,notes:[],topics:[],got:""}:Object.assign(JSON.parse(JSON.stringify(item)),{when:item.remindAt?"keep":"none"});
+  let o=document.getElementById("lkSheet");if(o)o.remove();o=el("div",{id:"lkSheet",role:"dialog","aria-modal":"true","aria-label":isNew?"เก็บลิงก์":"แก้ไขลิงก์"});
+  const card=el("div",{class:"lks"});o.appendChild(card);o.addEventListener("pointerdown",e=>{if(e.target===o)closeLkSheet()});document.body.appendChild(o);
+  const urlIn=el("input",{class:"lks-url",placeholder:"วางลิงก์ที่นี่ (YouTube · บทความ · พอดแคสต์ · GitHub …)","aria-label":"ลิงก์",inputmode:"url",autocomplete:"off"});urlIn.value=f.url;
+  const kindBox=el("span",{class:"lks-k"});const dup=el("div",{class:"lks-dup"});
+  const titleIn=el("input",{class:"lks-title",placeholder:"ชื่อ","aria-label":"ชื่อ"});titleIn.value=f.title||"";
+  const whyIn=el("input",{class:"lks-why",placeholder:"ทำไมถึงสนใจ (ไม่ใส่ก็ได้)","aria-label":"ทำไมถึงสนใจ"});whyIn.value=f.why||"";
+  const status=el("div",{class:"lks-seg"});const whenRow=el("div",{class:"lks-chips"});const catRow=el("div",{class:"lks-chips"});const more=el("details",{class:"lks-more"});const err=el("div",{class:"err"});
+  let fetchSeq=0;
+  const onUrl=async()=>{const u=urlIn.value.trim();f.url=u;kindBox.textContent="";dup.textContent="";if(!/^https?:\/\/\S+\.\S+/.test(u))return;
+    f.kind=lkKind(u);kindBox.append(lkIco(f.kind,15),el("span",{text:LK_KIND[f.kind][0]+" · "+lkHost(u)}));
+    const ex=lkLive().find(x=>x.url===u&&x.id!==f.id);if(ex)dup.append(el("span",{text:"เคยเก็บลิงก์นี้แล้ว"}),el("button",{class:"linkish",onclick:()=>lkSheet(ex),text:"เปิดอันเดิม"}));
+    if(!titleIn.value.trim()||titleIn.dataset.auto==="1"){titleIn.value=lkGuessTitle(u);titleIn.dataset.auto="1";f.title=titleIn.value;guessCat();titleIn.classList.add("loading");const my=++fetchSeq;const t=await lkFetchTitle(u);titleIn.classList.remove("loading");
+      if(my===fetchSeq&&t&&titleIn.dataset.auto==="1"){titleIn.value=t;f.title=t;guessCat()}}};
+  const guessCat=()=>{if(!f.catAuto)return;const g=lkGuessCat(f.title+" "+f.why+" "+f.url);if(g&&g!==f.cat){f.cat=g;drawCats()}};
+  urlIn.addEventListener("input",onUrl);urlIn.addEventListener("paste",()=>setTimeout(()=>{onUrl();if(urlIn.value.trim())whyIn.focus()},0));
+  titleIn.addEventListener("input",()=>{f.title=titleIn.value;titleIn.dataset.auto="0";guessCat()});whyIn.addEventListener("input",()=>{f.why=whyIn.value;guessCat()});
+  const drawStatus=()=>{status.textContent="";[["want","อยากดู"],["review","ทบทวน"]].concat(isNew?[]:[["done","ดูแล้ว"]]).forEach(([k,l])=>status.appendChild(el("button",{type:"button",class:f.status===k?"on":"",onclick:()=>{f.status=k;drawStatus()},text:l})))};
+  const drawWhen=()=>{whenRow.textContent="";const opts=(f.when==="keep"?[["keep",lkDueLabel(f.remindAt)]]:[]).concat(LK_WHEN,[["none","ไม่เตือน"]]);
+    opts.forEach(([k,l])=>whenRow.appendChild(el("button",{type:"button",class:"lks-chip"+(f.when===k?" on":""),onclick:()=>{f.when=k;f.remindAt=k==="none"?null:k==="keep"?f.remindAt:lkWhen(k);drawWhen()},text:l})));
+    const dt=el("input",{type:"datetime-local",class:"lks-dt","aria-label":"เลือกวันเวลาเอง"});if(f.when==="pick"&&f.remindAt){const d=new Date(f.remindAt);dt.value=dstr(d)+"T"+pad2(d.getHours())+":"+pad2(d.getMinutes())}
+    dt.addEventListener("change",()=>{if(dt.value){f.when="pick";f.remindAt=new Date(dt.value).getTime();drawWhen()}});whenRow.appendChild(el("label",{class:"lks-chip lks-pick"+(f.when==="pick"?" on":""),title:"เลือกวันเอง"},[el("span",{text:f.when==="pick"?lkDueLabel(f.remindAt):"เลือกวัน"}),dt]))};
+  const drawCats=()=>{catRow.textContent="";const used={};lkLive().forEach(x=>used[x.cat]=(used[x.cat]||0)+1);
+    let cs=LKC().slice().sort((a,b)=>(used[b.id]||0)-(used[a.id]||0));if(!UI.lkAllCats){const top=cs.slice(0,7);if(f.cat&&!top.some(c=>c.id===f.cat))top.push(lkCat(f.cat));cs=top}
+    cs.forEach(c=>catRow.appendChild(el("button",{type:"button",class:"lks-chip lkc"+c.c+(f.cat===c.id?" on":""),onclick:()=>{f.cat=f.cat===c.id?null:c.id;f.catAuto=false;drawCats()}},[el("i"),c.name])));
+    if(!UI.lkAllCats&&LKC().length>7)catRow.appendChild(el("button",{type:"button",class:"lks-chip ghostc",onclick:()=>{UI.lkAllCats=true;drawCats()},text:"ทั้งหมด "+LKC().length+" ▾"}));
+    const add=el("input",{class:"lks-newcat",placeholder:"+ หมวดใหม่","aria-label":"เพิ่มหมวดใหม่"});add.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();e.stopPropagation();const nm=add.value.trim();if(!nm)return;let c=LKC().find(x=>x.name.toLowerCase()===nm.toLowerCase());if(!c){c={id:"u"+uidGen(),name:nm,c:LKC().length%8};LKC().push(c);putRec("app",{})}f.cat=c.id;f.catAuto=false;drawCats();const a2=catRow.querySelector(".lks-newcat");if(a2)a2.focus()}});catRow.appendChild(add)};
+  /* เพิ่มเติม: ความยาว · โน้ต · หัวข้อในแผน · ได้อะไร */
+  const drawMore=()=>{const op=more.open;more.textContent="";const nn=(f.notes||[]).length+(f.topics||[]).length+(f.dur?1:0)+(f.got?1:0);more.appendChild(el("summary",{text:"ความยาว · โน้ต · หัวข้อในแผน"+(nn?" ("+nn+")":"")}));more.open=op;
+    const dur=el("div",{class:"lks-chips"},[5,15,30,60,90].map(m=>el("button",{type:"button",class:"lks-chip"+(f.dur===m?" on":""),onclick:()=>{f.dur=f.dur===m?null:m;drawMore()},text:m<60?m+" นาที":m/60+" ชม."+(m%60?" ครึ่ง":"")})));
+    more.append(el("div",{class:"lks-l",text:"ใช้เวลาประมาณ"}),dur);
+    more.append(el("div",{class:"lks-l",text:"โน้ตที่เกี่ยว"}),lkNotePicker(f,drawMore));
+    more.append(el("div",{class:"lks-l",text:"หัวข้อในแผน"}),topicsPicker(f.topics));
+    if(!isNew){const g=el("input",{class:"lks-why",placeholder:"ดูแล้วได้อะไร 1 บรรทัด","aria-label":"ได้อะไร"});g.value=f.got||"";g.addEventListener("input",()=>f.got=g.value);more.append(el("div",{class:"lks-l",text:"ได้อะไร"}),g)}};
+  more.addEventListener("toggle",()=>{UI.lkMore=more.open});if(UI.lkMore)more.open=true;
+  const save=()=>{const u=urlIn.value.trim();if(!/^https?:\/\/\S+/.test(u)){err.textContent="วางลิงก์ที่ขึ้นต้นด้วย http ก่อน";urlIn.focus();return}
+    const title=titleIn.value.trim()||lkGuessTitle(u);let x=isNew?{id:uidGen(),created:Date.now(),step:0}:A.links.find(y=>y.id===item.id);if(!x)return;
+    Object.assign(x,{url:u,title,why:whyIn.value.trim(),kind:lkKind(u),cat:f.cat||lkCat(null).id,status:f.status,remindAt:f.status==="done"?null:f.remindAt,dur:f.dur||null,notes:f.notes||[],topics:f.topics||[],got:f.got||""});
+    if(isNew){x.notified=0;A.links.push(x)}else if(x.remindAt!==item.remindAt)x.notified=0;if(x.status==="done"&&!x.seenAt)x.seenAt=Date.now();
+    lkPut(x);closeLkSheet();if(VIEW==="links")renderLinks();else toast("เก็บลิงก์แล้ว",x.title+(x.remindAt?" · เตือน "+lkDueLabel(x.remindAt):""),[["ดูที่เก็บ",()=>go("links")]])};
+  card.append(el("div",{class:"lks-h"},[el("span",{text:isNew?"เก็บลิงก์":"แก้ไขลิงก์"}),el("span",{class:"nh-sp"}),!isNew?el("button",{type:"button",class:"lks-open",onclick:()=>lkOpen(item),text:"เปิดลิงก์ ↗"}):null,el("button",{type:"button",class:"sp-x","aria-label":"ปิด",onclick:closeLkSheet,text:"×"})]),
+    el("div",{class:"lks-urlrow"},[urlIn,kindBox]),dup,titleIn,whyIn,
+    el("div",{class:"lks-grid"},[el("div",{class:"lks-l",text:"เก็บไว้ใน"}),status,el("div",{class:"lks-l",text:"เตือนให้กลับมาดู"}),whenRow,el("div",{class:"lks-l",text:"หมวด"}),catRow]),more,
+    el("div",{class:"lks-foot"},[el("button",{type:"button",class:"primary-btn",onclick:save,text:isNew?"เก็บ":"บันทึก"}),el("span",{class:"muted sm",text:"⌘Enter"}),err]));
+  o._save=save;card.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing&&!e.metaKey&&!e.ctrlKey&&(e.target===titleIn||e.target===whyIn||e.target===urlIn)){e.preventDefault();save()}});
+  if(isNew&&!f.status)f.status="want";drawStatus();drawWhen();drawCats();drawMore();if(f.url)onUrl();
+  if(!isNew&&item.kind)kindBox.append(lkIco(item.kind,15),el("span",{text:LK_KIND[item.kind][0]+" · "+lkHost(item.url)}));
+  setTimeout(()=>(isNew&&!f.url?urlIn:titleIn).focus(),30)}
+function lkNotePicker(f,redraw){const w=el("div",{class:"lk-np"});const chips=el("div",{class:"lks-chips"});
+  (f.notes||[]).forEach(id=>{const n=(NT.notes||[]).find(z=>z.id===id);if(!n)return;chips.appendChild(el("span",{class:"lk-nchip"},["📄 "+ntTitleOf(n),el("button",{type:"button","aria-label":"เอาออก",onclick:()=>{f.notes=f.notes.filter(z=>z!==id);redraw()},text:"×"})]))});
+  const inp=el("input",{class:"lks-why",placeholder:"ค้นโน้ต หรือพิมพ์ชื่อเพื่อสร้างใหม่","aria-label":"ค้นโน้ต"});const res=el("div",{class:"lk-nres"});
+  inp.addEventListener("input",()=>{res.textContent="";const q=ntNorm(inp.value);if(!q)return;const xs=(NT.notes||[]).filter(n=>!n.deleted_at&&!(f.notes||[]).includes(n.id)&&ntNorm(ntTitleOf(n)).includes(q)).slice(0,5);
+    xs.forEach(n=>res.appendChild(el("button",{type:"button",onclick:()=>{f.notes=[...(f.notes||[]),n.id];redraw()},text:"📄 "+ntTitleOf(n)})));
+    res.appendChild(el("button",{type:"button",class:"lk-ncreate",onclick:()=>{const n=ntQuickNote(inp.value.trim());f.notes=[...(f.notes||[]),n.id];redraw()},text:"+ สร้างโน้ตใหม่ \""+inp.value.trim()+"\""}))});
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();e.stopPropagation();const b=res.querySelector("button");if(b)b.click()}});
+  w.append(chips,inp,res);return w}
+
+/* ---------- หน้าลิงก์ ---------- */
+UI.lk=UI.lk||{tab:null,cat:"all",kind:"all",q:""};
+function lkRow(x){const K=x.kind||"other";const c=lkCat(x.cat);const due=lkDue(x);
+  const meta=el("div",{class:"lkr-m"},[el("span",{class:"lkr-c lkc"+c.c},[el("i"),c.name]),x.remindAt?el("span",{class:"lkr-d"+(due?" due":""),text:"⏰ "+lkDueLabel(x.remindAt)}):null,x.dur?el("span",{text:x.dur<60?x.dur+" นาที":(x.dur/60)+" ชม."}):null,
+    x.status==="review"&&x.reviewed?el("span",{text:"ทวนแล้ว "+x.reviewed+" รอบ"}):null,(x.notes||[]).length||lkNotesOf(x).length?el("span",{text:"📄 "+lkNotesOf(x).length}):null,x.status==="done"&&x.seenAt?el("span",{text:"ดู "+thDate(dstr(x.seenAt))}):null].filter(Boolean));
+  const row=el("div",{class:"lkr"+(due?" is-due":""),tabindex:"0","data-id":x.id},[lkIco(K,18),
+    el("div",{class:"lkr-b"},[el("div",{class:"lkr-t",text:x.title||lkHost(x.url)}),x.why||x.got?el("div",{class:"lkr-w",text:x.status==="done"&&x.got?"ได้: "+x.got:x.why}):null,meta]),
+    el("div",{class:"lkr-a"},[el("button",{type:"button",class:"lkb","aria-label":"เปิดลิงก์",title:"เปิดลิงก์",onclick:e=>{e.stopPropagation();lkOpen(x)}},["↗"]),
+      x.status!=="done"?el("button",{type:"button",class:"lkb","aria-label":"ตั้งเวลาเตือน",title:"เตือนอีกครั้ง",onclick:e=>{e.stopPropagation();lkWhenMenu(x,e)}},["⏰"]):null,
+      x.status!=="done"?el("button",{type:"button",class:"lkb ok","aria-label":x.status==="review"?"ทวนแล้ว":"ดูแล้ว",title:x.status==="review"?"ทวนแล้ว":"ดูแล้ว",onclick:e=>{e.stopPropagation();lkSeen(x)}},["✓"]):null,
+      el("button",{type:"button",class:"lkb","aria-label":"เมนู",onclick:e=>{e.stopPropagation();lkMoreMenu(x,e)}},["⋯"])])]);
+  row.addEventListener("click",()=>lkSheet(x));row.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();lkSheet(x)}});
+  if(typeof swipeRow==="function"&&x.status!=="done")swipeRow(row,()=>lkSeen(x),()=>lkSnooze(x,lkWhen("tomorrow")));return row}
+function renderLinks(){const box=$("#links");if(!box||box.hidden)return;box.textContent="";const L=UI.lk;const all=lkLive();const now=Date.now();
+  const tabs=[["due","ถึงเวลา",all.filter(x=>lkDue(x,now))],["want","อยากดู",all.filter(x=>x.status==="want")],["review","ทบทวน",all.filter(x=>x.status==="review")],["done","ดูแล้ว",all.filter(x=>x.status==="done")]];
+  if(!L.tab)L.tab=tabs[0][2].length?"due":"want";
+  box.appendChild(el("div",{class:"lk-head"},[el("h2",{text:"ลิงก์"}),el("span",{class:"nh-sp"}),el("button",{type:"button",class:"ghost lk-cats",onclick:lkCatManager,text:"จัดหมวด"}),el("button",{type:"button",class:"primary-btn lk-add",onclick:()=>lkSheet(),text:"+ เก็บลิงก์"})]));
+  const qa=el("input",{class:"lk-quick",placeholder:"วางลิงก์ที่อยากเก็บ แล้วกด Enter","aria-label":"วางลิงก์ที่อยากเก็บ",inputmode:"url"});
+  const goQ=()=>{const v=qa.value.trim();if(v)lkSheet(null,/^https?:/.test(v)?v:"https://"+v)};qa.addEventListener("paste",()=>setTimeout(goQ,0));qa.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();goQ()}});
+  box.appendChild(el("div",{class:"lk-qwrap"},[el("span",{class:"lk-qi",html:""}),qa]));box.querySelector(".lk-qi").innerHTML=lkSvg("web",17).replace(LK_ICON.web,ICONS.link);
+  const tb=el("div",{class:"lk-tabs",role:"tablist"});tabs.forEach(([k,l,xs])=>tb.appendChild(el("button",{type:"button",role:"tab","aria-selected":String(L.tab===k),class:L.tab===k?"on":"",onclick:()=>{L.tab=k;renderLinks()}},[l,el("span",{class:"lk-n"+(k==="due"&&xs.length?" hot":""),text:String(xs.length)})])));box.appendChild(tb);
+  let xs=tabs.find(t=>t[0]===L.tab)[2];
+  /* แถบกรอง: หมวด (เฉพาะที่มีของ) · ประเภท · ค้นหา */
+  const cnt={};xs.forEach(x=>{const c=lkCat(x.cat).id;cnt[c]=(cnt[c]||0)+1});const used=LKC().filter(c=>cnt[c.id]).sort((a,b)=>cnt[b.id]-cnt[a.id]);
+  if(L.cat!=="all"&&!cnt[L.cat])L.cat="all";
+  const fl=el("div",{class:"lk-filter"});const chip=(k,l,n,cls)=>el("button",{type:"button",class:"lkf "+(cls||"")+(L.cat===k?" on":""),onclick:()=>{L.cat=L.cat===k&&k!=="all"?"all":k;renderLinks()}},[cls?el("i"):null,l,n!=null?el("small",{text:String(n)}):null].filter(Boolean));
+  fl.appendChild(chip("all","ทั้งหมด",xs.length));const vis=used.slice(0,6);if(L.cat!=="all"&&!vis.some(c=>c.id===L.cat))vis.push(lkCat(L.cat));vis.forEach(c=>fl.appendChild(chip(c.id,c.name,cnt[c.id],"lkc"+c.c)));
+  if(used.length>vis.length)fl.appendChild(el("button",{type:"button",class:"lkf",onclick:e=>{const m=el("div",{class:"menu lk-menu"},used.filter(c=>!vis.includes(c)).map(c=>el("button",{onclick:()=>{closePop();L.cat=c.id;renderLinks()},text:c.name+" ("+cnt[c.id]+")"})));openPop(m,e.clientX-60,e.clientY)},text:"อีก "+(used.length-vis.length)+" ▾"}));
+  const kinds=[...new Set(xs.map(x=>x.kind||"other"))];if(L.kind!=="all"&&!kinds.includes(L.kind))L.kind="all";
+  const sp=el("span",{class:"nh-sp"});fl.appendChild(sp);
+  if(kinds.length>1){const sel=el("select",{class:"lk-kind","aria-label":"ประเภท"},[el("option",{value:"all",text:"ทุกประเภท"}),...kinds.map(k=>el("option",{value:k,text:LK_KIND[k][0]}))]);sel.value=L.kind;sel.addEventListener("change",()=>{L.kind=sel.value;renderLinks()});fl.appendChild(sel)}
+  const q=el("input",{type:"search",class:"lk-q",placeholder:"ค้นหา","aria-label":"ค้นหาลิงก์"});q.value=L.q;q.addEventListener("input",()=>{L.q=q.value;drawList()});fl.appendChild(q);if(xs.length||L.q)box.appendChild(fl);
+  const list=el("div",{class:"lk-list"});box.appendChild(list);
+  function drawList(){list.textContent="";const qq=ntNorm(L.q);let ys=xs.filter(x=>(L.cat==="all"||lkCat(x.cat).id===L.cat)&&(L.kind==="all"||(x.kind||"other")===L.kind)&&(!qq||ntNorm(x.title+" "+(x.why||"")+" "+(x.got||"")+" "+x.url+" "+lkCat(x.cat).name).includes(qq)));
+    ys.sort(L.tab==="done"?(a,b)=>(b.seenAt||0)-(a.seenAt||0):L.tab==="want"?(a,b)=>(lkDue(b)-lkDue(a))||((a.remindAt||9e15)-(b.remindAt||9e15))||(b.created-a.created):(a,b)=>(a.remindAt||9e15)-(b.remindAt||9e15));
+    if(!ys.length){const msg={due:["ไม่มีอะไรค้างดู","ลิงก์ที่ตั้งเตือนไว้จะมาโผล่ตรงนี้เมื่อถึงเวลา"],want:["เก็บลิงก์แรกกัน","เจอคลิป บทความ หรือพอดแคสต์น่าสนใจ วางลิงก์ไว้ในช่องด้านบนได้เลย"],review:["ยังไม่มีอะไรให้ทวน","ดูจบแล้วอยากกลับมาดูซ้ำ กด ✓ แล้วเลือก \"เก็บไว้ทบทวน\""],done:["ยังไม่มีลิงก์ที่ดูแล้ว","กด ✓ เมื่อดูจบ จะย้ายมาเก็บไว้ที่นี่"]}[L.tab];
+      list.appendChild(el("div",{class:"lk-empty"},[el("b",{text:qq||L.cat!=="all"?"ไม่เจอลิงก์ที่ตรง":msg[0]}),el("p",{text:qq||L.cat!=="all"?"ลองล้างตัวกรองหรือคำค้น":msg[1]})]));return}
+    ys.forEach(x=>list.appendChild(lkRow(x)))}
+  drawList();lkBadge()}
+/* จัดหมวด */
+function lkCatManager(){let o=document.getElementById("lkSheet");if(o)o.remove();o=el("div",{id:"lkSheet",role:"dialog","aria-modal":"true","aria-label":"จัดหมวด"});const card=el("div",{class:"lks lks-cm"});o.appendChild(card);o.addEventListener("pointerdown",e=>{if(e.target===o){o.remove();renderLinks()}});document.body.appendChild(o);
+  const draw=()=>{card.textContent="";const cnt={};lkLive().forEach(x=>{const c=lkCat(x.cat).id;cnt[c]=(cnt[c]||0)+1});
+    card.appendChild(el("div",{class:"lks-h"},[el("span",{text:"จัดหมวด"}),el("span",{class:"nh-sp"}),el("button",{type:"button",class:"sp-x","aria-label":"ปิด",onclick:()=>{o.remove();renderLinks()},text:"×"})]));
+    card.appendChild(el("p",{class:"muted sm",text:"กดจุดสีเพื่อเปลี่ยนสี · ลากขึ้นลงด้วยปุ่มลูกศร · ลบหมวดแล้วลิงก์ข้างในย้ายไป \"ทั่วไป\""}));
+    const L=el("div",{class:"lkcm"});LKC().forEach((c,i)=>{const nm=el("input",{class:"lkcm-n","aria-label":"ชื่อหมวด"});nm.value=c.name;nm.addEventListener("change",()=>{const v=nm.value.trim();if(v){c.name=v;putRec("app",{})}else nm.value=c.name});
+      L.appendChild(el("div",{class:"lkcm-r"},[el("button",{type:"button",class:"lkcm-dot lkc"+c.c,"aria-label":"เปลี่ยนสี",onclick:()=>{c.c=(c.c+1)%8;putRec("app",{});draw()}},[el("i")]),nm,el("span",{class:"muted sm",text:String(cnt[c.id]||0)}),
+        el("button",{type:"button",class:"lkb","aria-label":"ขึ้น",onclick:()=>{if(i>0){LKC().splice(i-1,0,LKC().splice(i,1)[0]);putRec("app",{});draw()}}},["↑"]),
+        c.name!=="ทั่วไป"?el("button",{type:"button",class:"lkb","aria-label":"ลบหมวด",onclick:()=>{const g=LKC().find(z=>z.name==="ทั่วไป");lkLive().filter(x=>x.cat===c.id).forEach(x=>{x.cat=g?g.id:null;lkPut(x)});A.settings.lcats=LKC().filter(z=>z!==c);putRec("app",{});draw()}},["×"]):el("span",{class:"lkb"})]))});
+    card.appendChild(L);const add=el("input",{class:"lks-why",placeholder:"+ เพิ่มหมวด เช่น ทำอาหาร แล้วกด Enter","aria-label":"เพิ่มหมวด"});add.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing&&add.value.trim()){LKC().push({id:"u"+uidGen(),name:add.value.trim(),c:LKC().length%8});putRec("app",{});draw();const a=card.querySelector(".lks-why");if(a)a.focus()}});card.appendChild(add)};draw()}
+
+/* ---------- เตือน · ป้ายเลข · การ์ดหน้าวันนี้ ---------- */
+function lkBadge(){const b=document.querySelector('#rail .rb[aria-label="ลิงก์"]');if(!b)return;let s=b.querySelector(".rbadge");const n=lkLive().filter(x=>lkDue(x)).length;if(!s){s=el("span",{class:"rbadge lkbadge"});b.appendChild(s)}s.textContent=n?String(n):"";s.style.display=n?"":"none"}
+{const _rr=renderRail;renderRail=function(){_rr();lkBadge()}}
+function lkCheck(){const now=Date.now();let hit=[];lkLive().forEach(x=>{if(lkDue(x,now)&&x.notified!==x.remindAt&&now-x.remindAt<36*3600e3){x.notified=x.remindAt;hit.push(x);lkPut(x)}});
+  if(hit.length){if(typeof alarmFire==="function")alarmFire("remind");else beep(3);const x=hit[0];toast("🔗 ถึงเวลาดู: "+x.title,hit.length>1?"และอีก "+(hit.length-1)+" ลิงก์":(x.why||""),[["เปิด",()=>lkOpen(x)],["ไปที่ลิงก์",()=>{UI.lk.tab="due";go("links")}]]);
+    if(typeof notifyOS==="function")notifyOS("ถึงเวลาดูลิงก์",x.title);if(VIEW==="links")renderLinks();if(VIEW==="today")renderToday()}lkBadge()}
+setInterval(lkCheck,30000);setTimeout(lkCheck,4000);
+function lkTodayCard(){const due=lkLive().filter(x=>lkDue(x)).sort((a,b)=>a.remindAt-b.remindAt);if(!due.length)return null;
+  const c=el("div",{class:"lk-today"},[el("div",{class:"lk-th"},[el("span",{text:"🔗 ถึงเวลาดู"}),el("span",{class:"nh-sp"}),el("button",{type:"button",class:"linkish",onclick:()=>{UI.lk.tab="due";go("links")},text:due.length>3?"ดูทั้งหมด "+due.length:"ไปที่ลิงก์"})])]);
+  due.slice(0,3).forEach(x=>c.appendChild(el("div",{class:"lk-ti"},[lkIco(x.kind||"other",15),el("button",{type:"button",class:"lk-tt",onclick:()=>lkOpen(x),title:"เปิดลิงก์"},[x.title]),
+    el("button",{type:"button",class:"lkb","aria-label":"เลื่อนไปพรุ่งนี้",title:"เลื่อนไปพรุ่งนี้",onclick:()=>{lkSnooze(x,lkWhen("tomorrow"));renderToday()}},["⏰"]),el("button",{type:"button",class:"lkb ok","aria-label":"ดูแล้ว",title:"ดูแล้ว",onclick:()=>{lkSeen(x);renderToday()}},["✓"])])));return c}
+{const _rt=renderToday;renderToday=function(){_rt();const box=$("#today");if(!box||box.hidden||T||UI.pre||UI.panel||UI.review)return;const c=lkTodayCard();if(!c)return;const a=box.querySelector(".tlbl2")||box.querySelector(".tmet");if(a)a.before(c);else box.appendChild(c)}}
+
+/* ---------- เปิดจากที่อื่น ---------- */
+CMDS.push(["เก็บลิงก์","",()=>lkSheet()],["ไปที่ ลิงก์","7",()=>go("links")]);
+{const _rr=renderRail;renderRail=function(){_rr();const tools=document.querySelector("#rail .rtools");const plus=tools&&tools.querySelector('[aria-label="ได้เรียนรู้"]');if(plus&&!plus.__lk){plus.__lk=true;plus.onclick=null;plus.addEventListener("click",e=>{e.stopImmediatePropagation();const r=plus.getBoundingClientRect();
+  const m=el("div",{class:"menu lk-menu"},[el("button",{onclick:()=>{closePop();lkSheet()},text:"🔗 เก็บลิงก์"}),el("button",{onclick:()=>{closePop();openCapture("learned")},text:"💡 ได้เรียนรู้"}),el("button",{onclick:()=>{closePop();openCapture("wish")},text:"❓ อยากรู้"})]);openPop(m,r.right,r.top-20)},true)}}}
+/* วางลิงก์ตรงหน้าลิงก์ (ไม่ได้อยู่ในช่องพิมพ์) = เปิดกล่องเก็บ */
+document.addEventListener("paste",e=>{if(VIEW!=="links"||document.getElementById("lkSheet"))return;const a=document.activeElement;if(a&&(/INPUT|TEXTAREA/.test(a.tagName)||a.isContentEditable))return;const t=(e.clipboardData||{}).getData?e.clipboardData.getData("text/plain").trim():"";if(/^https?:\/\/\S+$/.test(t)){e.preventDefault();lkSheet(null,t)}});
+/* ช่องอยากรู้มีลิงก์ = ชวนย้ายมาเก็บ */
+{const _dc=drawCapture;drawCapture=function(){_dc();const sh=document.getElementById("capsheet");if(!sh||!UI.cap)return;const ti=sh.querySelector(".cap-ti");if(!ti||ti.__lk)return;ti.__lk=true;
+  ti.addEventListener("input",()=>{const v=ti.value.trim();let h=sh.querySelector(".cap-lk");if(/^https?:\/\/\S+$/.test(v)){if(!h){h=el("div",{class:"cap-lk"},[el("span",{text:"นี่คือลิงก์ · เก็บในที่เก็บลิงก์ดีกว่า (ตั้งเตือนได้)"}),el("button",{class:"linkish",onclick:()=>{UI.cap=null;drawCapture();lkSheet(null,v)},text:"ย้ายไปเก็บลิงก์"})]);ti.after(h)}}else if(h)h.remove()})}}
+
+/* ---------- โน้ต: [[ ค้นลิงก์ที่เก็บไว้ด้วย · กล่องลิงก์ที่เกี่ยว ---------- */
+{const _cl=ntClean;ntClean=function(src,dst){if(src&&src.nodeType===1&&src.tagName==="SPAN"&&src.classList.contains("nlink")&&src.getAttribute("data-lid")){const c=document.createElement("span");c.className="nlink";c.setAttribute("data-lid",src.getAttribute("data-lid"));c.setAttribute("contenteditable","false");c.textContent=src.textContent.trim()||"ลิงก์";dst.appendChild(c);return}return _cl(src,dst)}}
+{const _rl=ntRefreshLinks;ntRefreshLinks=function(root){_rl(root);(root||document).querySelectorAll(".nlink[data-lid]").forEach(c=>{const x=A.links.find(y=>y.id===c.dataset.lid);const gone=!x||!!x.deleted;c.classList.add("is-lk");c.classList.toggle("gone",gone);c.textContent=gone?"ลิงก์ที่ถูกลบ":(x.title||lkHost(x.url));c.title=gone?"":x.url;c.setAttribute("contenteditable","false")})}}
+{const _li=ntLinkItems;ntLinkItems=function(q){const it=_li(q);const qq=ntNorm(q);const ls=lkLive().filter(x=>!qq||ntNorm(x.title+" "+(x.why||"")+" "+x.url).includes(qq)).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,qq?4:3).map(x=>({lk:x}));
+  const ci=it.findIndex(i=>i.create);if(ci>=0)it.splice(ci,0,...ls);else it.push(...ls);return it}}
+{const _tr=ntTpRender;ntTpRender=function(){_tr();const P=NT.tp;if(!P||!P.link)return;const box=document.getElementById("ntTp");if(!box)return;const bs=[...box.querySelectorAll(".nt-dditem")];
+  (P.items||[]).forEach((it,i)=>{if(!it.lk||!bs[i])return;const b=bs[i];b.textContent="";b.append(lkIco(it.lk.kind||"other",14),el("span",{class:"lk-t",text:it.lk.title||lkHost(it.lk.url)}),el("span",{class:"muted sm",text:"ลิงก์"}))})}}
+{const _tc=ntTpChoose;ntTpChoose=function(){const P=NT.tp;const it=P&&P.link&&P.items&&P.items[P.ix];if(!it||!it.lk)return _tc();const x=it.lk;
+  const r=document.createRange();r.setStart(P.node,P.start);r.setEnd(P.node,Math.min(P.end,P.node.nodeValue.length));r.deleteContents();const t=document.createElement("template");t.innerHTML=lkChipHtml(x);const chip=t.content.firstChild;r.insertNode(chip);const sp=document.createTextNode(" ");chip.after(sp);ntCaretAt(sp,1);ntTpClose();P.d.classList.remove("is-empty");ntChanged()}}
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest(".nlink[data-lid]");if(!c)return;e.preventDefault();e.stopPropagation();const x=A.links.find(y=>y.id===c.dataset.lid);if(!x||x.deleted){toast("ลิงก์นี้ถูกลบแล้ว","",[]);return}lkOpen(x)},true);
+{const _lb=ntLinksBox;ntLinksBox=function(n){const box=_lb(n);const k='data-lid="';const ids=new Set();(n.content||[]).forEach(b=>ntHtmlRefs(b).forEach(([o,f])=>{String(o[f]||"").replace(/data-lid="([^"]+)"/g,(m,id)=>ids.add(id))}));
+  const ls=lkLive().filter(x=>(x.notes||[]).includes(n.id)||ids.has(x.id));if(!ls.length)return box;
+  box.appendChild(el("div",{class:"lk-head2",text:"🔗 ลิงก์ที่เกี่ยว ("+ls.length+")"}));box.appendChild(el("div",{class:"lk-list2"},ls.map(x=>el("button",{type:"button",class:"lk-row",onclick:()=>lkOpen(x)},[lkIco(x.kind||"other",15),el("span",{class:"lk-t",text:x.title||lkHost(x.url)}),el("span",{class:"muted sm",text:lkCat(x.cat).name})]))));return box}}
+
+/* ---------- สำรองข้อมูล: หาง่าย + รวมโน้ตด้วย ---------- */
+backupAll=async function(){const snap={app:"da-learning-map",version:2,exported:new Date().toISOString(),A:JSON.parse(JSON.stringify(A)),S:JSON.parse(JSON.stringify(S)),T:T?JSON.parse(JSON.stringify(T)):null,
+    notes:typeof NT!=="undefined"?{notes:NT.notes||[],tags:NT.tags||[],sources:NT.sources||[],reviews:NT.revs||[]}:null};
+  const counts={sessions:(A.sessions||[]).length,notes:(NT.notes||[]).filter(n=>!n.deleted_at).length,links:lkLive().length,items:(A.items||[]).length,reviews:(A.reviews||[]).length};snap.counts=counts;
+  const blob=new Blob([JSON.stringify(snap)],{type:"application/json"});let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){}
+  if(!dl){try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="backup-da-map-"+today()+".json";document.body.appendChild(a);a.click();a.remove();A.lastBackup=today();persistA();return"สำรองแล้ว"}catch(e){return"สำรองไม่สำเร็จ"}}
+  try{await dl.save({filename:"backup-da-map-"+today()+".json",data:blob});A.lastBackup=today();persistA();return"สำรองแล้ว: รอบเรียน "+counts.sessions+" · โน้ต "+counts.notes+" · ลิงก์ "+counts.links+" · หนังสือ "+counts.items+" · ทบทวน "+counts.reviews}catch(e){return e&&e.code==="declined"?"ยกเลิกการสำรอง":"สำรองไม่สำเร็จ"}};
+function backupCard(){const d=A.lastBackup;const days=d?Math.round((new Date(today()+"T12:00:00")-new Date(d+"T12:00:00"))/864e5):null;const msg=el("span",{class:"muted sm",text:d?"ล่าสุด "+(days===0?"วันนี้":days+" วันก่อน")+" · "+thDate(d):"ยังไม่เคยสำรอง"});
+  return card("bk-card",[el("div",{class:"row sp tight"},[el("div",{},[el("div",{class:"cap",text:"💾 สำรองข้อมูล"}),msg]),el("button",{class:"primary-btn",onclick:async e=>{const b=e.currentTarget;b.disabled=true;b.textContent="กำลังสำรอง…";const r=await backupAll();toast(r,"เก็บไฟล์ .json นี้ไว้ในเครื่องหรือ Google Drive",[]);renderToday()},text:"ดาวน์โหลดไฟล์สำรอง"})]),
+    el("p",{class:"muted sm",text:"รวมทุกอย่าง: รอบเรียน โน้ต ลิงก์ หนังสือ แผน และการตั้งค่า เป็นไฟล์เดียว"+(days!=null&&days>=14?" · ไม่ได้สำรองมา "+days+" วันแล้ว":"")})])}
+{const _rt=renderToday;renderToday=function(){_rt();if(UI.panel!=="settings")return;const box=$("#today");if(!box||box.hidden||box.querySelector(".bk-card"))return;const first=box.querySelector(".ttop");const c=backupCard();if(first)first.after(c);else box.prepend(c)}}
+CMDS.push(["สำรองข้อมูล (ดาวน์โหลดไฟล์)","",async()=>toast(await backupAll(),"",[])],["ตั้งค่า","",()=>{UI.panel="settings";go("today")}]);
+
+addEventListener("keydown",e=>{const o=document.getElementById("lkSheet");if(!o)return;if(e.key==="Escape"){e.preventDefault();e.stopImmediatePropagation();if(o._save)closeLkSheet();else{o.remove();if(VIEW==="links")renderLinks()}return}
+  if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)&&o._save){e.preventDefault();e.stopImmediatePropagation();o._save()}},true);
 
 applyPlans();seedExt();migrateNotes();if(!window.SB)seedBooks();
 if(!A.repoSeeded&&!window.SB){A.repoSeeded=true;const n=newNote("repo",{url:"https://github.com/jomariya23156/sales-forecast-mlops-at-scale"},"repo: sales-forecast-mlops-at-scale");n.body=n.body.replace("## ทำอะไร (สรุป 2 บรรทัด)\n","## ทำอะไร (สรุป 2 บรรทัด)\nระบบพยากรณ์ยอดขายรายร้านที่ทำงานเองครบวงจร: ข้อมูลไหลเข้า ฝึกโมเดลรายสัปดาห์ เก็บผล และหน้าเว็บให้ผู้ใช้ดูและสั่งฝึกใหม่ ใช้ข้อมูล Rossmann 1,115 ร้าน\n").replace("## README ดีตรงไหน\n- ","## README ดีตรงไหน\n- เปิดด้วยประโยคเดียวว่าระบบทำอะไร แล้วตามด้วยแผนภาพและวิดีโอสาธิต\n- มีส่วน \"ทำงานยังไง\" เป็นขั้น 1–11 ก่อนวิธีติดตั้ง\n- บอกข้อจำกัดตรง ๆ เช่น เครื่องสเปกต่ำจะค้างตอนเปิดครั้งแรก").replace("## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- ","## การตัดสินใจที่น่าสนใจ (และเหตุผล)\n- หนึ่งโมเดลต่อร้าน เพราะแต่ละร้านมีรูปแบบยอดขายของตัวเอง\n- แยกเหตุผลการเลือกเครื่องมือไว้ใน notes/README.md").replace("## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- ","## เครื่องมือที่ใช้ และในแผนเรียนถึงหรือยัง\n- PostgreSQL, Python, Streamlit: มีในแผนหลัก\n- Prophet, MLflow, Airflow, FastAPI, Docker: คอร์สต่อยอด MLOps ขั้น 1–5\n- Kafka, Spark, Ray, Kubernetes, Grafana: คอร์สต่อยอด MLOps ขั้น 6").replace("## เอามาใช้กับงานของเราได้อะไร\n- ","## เอามาใช้กับงานของเราได้อะไร\n- โครง README และบันทึกการตัดสินใจ (หัวข้อ g8, g9)\n- ข้อมูล Rossmann สำหรับฝึก time series");putNote(n)}
