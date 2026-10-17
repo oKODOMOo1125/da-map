@@ -1,0 +1,25 @@
+{
+  "name": "DA Map — แผนที่การเรียนสาย DA",
+  "short_name": "DA Map",
+  "lang": "th",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#2C2C2A",
+  "theme_color": "#2C2C2A",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "เริ่มจับเวลา", "url": "./?go=timer", "icons": [{"src": "icon-192.png", "sizes": "192x192"}]},
+    {"name": "โน้ตใหม่", "url": "./?go=note", "icons": [{"src": "icon-192.png", "sizes": "192x192"}]},
+    {"name": "เก็บลิงก์", "url": "./?add=link", "icons": [{"src": "icon-192.png", "sizes": "192x192"}]}
+  ],
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": {"title": "title", "text": "text", "url": "url"}
+  }
+}
