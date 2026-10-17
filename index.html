@@ -2119,13 +2119,18 @@ body.nt-fsopen::after{content:"";position:fixed;inset:0;background:rgba(15,15,15
   .mrel-it .ch{color:var(--muted);font-size:20px;line-height:1}
 }
 @media (max-width:700px){
-  .mtd-ic{display:grid;place-items:center;height:24px}
-  .mtd .mtd-bg{fill:none;stroke:var(--line);stroke-width:2.4}
-  .mtd .mtd-arc{fill:none;stroke:var(--mteal);stroke-width:2.6;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
-  .mtd .mtd-dot{fill:var(--mteal)}
-  .mtd.run .rl{color:var(--mteal);font-weight:600}
-  .mtd.brk .mtd-arc,.mtd.brk .mtd-dot{stroke:#E0A84A}.mtd.brk .mtd-dot{fill:#E0A84A}.mtd.brk .rl{color:#B7791F}
-  .mtd.pz .mtd-arc{stroke:var(--muted)}.mtd.pz .mtd-dot{fill:var(--muted)}.mtd.pz .rl{color:var(--muted)}
+  .mtm .mtm-c{display:block;width:48px;height:48px;margin-top:-20px;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,.18);background:var(--bg);transition:transform .15s}
+  .mtm:active .mtm-c{transform:scale(.94)}
+  .mtm svg{display:block}
+  .mtm .mtm-bg{fill:var(--ink)}
+  .mtm .mtm-arc{fill:none;stroke:#5DCAA5;stroke-width:3.2;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+  .mtm .mtm-ring{fill:none;stroke:var(--bg);stroke-width:2.6}
+  .mtm .mtm-dot{fill:var(--bg)}
+  .mtm .rl{margin-top:1px}
+  .mtm.on .rl{color:var(--ink);font-weight:600}
+  .mtm.run .rl{color:var(--mteal);font-weight:600}
+  .mtm.brk .mtm-arc{stroke:#E0A84A}.mtm.brk .rl{color:#B7791F}
+  .mtm.pz .mtm-arc{stroke:var(--muted)}.mtm.pz .rl{color:var(--muted)}
 }
 @media (max-width:700px){
   #links{min-width:0;max-width:100%;overflow-x:clip}
@@ -9059,18 +9064,19 @@ ICONS.phone='<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"
 function mobStartTimer(){if(T){go("today");return}const p=position().cur,ln=lastNext();UI.pre={type:"learn",node:(ln&&ln.node)||p.id,mode:"count",work:A.settings.work,short:A.settings.short,rounds:A.settings.rounds,long:A.settings.long,pre:{}};go("today")}
 function mobTmState(){if(!T)return null;const now=Date.now();if(T.phase==="done")return{txt:"จด",p:1,brk:false};const left=phaseLeft(now);const tot=T.phaseEnd?T.phaseEnd-T.phaseStart:0;
   return{txt:left!=null?mmss(left):mmss(workMs(now)),p:tot?Math.min(1,1-left/tot):0,brk:T.phase!=="work",pz:!!T.pausedAt}}
-function mobTmDraw(){const b=document.querySelector("#rail .mtd");if(!b)return;const s=mobTmState();const was=b.classList.contains("run");b.classList.toggle("run",!!s);b.classList.toggle("brk",!!(s&&s.brk));b.classList.toggle("pz",!!(s&&s.pz));
-  const ic=b.querySelector(".mtd-ic");if(ic&&(was!==!!s||!ic.firstChild))ic.innerHTML=s?'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" class="mtd-bg"/><circle cx="12" cy="12" r="9.5" class="mtd-arc" stroke-dasharray="59.7" stroke-dashoffset="59.7" transform="rotate(-90 12 12)"/><circle cx="12" cy="12" r="2.4" class="mtd-dot"/></svg>':svgI("today",22);
-  const arc=b.querySelector(".mtd-arc");if(arc)arc.style.strokeDashoffset=String(59.7*(1-(s?s.p:0)));
+function mobTmDraw(){const b=document.querySelector("#rail .mtm");if(!b)return;const s=mobTmState();b.classList.toggle("run",!!s);b.classList.toggle("brk",!!(s&&s.brk));b.classList.toggle("pz",!!(s&&s.pz));
+  const arc=b.querySelector(".mtm-arc");if(arc)arc.style.strokeDashoffset=String(138.2*(1-(s?s.p:0)));
   const l=b.querySelector(".rl");if(l)l.textContent=s?(s.pz?"หยุดอยู่":s.brk?"พัก "+s.txt:s.txt):"วันนี้";b.setAttribute("aria-label",s?"วันนี้ · ตัวจับเวลา "+s.txt:"วันนี้")}
 function mobBar(){const r=document.getElementById("rail");if(!r)return;r.querySelectorAll(".mbar").forEach(x=>x.remove());r.classList.toggle("mob",MOB());if(!MOB())return;
   const bar=el("div",{class:"mbar"});
   const it=(k,ic,l,on,f)=>{const b=el("button",{class:"mbi"+(on?" on":""),"aria-label":l,"data-k":k,onclick:f});b.innerHTML=svgI(ic,22)+'<span class="rl">'+l+'</span>';return b};
   const pageOn=k=>VIEW===k;const inMore=!["today","notes","reading","links"].includes(VIEW);
-  const td=el("button",{class:"mbi mtd"+(pageOn("today")?" on":""),"aria-label":"วันนี้","data-k":"today",onclick:()=>{closePop();vt(()=>go("today"));window.scrollTo({top:0})}});
-  td.innerHTML='<span class="mtd-ic"></span><span class="rl">วันนี้</span>';bar.appendChild(td);
-  bar.appendChild(it("notes","note","โน้ต",pageOn("notes"),()=>{closePop();if(VIEW==="notes"&&NT.page==="note"){ntClose();return}vt(()=>go("notes"))}));
   bar.appendChild(it("reading","read","หนังสือ",pageOn("reading"),()=>{closePop();vt(()=>go("reading"))}));
+  bar.appendChild(it("notes","note","โน้ต",pageOn("notes"),()=>{closePop();if(VIEW==="notes"&&NT.page==="note"){ntClose();return}vt(()=>go("notes"))}));
+  /* ปุ่มกลม = หน้าวันนี้ (มีตัวจับเวลาอยู่ในนั้น) · อยู่หน้าวันนี้แล้วกดอีกครั้ง = เริ่มจับเวลา */
+  const tm=el("button",{class:"mbi mtm"+(pageOn("today")?" on":""),"aria-label":"วันนี้","data-k":"today",onclick:()=>{closePop();if(VIEW==="today"&&!T&&!UI.pre&&UI.panel!=="settings")mobStartTimer();else{UI.panel=UI.panel==="settings"?null:UI.panel;vt(()=>go("today"))}window.scrollTo({top:0})}});
+  tm.innerHTML='<span class="mtm-c"><svg viewBox="0 0 48 48" width="48" height="48" aria-hidden="true"><circle cx="24" cy="24" r="22" class="mtm-bg"/><circle cx="24" cy="24" r="22" class="mtm-arc" stroke-dasharray="138.2" stroke-dashoffset="138.2" transform="rotate(-90 24 24)"/><circle cx="24" cy="24" r="8.5" class="mtm-ring"/><circle cx="24" cy="24" r="2.2" class="mtm-dot"/></svg></span><span class="rl">วันนี้</span>';
+  bar.appendChild(tm);
   const lk=it("links","link","ลิงก์",pageOn("links"),()=>{closePop();vt(()=>go("links"))});lk.appendChild(el("span",{class:"rbadge mbadge"}));bar.appendChild(lk);
   bar.appendChild(it("more","more","อื่น ๆ",inMore,e=>{e.stopPropagation();mobMore()}));
   r.appendChild(bar);mobTmDraw();mobBadge();mobFab()}
